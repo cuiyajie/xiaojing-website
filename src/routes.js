@@ -1,7 +1,7 @@
-import User from './components/User/index';
-import Checkin from './components/Checkin/index';
-import Login from './components/Login/login';
-import Container from './components/Container/container';
+import Users from './components/User/Users';
+import Checkins from './components/Checkin/Checkins';
+import Login from './components/Login/Login';
+import Container from './components/Container/Container';
 import NotFound from './components/NotFound';
 
 export default [
@@ -19,11 +19,11 @@ export default [
       {
         path: 'users',
         name: 'users',
-        component: User,
+        component: Users,
       }, {
         path: 'checkins',
         name: 'checkins',
-        component: Checkin,
+        component: Checkins,
       },
     ],
   }, {

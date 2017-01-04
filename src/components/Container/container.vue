@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import sideNav from './sideNav';
+import SideNav from './SideNav';
 
 export default {
   components: {
-    sideNav,
+    SideNav,
   },
 };
 </script>
