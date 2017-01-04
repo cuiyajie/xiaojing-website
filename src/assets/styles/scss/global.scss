@@ -1,0 +1,68 @@
+body {
+    font-size: $base-font-size;
+    font-family: $base-font-family;
+    padding: 0;
+    margin: 0;
+    color: $base-font-color;
+    background-color: $base-background-color;
+    touch-action: manipulation;
+    -webkit-touch-callout: none !important;
+}
+
+* { box-sizing: border-box; }
+p {
+    margin: 0;
+    line-height: 120%;
+}
+a { -webkit-user-select: none !important; }
+
+h2 { font-size: 24px; }
+
+.icon {
+    display: inline-block;
+    fill: currentColor;
+}
+
+.container,
+.container-full {
+    width: 100%;
+    max-width: 750px;
+    margin: 0 auto;
+}
+.container {
+    padding-left: 30px;
+    padding-right: 30px;
+    .soccer & {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+@media screen and (max-width: 640px) {
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+@media screen and (max-width: 450px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+        .soccer & {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
+    body.soccer {
+        font-size: 12px;
+    }
+
+    body.badminton {
+        font-size: 12px;
+    }
+}
+
+.clearfix:after {
+    content: '';
+    display: table;
+    clear: both;
+}
