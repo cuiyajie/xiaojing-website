@@ -7,7 +7,7 @@ import VueRouter from 'vue-router';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-default/index.css';
 import { sync } from 'vuex-router-sync';
-import App from './components/App';
+import App from './modules/App';
 import filters from './utils/filters';
 import routes from './routes';
 import store from './vuex/store';

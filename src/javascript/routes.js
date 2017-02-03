@@ -1,8 +1,8 @@
-import Users from './components/User/Users';
-import Checkins from './components/Checkin/Checkins';
-import Login from './components/Login/Login';
-import Container from './components/Container/Container';
-import NotFound from './components/NotFound';
+import Users from './modules/User/Users';
+import Checkins from './modules/Checkin/Checkins';
+import Login from './modules/Login/Login';
+import Container from './modules/Container/Container';
+import NotFound from './modules/NotFound';
 
 export default [
   {
