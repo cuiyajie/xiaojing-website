@@ -2,7 +2,6 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
 import Vuex from 'vuex';
-import VueResource from 'vue-resource';
 import VueRouter from 'vue-router';
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-default/index.css';
@@ -10,11 +9,10 @@ import { sync } from 'vuex-router-sync';
 import App from './modules/App';
 import filters from './utils/filters';
 import routes from './routes';
-import store from './vuex/store';
+import store from './store';
 
 Vue.use(Vuex);
 Vue.use(VueRouter);
-Vue.use(VueResource);
 Vue.use(ElementUI);
 Object.keys(filters).forEach(k => Vue.filter(k, filters[k]));
 

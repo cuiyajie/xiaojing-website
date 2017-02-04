@@ -1,0 +1,14 @@
+@mixin fillfull($position: absolute) {
+	position: $position;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
+@mixin fixsize($w, $l) {
+	$paddingTop: percentage($l / $w);
+	content: '';
+	display: block;
+	padding-top: $paddingTop;
+}

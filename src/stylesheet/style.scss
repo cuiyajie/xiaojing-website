@@ -1,6 +1,5 @@
-@import 'scss/variable';
-@import 'scss/mixin';
-@import 'scss/common';
-@import 'scss/global';
+@import 'common/variable';
+@import 'common/mixin';
+@import '~normalize.css/normalize.css';
 
-@import 'scss/homepage';
+@import 'common/global';

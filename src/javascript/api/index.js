@@ -1,9 +1,5 @@
-/* export default {
-  localLogin: function () {
-    return {
-      user_name: 'Linkface',
-      user_id: 1,
-    };
-  },
+import LoginApi from './login';
+
+export default {
+	LoginApi
 };
-*/
