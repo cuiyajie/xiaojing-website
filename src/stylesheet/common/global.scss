@@ -1,16 +1,56 @@
 body {
-    font-size: $base-font-size;
-    font-family: $base-font-family;
-    padding: 0;
-    margin: 0;
-    color: $base-font-color;
-    background-color: $base-background-color;
-    touch-action: manipulation;
-    -webkit-touch-callout: none !important;
+  font-size: $base-font-size;
+  font-family: $base-font-family;
+  padding: 0;
+  margin: 0;
+  color: $base-font-color;
+  background-color: $base-background-color;
+  touch-action: manipulation;
+  -webkit-touch-callout: none !important;
+  overflow-x: auto;
+}
+
+* {
+  box-sizing: border-box;
+
+  &:before,
+  &:after {
+    box-sizing: border-box;
+  }   
 }
 
 .clearfix:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $linkface;
+  }
+}
+
+.right-border {
+  position: relative;
+  &:after {
     content: '';
-    display: table;
-    clear: both;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: $linkface;
+  }
 }

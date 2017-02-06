@@ -29,8 +29,8 @@ module.exports = {
       'assets': path.resolve(__dirname, '../src/assets'),
       'javascript': path.resolve(__dirname, '../src/javascript'),
       'stylesheet': path.resolve(__dirname, '../src/stylesheet'),
-      'scss_var': path.resolve(__dirname, '../src/stylesheet/scss/variable.scss'),
-      'scss_mixin': path.resolve(__dirname, '../src/stylesheet/scss/mixin.scss')
+      'scss_var': path.resolve(__dirname, '../src/stylesheet/common/variable.scss'),
+      'scss_mixin': path.resolve(__dirname, '../src/stylesheet/common/mixin.scss')
     }
   },
   resolveLoader: {

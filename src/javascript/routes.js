@@ -1,52 +1,48 @@
 import Login from './modules/Login';
-
+import LayoutView from './components/LayoutView';
 import Staff from './modules/Staff';
 import Attendance from './modules/Attendance';
 import Department from './modules/Department';
 import Company from './modules/Company';
-
 import NotFound from './NotFound';
 
 const LoginRouter = {
   path: '/login',
   name: 'login',
-  component: Login
+  component: Login,
 };
 
-const DefaultRouter = {
+const DashboardRouter = {
   path: '/',
-  redirect: '/login'
-};
-
-const ManagementRouter = [
-  {
+  name: 'dashboard',
+  component: LayoutView,
+  children: [{
     path: '/staff',
-    name: 'staff'
-    component: Staff
+    name: 'staff',
+    component: Staff,
   }, {
     path: '/attendance',
     name: 'attendance',
-    component: Attendance
+    component: Attendance,
   }, {
     path: '/department',
-    name: department,
-    component: Department
+    name: 'department',
+    component: Department,
   }, {
     path: '/company',
     name: 'company',
-    component: Company
-  }
-];
+    component: Company,
+  }],
+};
 
-const _404Router = {
+const NotFoundRouter = {
   path: '*',
   name: 'notfound',
-  component: NotFound
+  component: NotFound,
 };
 
 export default [
   LoginRouter,
-  DefaultRouter,
-  ...ManagementRouter,
-  _404Router
+  DashboardRouter,
+  NotFoundRouter,
 ];
