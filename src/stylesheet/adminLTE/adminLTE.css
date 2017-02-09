@@ -95,7 +95,7 @@ body {
 }
 .fixed .content-wrapper,
 .fixed .right-side {
-  padding-top: 50px;
+  padding-top: 80px;
 }
 .fixed.layout-boxed .wrapper {
   max-width: 100%;

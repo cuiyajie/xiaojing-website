@@ -43,6 +43,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      favicon: 'src/favicon.ico',
       filename: process.env.NODE_ENV === 'testing'
         ? 'src/index.html'
         : config.build.index,

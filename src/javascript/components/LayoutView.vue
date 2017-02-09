@@ -15,8 +15,8 @@
             <!-- User Account Menu -->
             <li class="user user-menu">
                 <!-- The user image in the navbar-->
-                <img :src="defaultAvatar" class="user-image" alt="User Image">
-                <span>张国强</span>
+                <img :src="currentUser.avatar || defaultAvatar" class="user-image" alt="User Image">
+                <span>{{ currentUser.name }}</span>
             </li>
             <!-- Logout -->
             <li class="logout">
@@ -49,6 +49,9 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+  import store from '../store';
+  import { autoLogin } from '../store/actions';
   import logoSrc from '../../img/linkface.svg';
   import defaultAvatar from '../../img/avatar-darkbg.png';
 
@@ -59,10 +62,17 @@
         defaultAvatar,
       };
     },
+    computed: {
+      ...mapGetters({
+        currentUser: 'currentUser',
+      }),
+    },
     components: {
       
     },
   };
+
+  autoLogin(store);
 </script>
 
 <style lang="scss">
@@ -123,6 +133,7 @@
       width: 40px;
       height: 40px;
       vertical-align: middle;
+      border-radius: 50%;
     }
   }
   /* sidebar */

@@ -4,8 +4,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-default/index.css';
 import { sync } from 'vuex-router-sync';
+import '../../theme/index.css';
 import '../fonts/iconfont/iconfont.css';
 import App from './App';
 import filters from './utils/filters';
@@ -25,8 +25,10 @@ const router = new VueRouter({
 
 sync(store, router);
 
-new Vue({
+const VueInstance = new Vue({
   router,
+  store,
   render: h => h(App),
 }).$mount('#app');
 
+export default VueInstance;
