@@ -1,22 +1,29 @@
 <template>
-  <div class="company-container">
-    <div class="section-header">公司信息</div>
+  <div class="lf-page-container company-container">
+    <div class="section-header mt0">公司信息</div>
     <div class="section-row bordered">
       <form-row-label title="公司ID" :value="company.id"></form-row-label>
     </div>
     <div class="section-row bordered">
       <form-row-text-input title="公司名称" :value="company.name" description="50字以内" placeholder="请输入公司名称" :save="saveCompanyName"></form-row-text-input>
     </div>
-    <div class="section-row">
-      <form-row-image title="公司标志" :origin-image="company.logo" description="只支持PNG，JPG格式文件；图片尺寸100*100像素；文件大小100KB。"
+    <div class="section-row image-row">
+      <form-row-image title="公司标志" :origin-image="company.logo" description="只支持PNG，JPG格式文件；图片尺寸100*100像素；文件小于100KB。"
+         upload-name="logo" 
         :upload-url="uploadCompanyLogoUrl" 
         :upload-params="uploadCompanyLogoParams"
-        :upload-limitsize="uploadCompanyLogoLimit">  
+        :upload-limitsize="uploadCompanyLogoLimit"
+        :upload-success="saveCompanyLogoSuccess">  
       </form-row-image>
     </div>
-    <div class="section-header">考勤机</div>
     <div class="section-header">管理员（可以进行考勤管理，登录网站管理后台）</div>
-    <div class="section-header">考勤设置（每日工作时长 9小时）</div>  
+    <div class="section-row admin-row">
+      <form-row-admin :admin="admin" :save="updateAdmin" :company-id="company.id"></form-row-admin>
+    </div>
+    <div class="section-header">考勤设置（每日工作时长 9小时）</div>
+    <div class="section-row">
+      <form-row-attendance-time :start-time="company.start_time" :end-time="company.end_time" :save="saveCompanyAttendanceTime"></form-row-attendance-time>
+    </div>
   </div>
 </template>
 <script>
@@ -26,6 +33,8 @@
   import FormRowLabel from '../components/FormRowLabel';
   import FormRowTextInput from '../components/FormRowTextInput';
   import FormRowImage from '../components/FormRowImage';
+  import FormRowAdmin from '../components/FormRowAdmin';
+  import FormRowAttendanceTime from '../components/FormRowAttendanceTime';
 
   export default {
     data() {
@@ -37,22 +46,34 @@
     computed: {
       ...mapGetters({
         company: 'currentCompany',
+        admin: 'currentUser',
       }),
       uploadCompanyLogoParams() {
-        return { company_id: this.company.id };
+        return { company_id: this.company.id, company: JSON.stringify({}) };
       },
     },
     components: {
       FormRowLabel,
       FormRowTextInput,
       FormRowImage,
+      FormRowAdmin,
+      FormRowAttendanceTime,
     },
     methods: {
       saveCompanyName(name) {
         return api.updateCompany(this.company.id, { name });
       },
+      saveCompanyLogoSuccess(logo) {
+        if (logo && logo !== '') {
+          const logoUnique = `${logo}?t=${new Date().getTime()}`;
+          this.$store.dispatch('updateCompany', { logoUnique });
+        }
+      },
       saveCompanyAttendanceTime(startTime, endTime) {
         return api.updateCompany(this.company.id, { start_time: startTime, end_time: endTime });
+      },
+      updateAdmin() {
+
       },
     },
 };
@@ -61,10 +82,9 @@
   @import "~scss_var";
 
   .company-container {
-    padding: 25px 20px 60px;
-    color: #313131;
     
     .section-header {
+      margin-top: 30px;
       line-height: 200%;
       border-bottom: 1px solid $linkface;
     }
@@ -83,6 +103,7 @@
         position: absolute;
         right: 0;
         top: -6px;
+        z-index: 10;
       }
 
       .el-col {
@@ -99,21 +120,33 @@
       	}
       }
 
-      .el-button {
-        padding: 7px 16px;
-      }
-
       .value-input {
       	width: calc(100% - 20px);
       	margin-top: -8px;
       	margin-bottom: -8px;
       }
 
+      &.image-row {
+        line-height: 150%;
+      }
+
       .value-image {
       	overflow: hidden;
       	img {
+          vertical-align: middle;
       		height: 100px;
       	}
+      }
+
+      &.admin-row {
+        line-height: 40px;
+
+        .avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          vertical-align: middle;
+        }
       }
     }
   }

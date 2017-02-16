@@ -4,7 +4,7 @@
     <header class="main-header">
       <a href="/" class="logo right-border">
         <div class="logo-lg">
-          <div class="container"><img :src="logoSrc" height="20" alt="Linkface"></div>
+          <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo" alt="Company Logo"></div>
         </div>
       </a>
       <!-- Header navbar -->
@@ -51,7 +51,6 @@
 <script>
   import { mapGetters } from 'vuex';
   import store from '../store';
-  import { autoLogin } from '../store/actions';
   import logoSrc from '../../img/linkface.svg';
   import defaultAvatar from '../../img/avatar-darkbg.png';
 
@@ -65,14 +64,19 @@
     computed: {
       ...mapGetters({
         currentUser: 'currentUser',
+        currentCompany: 'currentCompany',
       }),
     },
-    components: {
-      
+    watch: {
+      currentCompany(val) {
+        if (val) {
+          this.$store.dispatch('fetchDepartments', val.id);
+        }
+      },
     },
   };
 
-  autoLogin(store);
+  store.dispatch('autoLogin');
 </script>
 
 <style lang="scss">
@@ -88,6 +92,11 @@
       height: $header-height;
       line-height: $header-height;
       background-color: #28334d;
+
+      img {
+        height: 60px;
+        margin-top: 10px;
+      }
     }
 
     .navbar {

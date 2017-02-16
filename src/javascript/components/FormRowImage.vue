@@ -8,36 +8,49 @@
     </el-col>
     <el-col :span="12" class="pad-btn"><div class="section-val">{{ description }}</div></el-col>
     <div class="buttons-area">
-      <el-upload :action="uploadUrl"
+      <el-upload :action="ajaxUrl"
                  :data="uploadParams"
-                 :on-preview="handlePreview"
-                 :on-success="handleSuccess">
-      	<el-button type="primary" size="small">上传</el-button>
+                 :name="uploadName"
+                 :headers="ajaxHeaders"
+                 :on-success="handleSuccess"
+                 :show-upload-list="false">
+      	<el-button type="primary" size="small" :disabled="loading" :loading="loading">上传</el-button>
       </el-upload>
     </div>
   </el-row>
 </template>
 <script>
     import defaultLogo from '../../img/company-logo.png';
+    import { HttpUtils } from '../api/global';
 
     export default {
       data() {
         return {
-          
+          loading: false,
         };
       },
       computed: {
         currentLogo() {
           return this.originImage && this.originImage !== '' ? this.originImage : defaultLogo; 
         },
-      },
-      props: ['title', 'description', 'originImage', 'uploadUrl', 'uploadParams', 'uploadLimitsize'],
-      methods: {
-        handlePreview(file) {
-          console.log(file);
+        ajaxUrl() {
+          return HttpUtils.getUrl(this.uploadUrl);
         },
+        ajaxHeaders() {
+          const headers = HttpUtils.getHeaders(true);
+          if (headers && headers.token) {
+            return headers;
+          } 
+          HttpUtils.handleUnAuthorized();
+          return null;
+        },
+      },
+      props: ['title', 'description', 'originImage', 'uploadUrl', 'uploadName', 'uploadParams', 'uploadLimitsize', 'uploadSuccess'],
+      methods: {
         handleSuccess() {
-
+          if (this.uploadSuccess) {
+            this.uploadSuccess();
+          }
         },
       },
     };

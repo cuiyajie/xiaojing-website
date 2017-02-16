@@ -3,5 +3,12 @@
 @import 'common/variable';
 @import 'common/mixin';
 @import '~normalize.css/normalize.css';
+@import 'common/common';
+
+@import 'components/messagebox';
+@import 'components/dialog';
+@import 'components/table';
+
+@import 'components/pages';
 
 @import 'common/global';

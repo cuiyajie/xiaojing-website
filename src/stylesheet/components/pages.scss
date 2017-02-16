@@ -1,0 +1,31 @@
+.lf-page-container {
+	padding: 10px 20px 60px;
+}
+
+.lf-page-header {
+	height: 60px;
+	position: relative;
+
+	&.bordered {
+		border-bottom: 1px solid $linkface;
+	}
+
+	.lf-page-caption {
+		display: inline-block;
+		line-height: 60px;
+	}
+ 
+	.lf-page-header-buttons {
+		position: absolute;
+		top: 15px;
+		right: 0;
+	}
+}
+
+.lf-page-fixed {
+	position: fixed;
+	top: ($header-height - 30px) / 2;
+	left: $sidebar-width + 20px;
+	width: 800px;
+	z-index: 1050;
+}

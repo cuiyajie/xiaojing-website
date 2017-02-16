@@ -5,7 +5,7 @@ import VueCookie from 'vue-cookie';
 import _ from 'lodash/core';
 import _object from 'lodash/fp/object';
 import Cache from './cache';
-import { VueSuccesStatus, VueUnAuthorizedStatus, ServerSuccessStatus, ServerInvalidToken } from './httpstatus';
+import { VueSuccesStatus, ServerSuccessStatus, ServerInvalidToken } from './httpstatus';
 
 Vue.use(VueResource);
 Vue.use(VueCookie);
@@ -30,9 +30,9 @@ const QueryString = (() => {
   return queryString;
 })();
 
-function handleUnAuthorized(request) {
-  request.respondWith({}, VueUnAuthorizedStatus);
-}
+const handleUnAuthorized = () => {
+
+};
 
 const environment = {
   isDevelopment: () => {
@@ -41,21 +41,34 @@ const environment = {
   },
 };
 
+const getHeaders = (isDebug) => {
+  if (isDebug) {
+    return { token: 'b3A4mdXeWP7yyT8Ss4N42tSA' };
+  } 
+  const token = Vue.cookie.get('xtAccessToken');
+  if (token) {
+    return { token };
+  } 
+  return null;
+};
+
 // check access token
 Vue.http.interceptors.push((request, next) => {
 	// for unanonymous interface, check cookie.
+  let headers; 
   if (Vue.config.debug) {
-    request.headers.set('token', 'b3A4mdXeWP7yyT8Ss4N42tSA');
+    headers = getHeaders(true);
   } else if (request.params.authType !== 'anonymous') {
-    const token = Vue.cookie.get('xtAccessToken');
-    if (token) {
-      request.headers.set('token', token);
-    } else {
-      handleUnAuthorized.call(this, request);
-      return;
-    }
+    headers = getHeaders();
   } else {
     delete request.params.authType;
+  }
+  if (headers && headers.token) {
+    _.each(headers, (v, k) => {
+      request.headers.set(k, v);
+    });
+  } else {
+    handleUnAuthorized();
   }
 
 	// check if token is invalid
@@ -80,19 +93,24 @@ function getApiServer() {
   return _apiServer;
 }
 
-// get http request domain
-Vue.http.interceptors.push((request, next) => {
+const getUrl = (url) => {
   const apiServer = getApiServer();
-  request.url = `${apiServer}${request.url}`;
-  next();
-});
+  return `${apiServer}${url}`;
+};
+
+function getCacheKey(request) {
+  const paramsString = _.map(request.params, (v, k) => `${k}=${v}`);
+  return `Cache_${request.url}?${paramsString.join('&')}`;
+}
 
 // add interceptor used to cache put request result
 Vue.http.interceptors.push((request, next) => {
+  request.url = getUrl(request.url);
+
   if (request.method.toLowerCase() === 'get') {
-    const cache = Cache.get(`Cache_${request.url}`);
+    const cache = Cache.get(getCacheKey(request));
     if (cache) {
-      next(request.respondWith(_object.assignIn(cache, ServerSuccessStatus), VueSuccesStatus));
+      next(request.respondWith(_object.assign({}, cache), VueSuccesStatus));
       return;			
     }
   }
@@ -100,7 +118,7 @@ Vue.http.interceptors.push((request, next) => {
   next((response) => {
     const { status, body } = response;
     if (status === VueSuccesStatus.status && request.method.toLowerCase() === 'get' && body.status === ServerSuccessStatus.status) {
-      Cache.set(`Cache_${request.url}`, body.result);
+      Cache.set(getCacheKey(request), body.result);
     }
   });
 });
@@ -118,5 +136,11 @@ Vue.http.interceptors.push((request, next) => {
 export const VueHttp = Vue.http;
 
 export const ENV = environment;
+
+export const HttpUtils = {
+  getUrl,
+  getHeaders,
+  handleUnAuthorized,
+};
 
 export default VueHttp;

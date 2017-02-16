@@ -10,6 +10,7 @@ const state = {
   global: {
     currentUser: {},
     currentCompany: {},
+    departments: [],
   },
 };
 

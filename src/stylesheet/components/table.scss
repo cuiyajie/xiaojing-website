@@ -5,4 +5,55 @@ $row-header-fontcolor: #7d7d7d;
 $pagination-prev-bgcolor: #dcdcdc;
 $pagination-next-bgcolor: $linkface;
 
+.el-table.custom-table {
+	border: 0;
+  padding-bottom: 20px;
+
+	&:before,
+	&:after {
+		content: none;
+	}
+  
+  .el-table__header-wrapper thead div {
+  	background-color: #FFF;
+    color: $row-header-fontcolor;
+  }
+
+	th {
+		text-align: center;
+		background-color: #FFF;
+
+		.cell {
+			font-weight: normal;
+			background-color: #FFF;
+		}
+
+		&.is-leaf {
+			border-color: $row-border-color;
+		}
+	}
+
+	td {
+		text-align: center;
+	}
+
+	.el-table__empty-block {
+		border-bottom: 1px solid $row-border-color;
+	}
+
+	& + .table-footer {
+		.table-pagination {	
+			float: right;
+			display: inline-block;
+			line-height: 1;
+		}
+	}
+}
+
+.el-table--enable-row-hover.custom-table {
+	tr:hover > td {
+		background-color: $selected-row-color;
+	}
+} 
+
 
