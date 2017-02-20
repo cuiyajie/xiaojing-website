@@ -21,7 +21,7 @@
 </template>
 <script>
     import defaultLogo from '../../img/company-logo.png';
-    import { HttpUtils } from '../api/global';
+    import { NetworkUtils } from '../api/global';
 
     export default {
       data() {
@@ -34,14 +34,14 @@
           return this.originImage && this.originImage !== '' ? this.originImage : defaultLogo; 
         },
         ajaxUrl() {
-          return HttpUtils.getUrl(this.uploadUrl);
+          return NetworkUtils.getUrl(this.uploadUrl);
         },
         ajaxHeaders() {
-          const headers = HttpUtils.getHeaders(true);
+          const headers = NetworkUtils.getHeaders(true);
           if (headers && headers.token) {
             return headers;
           } 
-          HttpUtils.handleUnAuthorized();
+          NetworkUtils.handleUnAuthorized();
           return null;
         },
       },

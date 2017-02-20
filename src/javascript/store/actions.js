@@ -1,13 +1,16 @@
 import * as types from './mutation-types';
 import api from '../api';
 
-export const autoLogin = ({ commit }) => {
-  api.loginDebug().then(({ body }) => {
+export const autoLogin = ({ commit }, { companyId, token, cb }) => {
+  api.login(companyId, token).then(({ body }) => {
     commit(types.AUTO_LOGIN, {
       user: body.user || {},
       company: body.company || {},
     });
-  });
+    if (cb) {
+      cb();
+    }
+  }, () => {});
 };
 
 export const fetchDepartments = ({ commit }, companyId) => {

@@ -1,5 +1,4 @@
 import { MessageBox } from 'element-ui';
-import _object from 'lodash/fp/object';
 
 MessageBox.tip = message => MessageBox({ // eslint-disable-line
   message,
@@ -9,7 +8,7 @@ MessageBox.tip = message => MessageBox({ // eslint-disable-line
   showConfirmButton: true,
 });
 
-MessageBox.lConfirm = (message, options) => MessageBox.confirm(message, '', _object.assign({
+MessageBox.lConfirm = (message, options) => MessageBox.confirm(message, '', Object.assign({
   showCancelButton: true,
   cancelButtonClass: 'el-button--small',
   confirmButtonClass: 'el-button--small',

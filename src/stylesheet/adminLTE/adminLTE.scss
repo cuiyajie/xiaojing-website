@@ -15,6 +15,8 @@
  * Core: General Layout Style
  * -------------------------
  */
+$header-height: 80px;
+
 html,
 body {
   height: 100%;
@@ -95,7 +97,7 @@ body {
 }
 .fixed .content-wrapper,
 .fixed .right-side {
-  padding-top: 80px;
+  padding-top: $header-height;
 }
 .fixed.layout-boxed .wrapper {
   max-width: 100%;
@@ -173,7 +175,7 @@ a:focus {
   margin-bottom: 0;
   margin-left: 240px;
   border: none;
-  min-height: 50px;
+  min-height: $header-height;
   border-radius: 0;
 }
 .layout-top-nav .main-header .navbar {
@@ -242,9 +244,9 @@ a:focus {
   transition: width 0.3s ease-in-out;
   display: block;
   float: left;
-  height: 50px;
+  height: $header-height;
   font-size: 20px;
-  line-height: 50px;
+  line-height: $header-height;
   text-align: center;
   width: 240px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -315,7 +317,7 @@ a:focus {
   position: absolute;
   top: 0;
   left: 0;
-  padding-top: 50px;
+  padding-top: $header-height;
   min-height: 100%;
   width: 240px;
   z-index: 810;

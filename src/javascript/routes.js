@@ -1,4 +1,6 @@
+import WebsiteLayoutView from './components/WebsiteLayoutView';
 import Login from './modules/Login';
+import Homepage from './modules/Homepage';
 import LayoutView from './components/LayoutView';
 import Staff from './modules/Staff';
 import Attendance from './modules/Attendance';
@@ -6,30 +8,37 @@ import Department from './modules/Department';
 import Company from './modules/Company';
 import NotFound from './NotFound';
 
-const LoginRouter = {
-  path: '/login',
-  name: 'login',
-  component: Login,
+const WebsiteRouter = {
+  path: '/',
+  component: WebsiteLayoutView,
+  children: [{
+    path: 'login',
+    name: 'login',
+    component: Login,
+  }, {
+    path: '',
+    name: 'home',
+    component: Homepage,
+  }],
 };
 
 const DashboardRouter = {
-  path: '/',
-  name: 'dashboard',
+  path: '/page',
   component: LayoutView,
   children: [{
-    path: '/staff',
+    path: 'staff',
     name: 'staff',
     component: Staff,
   }, {
-    path: '/attendance',
+    path: '',
     name: 'attendance',
     component: Attendance,
   }, {
-    path: '/department',
+    path: 'department',
     name: 'department',
     component: Department,
   }, {
-    path: '/company',
+    path: 'company',
     name: 'company',
     component: Company,
   }],
@@ -42,7 +51,7 @@ const NotFoundRouter = {
 };
 
 export default [
-  LoginRouter,
+  WebsiteRouter,
   DashboardRouter,
   NotFoundRouter,
 ];

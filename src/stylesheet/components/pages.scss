@@ -13,6 +13,23 @@
 	.lf-page-caption {
 		display: inline-block;
 		line-height: 60px;
+		position: relative;
+
+		&.pin {
+			margin-top: 20px;
+			line-height: 20px;
+			padding-left: 10px;
+
+			&:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background-color: $linkface;
+			}
+		}
 	}
  
 	.lf-page-header-buttons {
@@ -28,4 +45,23 @@
 	left: $sidebar-width + 20px;
 	width: 800px;
 	z-index: 1050;
+
+  .el-col {
+    padding-right: 15px;
+  }
+
+  .el-date-editor--daterange.el-input,
+  .el-autocomplete {
+    width: 100%;
+  }
+
+  .el-col > .el-button,
+  .el-col > .el-dropdown {
+    margin-top: 1px;
+  }
+
+  .el-col > .el-dropdown,
+  .el-dropdown > .el-button {
+    width: 100%;
+  }
 }

@@ -2,11 +2,11 @@
   <!-- use adminLTE layout -->
   <div class="wrapper fixed">
     <header class="main-header">
-      <a href="/" class="logo right-border">
+      <router-link class="logo right-border" to="/">
         <div class="logo-lg">
           <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo" alt="Company Logo"></div>
         </div>
-      </a>
+      </router-link>
       <!-- Header navbar -->
       <nav class="navbar navbar-static-top" role="navigation">
         <!-- Navbar Right Menu -->
@@ -20,7 +20,7 @@
             </li>
             <!-- Logout -->
             <li class="logout">
-                <a href="">退出</a>
+                <a href="javascript:void(0);" @click="logout">退出</a>
             </li>
           </ul>
         </div>
@@ -33,10 +33,10 @@
           <li class="treeview active">
             <div class="trewview-header"><i class="lnf-icon-briefcase"></i><span>工作</span></div>
             <ul class="treeview-menu menu-open">
-              <li><router-link to="staff">员工管理</router-link></li>
-              <li><router-link to="department">部门管理</router-link></li>
-              <li><router-link to="attendance">考勤管理</router-link></li>
-              <li><router-link to="company">公司信息管理</router-link></li>
+              <li><router-link to="/page/staff">员工管理</router-link></li>
+              <li><router-link to="/page/department">部门管理</router-link></li>
+              <li><router-link exact to="/page">考勤管理</router-link></li>
+              <li><router-link to="/page/company">公司信息管理</router-link></li>
             </ul>
           </li>
         </ul>
@@ -50,9 +50,9 @@
 
 <script>
   import { mapGetters } from 'vuex';
-  import store from '../store';
   import logoSrc from '../../img/linkface.svg';
   import defaultAvatar from '../../img/avatar-darkbg.png';
+  import { logout } from '../api/global';
 
   export default {
     data() {
@@ -67,6 +67,9 @@
         currentCompany: 'currentCompany',
       }),
     },
+    methods: {
+      logout,
+    },
     watch: {
       currentCompany(val) {
         if (val) {
@@ -75,8 +78,6 @@
       },
     },
   };
-
-  store.dispatch('autoLogin');
 </script>
 
 <style lang="scss">

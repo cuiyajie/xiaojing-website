@@ -1,5 +1,6 @@
 export default {
   URL_AUTO_LOGIN: '/v1.0/companies/auto_login',
+  URL_FETCH_LOGIN_CODE: '/v1.0/companies/scan_code',
   URL_UPDATE_COMPANY: '/v1.0/companies/update',
   URL_FETCH_ALL_STAFFS: '/v1.0/users/company_users',
   URL_FETCH_STAFFS: '/v1.0/users/search_users',
@@ -7,4 +8,13 @@ export default {
   URL_CREATE_DEPARTMENT: '/v1.0/departments/create',
   URL_UPDATE_DEPARTMENT: '/v1.0/departments/update',
   URL_DELETE_DEPARTMENT: '/v1.0/departments/delete',
+  URL_STAFF_UPDATE_FACE: '/v1.0/users/update_face',
+  URL_STAFF_CREATE: '/v1.0/users/create',
+  URL_STAFF_UPDATE: '/v1.0/users/update_profile',
+  URL_STAFF_DELETE: '/v1.0/users/delete',
+  URL_STAFF_QUIT: '/v1.0/users/quit',
+  URL_STAFF_IMPORT: '/v1.0/users/import_image',
+  URL_STAFF_BTACH_UPDATE_DEPARTMENT: '/v1.0/users/change_department',
+  URL_FETCH_ATTENDANCE_ANALYSIS: '/v1.0/attendances/company_attendances_detail',
+  URL_FETCH_USER_ATTENDANCE: '/v1.0/user_attendances/query',
 };

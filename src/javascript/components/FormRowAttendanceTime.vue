@@ -11,7 +11,6 @@
 </template>
 <script>
   import _ from 'lodash/core';
-  import _object from 'lodash/fp/object';
   import MessageBox from '../utils/messagebox';
 
 export default {
@@ -44,7 +43,7 @@ export default {
               eMinute: times[2],
               eSecond: times[3],
             };
-            return _object.assign({}, this.originalForm);
+            return Object.assign({}, this.originalForm);
           },
         },
         template: `<el-dialog title="考勤设置" v-model="dialogVisible" custom-class="time-setting normal tiny" :close-on-click-modal="false" :show-close="false">
@@ -90,14 +89,14 @@ export default {
                 .then(() => {
                   this.loading = false;
                   this.dialogVisible = false;
-                  this.originalForm = _object.assign({}, this.form);
+                  this.originalForm = Object.assign({}, this.form);
                 }, () => {
                   this.loading = false;
                 });
             }
           },
           cancel() {
-            this.form = _object.assign({}, this.originalForm);
+            this.form = Object.assign({}, this.originalForm);
             this.dialogVisible = false;
           },
         },

@@ -21,10 +21,14 @@
     "precommit-lint"
   ],
   "dependencies": {
+    "actioncable-js": "^5.0.0-rc2",
     "element-ui": "^1.1.2",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
+    "moment-duration-format": "^1.3.0",
     "normalize.css": "^5.0.0",
+    "qrcode-generator": "^1.1.0",
+    "rx-lite": "^4.0.8",
     "vue": "^2.1.0",
     "vue-cookie": "^1.1.3",
     "vue-resource": "^1.2.0",

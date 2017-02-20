@@ -13,16 +13,16 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
-        <el-col :span="5">
+        <!-- <el-col :span="5">
           <el-dropdown menu-align="start">
             <el-button size="small">{{ selectedStatus.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
             <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
               <el-dropdown-item v-for="stat in statuslist" :key="stat.id" @click.native="selectStat(stat);">{{ stat.name }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown> 
-        </el-col>
-        <el-col :span="5">
-           <el-button size="small" type="primary">查询</el-button>
+        </el-col> -->
+        <el-col :span="10">
+           <el-button size="small" type="primary" @click="onSearch">查询</el-button>
         </el-col>
       </el-row>
     </div>
@@ -30,13 +30,18 @@
       <span class="lf-page-caption">共{{ total }}人</span>
       <div class="lf-page-header-buttons">
         <el-button size="small" type="primary" @click="onAdd">添加员工</el-button>
-        <el-button size="small" @click="onBatchAdd">批量添加</el-button>
+        <el-button size="small" @click="onStaffBatchAdd">批量添加</el-button>
       </div>
     </div>
     <el-table class="custom-table mt15"
       row-key="id"
+      ref="staffTable"
+      :row-style="{ cursor: 'pointer' }"
       :empty-text="emptyText"
-      :data="dataStore">
+      :data="dataStore"
+      :reserve-selection="true"
+      @selection-change="onSelectionChange"
+      @row-click="onRowClick">
       <el-table-column type="selection"></el-table-column>
       <el-table-column label="姓名" property="name"></el-table-column>
       <el-table-column label="性别" property="user_count"><template scope="scope">{{ gender(scope.row.gender) }}</template></el-table-column>
@@ -47,148 +52,38 @@
     </el-table>
     <div class="table-footer">
       <el-button size="small" type="primary" @click="changeDepartment">更换部门</el-button>
-      <pagination class="table-pagination" 
+      <pagination class="table-pagination" ref="pagination"
         :page-size="pageSize"
         :total="total"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
-    <department-list-modal ref="multiDepartmentlistModal" @select-department=""></department-list-modal>
-    <department-list-modal ref="departmentlistModal" @select-department=""></department-list-modal>
-    <staff-modal ref="staffModal"></staff-modal>
+    <department-list-modal ref="multiDepartmentlistModal" @select-department="onModalMultiSelectDepartment"></department-list-modal>
+    <department-list-modal ref="departmentlistModal" @select-department="onModalSelectDepartment"></department-list-modal>
+    <staff-edit-modal ref="staffModal" @staff-added="onStaffAdded"></staff-edit-modal>
+    <staff-view-modal ref="staffViewModal" @staff-edit="onStaffEdit" @staff-delete="onStaffDelete"></staff-view-modal>
+    <batch-upload-staff-modal ref="batchUploadModal" @staff-batch-added="onStaffBatchAdded"></batch-upload-staff-modal>
   </div>
 </template>
 <script>
-  import Vue from 'vue';
   import _ from 'lodash/core';
-  import _object from 'lodash/fp/object';
+  import _array from 'lodash/array';
   import { mapGetters } from 'vuex';
-import Pagination from '../components/Pagination';
+  import Pagination from '../components/Pagination';
   import StaffAutoComplete from '../components/StaffAutoComplete';
-  import api from '../api';
+  import StaffEditModal from '../components/StaffEditModal';
+  import StaffViewModal from '../components/StaffViewModal';
+  import BatchUploadStaffModal from '../components/BatchUploadStaffModal';
+  import DepartmentListModal from '../components/DepartmentListModal';
   import { tableValFilter } from '../utils/filters';
-  import { STAFF_STATUS, GENDER } from '../utils/constants';
-  import defaultAvatar from '../../img/avatar-darkbg.png';
-
-  Vue.component('department-list-modal', {
-    data() {
-      return {
-        dialogVisible: false,
-      };
-    },
-    computed: {
-      ...mapGetters({
-        departments: 'departments',
-      }),
-      selectedId() { // eslint-disable-line
-        if (this.departments && this.departments.length > 0) {
-          return this.departments[0].id;
-        }
-      },
-    },
-    template: `<el-dialog title="更换部门" v-model="dialogVisible" size="small" custom-class="department-setting normal tiny" :close-on-click-modal="false" :show-close="false">
-                 <div class="radio-group-body">
-                   <div class="radio-group-body-inner">
-                   <el-radio-group v-model="selectedId">
-                     <el-radio v-for="department in departments" :label="department.id">{{ department.name }}</el-radio>
-                   </el-radio-group>
-                   </div>
-                 </div>
-                 <div class="radio-group-footer">
-                   <el-button type="primary" size="small" @click="onSave">确定</el-button>
-                   <el-button size="small" @click="onCancel">取消</el-button>
-                 </div>
-               </el-dialog>`,
-    methods: {
-      onSave() {
-        this.$emit('select-department', this.selectedId);
-        this.dialogVisible = false;
-      },
-      onCancel() {
-        this.selectedId = this.departments[0].id;
-        this.dialogVisible = false;
-      },
-    },
-  });
-
-  Vue.component('staff-modal', {
-    data() {
-      return {
-        dialogVisible: false,
-        changed: {},
-        GENDER,
-      };
-    },
-    computed: {
-      ...mapGetters({
-        company: 'currentCompany',
-        departments: 'departments',
-      }),
-      empty() {
-        return {
-          avatar: defaultAvatar,
-          name: '',
-          gender: GENDER.MALE,
-          tel: '',
-          department_id: this.departments[0].id,
-          department_name: this.departments[0].name,
-          job_position: '',
-        };
-      },
-    },
-    template: `<el-dialog :title="company.name" v-model="dialogVisible" size="small" custom-class="staff-setting normal tiny" :close-on-click-modal="false">
-                 <div class="avatar-header">
-                   <div class="avatar-container" @click.native="uploadAvatar">
-                     <img :src="changed.avatar" alt="User Avater">
-                     <span>点击上传</span>
-                   </div>
-                 </div>
-                 <el-form v-model="changed">
-                   <el-form-item label="姓名"><el-input placeholder="请输入姓名"></el-input></el-form-item>
-                   <el-form-item label="性别">
-                     <el-radio-group v-model="changed.gender">
-                      <el-radio :label="GENDER.MALE">男</el-radio>
-                      <el-radio :label="GENDER.FEMALE">女</el-radio>
-                     </el-radio-group>
-                   </el-form-item>
-                   <el-form-item label="联系电话"><el-input placeholder="请输入电话号码"></el-input></el-form-item>
-                   <el-form-item label="部门"><span class="form-department" @click="handleSelectDepartment">{{ changed.department_name }}<i class="el-icon-caret-right el-icon--right"></i></span></el-form-item>
-                   <el-form-item label="职务"><el-input placeholder="选填"></el-input></el-form-item>
-                   <el-form-item class="tx_c no-bordered buttons">
-                    <el-button type="primary" @click="onSubmit" size="small">保存</el-button>
-                    <el-button @click="close" size="small">取消</el-button>
-                   </el-form-item>
-                 </el-form>
-               </el-dialog>`,
-    methods: {
-      show(staff) {
-        if (staff && staff.id) {
-          this.changed = staff;
-        } else {
-          this.changed = _object.assign({}, this.empty);
-        }
-        this.dialogVisible = true;
-      },
-      close() {
-        this.dialogVisible = false;
-      },
-      uploadAvatar() {
-
-      },
-      onSubmit() {
-
-      },
-      handleSelectDepartment() {
-        this.$parent.$refs.departmentlistModal.dialogVisible = true;
-      },
-    },
-  });
+  import { STAFF_STATUS } from '../utils/constants';
+  import MessageBox from '../utils/messagebox';
+  import api from '../api';
 
   export default {
     data() {
       return {
         emptyText: '暂时没有符合条件的员工！',
-        currentPage: 1,
-        pageSize: 5,
+        pageSize: 15,
         total: 0,
         dataStore: [],
         historyStore: [],
@@ -213,13 +108,21 @@ import Pagination from '../components/Pagination';
     components: {
       Pagination,
       StaffAutoComplete,
+      StaffEditModal,
+      StaffViewModal,
+      BatchUploadStaffModal,
+      DepartmentListModal,
     },
     methods: {
       handleRequest(queryString, cb) {
-        cb();
+        if (queryString === '') {
+          this.clearStore();
+          this.fetchAllStaffs();
+          cb([]);
+        }
       },
-      handleSelect() {
-
+      handleSelect(staff) {
+        this.dataStore = [staff];
       },
       selectDepartment(department) {
         this.selectedDepartment = department;
@@ -227,38 +130,98 @@ import Pagination from '../components/Pagination';
       selectStat(stat) {
         this.selectedStatus = stat;
       },
+      clearStore() {
+        this.lastUserID = 0;
+        this.historyStore = [];
+        this.total = 0;
+      },
       // fetch data async
       fetchAllStaffs(fromLocale, page) {
         if (fromLocale) {
           this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
         } else {
           this.loading = true;
-          api.fetchAllStaffs(this.company.id, this.lastUserID, this.pageSize).then((response) => {
-            this.lastUserID = response.body.max_user_id;
-            this.dataStore = response.body.users;
-            this.historyStore = this.historyStore.concat(this.dataStore);
-            this.total = response.body.total || 0;
-            this.loading = false;
-          }, () => {
-            this.loading = false;
-          });
+          api.fetchAllStaffs(
+            this.company.id, 
+            this.selectedDepartment.id, 
+            this.lastUserID, 
+            this.pageSize).then((response) => {
+              this.lastUserID = response.body.max_user_id;
+              this.dataStore = response.body.users;
+              this.historyStore = this.historyStore.concat(this.dataStore);
+              this.total = response.body.total || 0;
+              this.loading = false;
+            }, () => {
+              this.loading = false;
+            });
         }
       },
       onPageChanged(page) {
         this.fetchAllStaffs(!page.fetchData, page.newPage);
       },
-      onSelectionChange() {
-        
+      onRowClick(row, event, column) {
+        if (column.type !== 'selection') {
+          this.$refs.staffViewModal.show(row);
+        }
       },
       ...tableValFilter,
+      onSearch() {
+        this.clearStore();
+        this.fetchAllStaffs();
+      },
       onAdd() {
         this.$refs.staffModal.show();
       },
-      onBatchAdd() {
-
+      onStaffAdded(staff) {
+        this.historyStore.splice(0, 0, staff);
+        this.total = this.total + 1;
+        this.fetchAllStaffs(true, 1);
+      },
+      onStaffEdit(staff) {
+        this.$refs.staffModal.show(staff);
+      },
+      onStaffDelete(staffId) {
+        const index = _array.findIndex(this.historyStore, u => u.id === staffId);
+        this.historyStore.splice(index, 1);
+        this.total = this.total - 1;
+        this.fetchAllStaffs(true, this.$refs.pagination.currentPage);
+      },
+      onStaffBatchAdd() {
+        this.$refs.batchUploadModal.dialogVisible = true;
+      },
+      onStaffBatchAdded(staffs) {
+        this.historyStore = staffs.concat(this.historyStore);
+        this.total = this.total + staffs.length;
+        this.fetchAllStaffs(true, 1);
+      },
+      onModalSelectDepartment(selected) {
+        this.$refs.staffModal.changed.department_id = selected.id;
+        this.$refs.staffModal.changed.department_name = selected.name;
+      },
+      onSelectionChange(selection) {
+        this.selected = selection;
+      },
+      onModalMultiSelectDepartment(selectedDepartment) {
+        if (!this.selected || this.selected.length === 0) {
+          MessageBox.tip('请选择至少一位员工');
+          return;
+        }
+        const userIds = _.map(this.selected, s => s.id);
+        api.batchUpdateDepartment(this.company.id, selectedDepartment.id, userIds).then(() => {
+          _.each(this.selected, (s) => {
+            Object.assign(s, {
+              department_id: selectedDepartment.id,
+              department_name: selectedDepartment.name,
+            });
+          });
+          this.$refs.staffTable.clearSelection();
+          MessageBox.tip('修改部门成功！');
+        }, () => {
+          MessageBox.tip('修改部门失败！');
+        });
       },
       changeDepartment() {
-        this.$refs.multiDepartmentlistModal.dialogVisible = true;
+        this.$refs.multiDepartmentlistModal.show();
       },
     },
     watch: {
@@ -270,38 +233,11 @@ import Pagination from '../components/Pagination';
           }
         },
       },
-      dataStore: {
-        handler() {
-          
-        },
-      },
     },
   };
 </script>
 <style lang="scss">
   @import '~scss_var';
-
-  .staff-container {
-    .lf-page-fixed {
-      .el-col {
-        padding-right: 15px;
-      }
-
-      .el-autocomplete {
-        width: 100%;
-      }
-
-      .el-col > .el-button,
-      .el-col > .el-dropdown {
-        margin-top: 1px;
-      }
-
-      .el-col > .el-dropdown,
-      .el-dropdown > .el-button {
-        width: 100%;
-      }
-    }
-  }
 
   .staff-header-dropdown.el-dropdown-menu {
     width: 152px;
@@ -313,135 +249,6 @@ import Pagination from '../components/Pagination';
       &:not(.is-disabled):hover {
         background-color: $linkface;
         color: #FFF;
-      }
-    }
-  }
-
-  .department-setting.el-dialog {
-    .el-dialog__body {
-      position: relative;
-      padding: 0;
-    }
-
-    .el-radio-group {
-      width: 100%;
-
-      .el-radio {
-        font-size: 14px;
-        line-height: 18px;
-        display: block;
-        position: relative;
-
-        & + .el-radio {
-          margin-left: 0;
-          margin-top: 15px;
-        }
-
-        .el-radio__input {
-          position: absolute;
-          top: 0;
-          right: 0;
-        }
-      }
-    }
-
-    .radio-group-body {
-      padding: 0 0 70px;
-      .radio-group-body-inner {
-        height: 300px;
-        padding: 30px 20px 0;
-        overflow-y: scroll;
-      }
-    }
-
-    .radio-group-footer {
-      position: absolute;
-      width: 100%;
-      left: 0;
-      bottom: 0;
-      text-align: center;
-      padding: 10px 0 20px;
-      background-color: #FFF;
-      border-radius: 4px;
-    }
-  }
-
-  .staff-setting.el-dialog {
-    width: 300px !important;
-    .el-dialog__body {
-      position: relative;
-      padding-top: 90px;
-    }
-    .avatar-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      background-color: $darkblue;
-      text-align: center;
-      padding: 15px 0;
-
-      .avatar-container {
-        cursor: pointer;
-        position: relative;
-        width: 60px;
-        height: 60px;
-        margin: 0 auto;
-        border-radius: 50%;
-        line-height: 60px;
-      }
-
-      img {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-      }
-
-      span {
-        position: relative;
-        font-size: 12px;
-        display: inline-block;
-        width: 100%;
-        color: $linkface;
-      }
-    }
-
-    .el-form {
-      padding-top: 10px;
-    }
-
-    .el-form-item {
-      margin-bottom: 0;
-      border-bottom: 1px solid #eee;
-
-      &.buttons {
-        margin-top: 10px;
-      }
-
-      .el-input,
-      .el-radio-group,
-      .form-department {
-        position: absolute;
-        right: 0;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-
-      .form-department {
-        cursor: pointer;
-
-        i {
-          color: $linkface;
-        }
-      }
-
-      .el-input {
-        width: 160px;
-
-        input[type=text] {
-          text-align: right;
-          border: none;
-        }
       }
     }
   }

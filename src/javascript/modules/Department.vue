@@ -33,7 +33,6 @@
 </template>
 <script>
   import { mapGetters } from 'vuex';
-  import _object from 'lodash/fp/object';
   import Pagination from '../components/Pagination';
   import api from '../api';
   import { dateFilter } from '../utils/filters';
@@ -73,7 +72,7 @@ export default {
           },
         },
         props: ['company'],
-        template: `<el-dialog v-loading.body="loading" :title="title" v-model="dialogVisible" size="small" custom-class="department-setting normal tiny" :close-on-click-modal="false" :show-close="false">
+        template: `<el-dialog v-loading.body="loading" :title="title" v-model="dialogVisible" size="small" custom-class="department-editing normal tiny" :close-on-click-modal="false" :show-close="false">
                       <el-input placeholder="请输入部门" size="small" :disabled="loading" min="10" v-model="changed.name"></el-input>
                       <div class="description">不超过10个字，名称不能重复</div>
                       <span slot="footer" class="dialog-footer">
@@ -84,7 +83,7 @@ export default {
         methods: {
           show(department) {
             if (department) {
-              this.changed = _object.assign({}, department);
+              this.changed = Object.assign({}, department);
             }
             this.dialogVisible = true;
           },
@@ -158,7 +157,7 @@ export default {
 };
 </script>
 <style lang="scss">
-  .department-setting.el-dialog {
+  .department-editing.el-dialog {
 
     .description {
       margin-top: 10px;

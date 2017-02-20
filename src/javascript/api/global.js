@@ -3,14 +3,15 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 import VueCookie from 'vue-cookie';
 import _ from 'lodash/core';
-import _object from 'lodash/fp/object';
 import Cache from './cache';
 import { VueSuccesStatus, ServerSuccessStatus, ServerInvalidToken } from './httpstatus';
 
 Vue.use(VueResource);
 Vue.use(VueCookie);
-Vue.config.debug = true;
+Vue.config.debug = false;
 Vue.http.options.xhr = { withCredentials: true, crossDomain: true };
+
+let router;
 
 const QueryString = (() => {
   const queryString = {};
@@ -30,45 +31,45 @@ const QueryString = (() => {
   return queryString;
 })();
 
-const handleUnAuthorized = () => {
+const clearCookie = () => {
+  const options = { path: '/' };
+  Vue.cookie.delete('xtAccessToken', options);
+  Vue.cookie.delete('xtCompanyId', options);
+};
 
+const handleUnAuthorized = () => {
+  if (router) {
+    clearCookie();
+    router.replace('/login');
+  }
 };
 
 const environment = {
   isDevelopment: () => {
     const devIP = '192.168.2.181';
+    // return false;
     return window.location.href.indexOf('localhost') >= 0 || window.location.href.indexOf(devIP) >= 0;
   },
+  isDebug: () => Vue.config.debug,
 };
 
-const getHeaders = (isDebug) => {
-  if (isDebug) {
-    return { token: 'b3A4mdXeWP7yyT8Ss4N42tSA' };
-  } 
-  const token = Vue.cookie.get('xtAccessToken');
-  if (token) {
-    return { token };
-  } 
-  return null;
-};
+const getHeaders = () => ({ token: Vue.cookie.get('xtAccessToken') });
 
 // check access token
 Vue.http.interceptors.push((request, next) => {
 	// for unanonymous interface, check cookie.
-  let headers; 
-  if (Vue.config.debug) {
-    headers = getHeaders(true);
-  } else if (request.params.authType !== 'anonymous') {
-    headers = getHeaders();
-  } else {
+  let headers;
+  if (request.params.authType === 'anonymous') {
     delete request.params.authType;
-  }
-  if (headers && headers.token) {
-    _.each(headers, (v, k) => {
-      request.headers.set(k, v);
-    });
   } else {
-    handleUnAuthorized();
+    headers = getHeaders();
+    if (headers && headers.token) {
+      _.each(headers, (v, k) => {
+        request.headers.set(k, v);
+      });
+    } else {
+      handleUnAuthorized();
+    }
   }
 
 	// check if token is invalid
@@ -87,7 +88,7 @@ function getApiServer() {
     if (environment.isDevelopment()) {
       _apiServer = 'http://192.168.2.181';
     } else {
-      _apiServer = '';
+      _apiServer = 'https://xiaojing.linkface.cn';
     }
   }
   return _apiServer;
@@ -110,7 +111,7 @@ Vue.http.interceptors.push((request, next) => {
   if (request.method.toLowerCase() === 'get') {
     const cache = Cache.get(getCacheKey(request));
     if (cache) {
-      next(request.respondWith(_object.assign({}, cache), VueSuccesStatus));
+      next(request.respondWith(Object.assign({}, cache), VueSuccesStatus));
       return;			
     }
   }
@@ -133,14 +134,69 @@ Vue.http.interceptors.push((request, next) => {
   });
 });
 
+export const syncRouter = (r) => {
+  router = r;
+};
+
 export const VueHttp = Vue.http;
 
 export const ENV = environment;
 
-export const HttpUtils = {
+export const SocketUrl = () => {
+  if (environment.isDevelopment()) {
+    return 'ws://192.168.2.181:7000/websocket';
+  } 
+  return 'ws://xiaojing.linkface.cn/websocket';
+};
+
+export const keepAlive = (companyId, token) => {
+  const options = {
+    expires: '1M',
+    path: '/',
+  };
+  Vue.cookie.set('xtCompanyId', companyId, options);
+  Vue.cookie.set('xtAccessToken', token, options);
+};
+
+export const isAlive = () => !!Vue.cookie.get('xtAccessToken', { path: '/' });
+
+export const tryAlive = () => {
+  const cb = () => {
+    if (/^\/page.*$/.test(window.location.pathname)) {
+      router.push(window.location.pathname);
+    } else {
+      router.push('/page');
+    }
+  };
+  if (environment.isDebug()) {
+    return Promise.resolve({
+      cb,
+    });
+  }
+  const companyId = Vue.cookie.get('xtCompanyId');
+  const token = Vue.cookie.get('xtAccessToken');
+  if (companyId && token) {
+    return Promise.resolve({
+      companyId,
+      token,
+      cb,
+    });
+  } 
+  handleUnAuthorized();
+  return Promise.reject();
+};
+ 
+export const logout = () => {
+  clearCookie();
+  router.replace('/login');
+};
+
+export const NetworkUtils = {
   getUrl,
   getHeaders,
   handleUnAuthorized,
+  logout,
+  SocketUrl,
 };
 
 export default VueHttp;

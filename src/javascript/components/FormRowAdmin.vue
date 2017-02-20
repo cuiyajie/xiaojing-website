@@ -70,8 +70,8 @@ export default {
                           <el-table-column label="状态" property="status"><template scope="scope">{{ staffStatus(scope.row.status) }}</template></el-table-column>
                         </el-table>
                         <div class="table-footer">
-                          <el-button type="primary" @click="saveAdminSetting">确定</el-button>
-                          <el-button @click="cancel">取消</el-button>
+                          <el-button type="primary" size="small" @click="saveAdminSetting">确定</el-button>
+                          <el-button size="small" @click="cancel">取消</el-button>
                           <pagination class="table-pagination" 
                             :page-size="pageSize" 
                             :total="total"
@@ -93,15 +93,19 @@ export default {
                 this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
             } else {
               this.loading = true;
-              api.fetchAllStaffs(this.companyId, this.lastUserID, this.pageSize).then((response) => {
-                this.lastUserID = response.body.max_user_id;
-                this.dataStore = response.body.users;
-                this.historyStore = this.historyStore.concat(this.dataStore);
-                this.total = response.body.total || 0;
-                this.loading = false;
-              }, () => {
-                this.loading = false;
-              });
+              api.fetchAllStaffs(
+                this.companyId, 
+                null, 
+                this.lastUserID, 
+                this.pageSize).then((response) => {
+                  this.lastUserID = response.body.max_user_id;
+                  this.dataStore = response.body.users;
+                  this.historyStore = this.historyStore.concat(this.dataStore);
+                  this.total = response.body.total || 0;
+                  this.loading = false;
+                }, () => {
+                  this.loading = false;
+                });
             }
           },
           handleRequest(queryString, cb) {

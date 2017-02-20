@@ -7,6 +7,40 @@ $border-radius: 4px;
   	width: 240px;
   }
 
+  &.small {
+    width: 300px;
+  }
+
+  &.large {
+  	width: 800px;
+  }
+
+  &.modal {
+    top: 40% !important;
+    text-align: center;
+    font-size: 14px;
+    line-height: 175%;
+
+    a {
+      color: $linkface;
+      text-decoration: underline;
+      margin-left: 4px;
+    }
+
+    .el-dialog__header {
+      background-color: $lightblue;
+      padding: 5px;
+
+      .el-dialog__title {
+        color: #333;
+      }
+    }
+
+    .el-dialog__body {
+      color: #333;
+    }
+  }
+
 	.el-dialog__header {
 		background-color: $darkblue;
 		text-align: center;
