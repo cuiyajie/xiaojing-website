@@ -146,7 +146,7 @@ export const SocketUrl = () => {
   if (environment.isDevelopment()) {
     return 'ws://192.168.2.181:7000/websocket';
   } 
-  return 'ws://xiaojing.linkface.cn/websocket';
+  return 'wss://xiaojing.linkface.cn:7000/websocket';
 };
 
 export const keepAlive = (companyId, token) => {
