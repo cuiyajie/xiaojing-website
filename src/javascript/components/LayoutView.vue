@@ -4,7 +4,7 @@
     <header class="main-header">
       <router-link class="logo right-border" to="/">
         <div class="logo-lg">
-          <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo" alt="Company Logo"></div>
+          <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo || defaultCompanyLogo" alt="Company Logo"></div>
         </div>
       </router-link>
       <!-- Header navbar -->
@@ -52,6 +52,7 @@
   import { mapGetters } from 'vuex';
   import logoSrc from '../../img/linkface.svg';
   import defaultAvatar from '../../img/avatar-darkbg.png';
+  import defaultCompanyLogo from '../../img/company-logo.png';
   import { logout } from '../api/global';
 
   export default {
@@ -59,6 +60,7 @@
       return {
         logoSrc,
         defaultAvatar,
+        defaultCompanyLogo,
       };
     },
     computed: {
@@ -180,7 +182,7 @@
                 position: absolute;
                 top: 0;
                 left: 0;
-                width: 2px;
+                width: 4px;
                 height: 100%;
                 background-color: $linkface;
               }

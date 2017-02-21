@@ -4,7 +4,6 @@
               row-key="id"
               :empty-text="emptyText"
               :data="dataStore">
-      <el-table-column type="selection"></el-table-column>
       <el-table-column label="员工" property="user_name" width="80"></el-table-column>
       <el-table-column label="部门" property="department_name" width="150"></el-table-column>
       <el-table-column label="上班签到" property="first_checkin_date" width="100"><template scope="scope">{{ toShortTimeString(scope.row.first_checkin_date) }}</template></el-table-column>
@@ -15,7 +14,6 @@
       <el-table-column label="加班时长" property="overtime" width="120"><template scope="scope">{{ toDurationString(scope.row.overtime) }}</template></el-table-column>
     </el-table>
     <div class="table-footer">
-      <el-button size="small" type="primary" @click="onExport">导出</el-button>
       <pagination class="table-pagination" 
         :page-size="pageSize"
         :total="total"
@@ -37,7 +35,6 @@
         historyStore: [],
         pageSize: 10,
         total: 0,
-        selected: [],
         loading: false,
         lastUserAttendanceId: 0,
         initial: true,
@@ -78,9 +75,6 @@
       onPageChanged(page) {
         this.fetchAttendanceRecords(!page.fetchData, page.newPage);
       },
-      onExport() {
-        
-      },
       show() {
         if (this.initial) {
           this.fetchAttendanceRecords();
@@ -93,7 +87,6 @@
         this.lastUserAttendanceId = 0;
         this.total = 0;
         this.initial = true;
-        this.selected = [];
       },
       ...dateFilter,
     },

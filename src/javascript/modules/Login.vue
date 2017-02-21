@@ -53,14 +53,16 @@
       return {
         logo,
         loading: true,
+        consumer: null,
+        subscription: null,
       };
     },
     methods: {
       createSocketConnect(code) {
         /* eslint max-len: ["error", { "ignoreComments": true }]*/
-        const consumer = ActionCable.createConsumer(NetworkUtils.SocketUrl()); // eslint-disable-line new-cap
+        this.consumer = ActionCable.createConsumer(NetworkUtils.SocketUrl()); // eslint-disable-line new-cap
         const vm = this;
-        consumer.subscriptions.create({
+        this.subscription = this.consumer.subscriptions.create({
           channel: 'WebLoginChannel',
           code,
         }, {
@@ -97,6 +99,9 @@
         this.loading = false;
         this.createSocketConnect(code);
       }, () => {}); 
+    },
+    destroyed() {
+      this.consumer.disconnect();
     },
 };
 </script>
