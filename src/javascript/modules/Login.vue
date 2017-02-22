@@ -7,7 +7,7 @@
             <div class="feature-icon mobile"></div>
             <div class="feature-text">
               <p>01</p>
-              <p>登录手机端智慧小睛</p>
+              <p>登录手机端小瞳助手</p>
             </div>
           </li>
           <li class="clearfix">
