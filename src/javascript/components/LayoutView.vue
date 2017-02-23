@@ -35,7 +35,9 @@
             <ul class="treeview-menu menu-open">
               <li><router-link to="/page/staff">员工管理</router-link></li>
               <li><router-link to="/page/department">部门管理</router-link></li>
-              <li><router-link exact to="/page">考勤管理</router-link></li>
+              <li><router-link exact to="/page">考勤统计</router-link></li>
+              <li><router-link to="/page/attendance/staff">员工签到记录</router-link></li>
+              <li><router-link to="/page/attendance/visitor">访客签到记录</router-link></li>
               <li><router-link to="/page/company">公司信息管理</router-link></li>
             </ul>
           </li>
@@ -94,7 +96,7 @@
     .logo {
       height: $header-height;
       line-height: $header-height;
-      background-color: #28334d;
+      background-color: $darkerblue;
 
       img {
         height: 60px;
@@ -176,6 +178,7 @@
 
             &.router-link-active {
               position: relative;
+              background-color: $darkerblue;
 
               &:before {
                 content: '';

@@ -2,7 +2,7 @@
   <el-dialog :title="title" 
       v-model="dialogVisible" 
       size="small" 
-      custom-class="day-attendance normal" 
+      custom-class="day-attendance normal no-padding" 
       :close-on-click-modal="false"
       @close="onClose">
     <div class="dialog-body">
@@ -91,10 +91,6 @@
     width: 90%;
     max-width: 1100px;
     min-width: 900px;
-
-    &.el-dialog.normal .el-dialog__body {
-      padding: 0;
-    }
 
     .dialog-body {
       padding: 0 20px 20px;

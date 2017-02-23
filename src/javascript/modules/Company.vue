@@ -16,14 +16,20 @@
         :upload-success="saveCompanyLogoSuccess">  
       </form-row-image>
     </div>
-    <div class="section-header">管理员（可以进行考勤管理，登录网站管理后台）</div>
+    <div class="section-header">管理员</div>
     <div class="section-row admin-row">
-      <form-row-admin :admin="admin" :save="updateAdmin" :company-id="company.id"></form-row-admin>
+      <el-row>
+        <el-col :span="24">可以进行考勤管理，登录网站管理后台</el-col>
+        <div class="buttons-area">
+          <el-button type="primary" size="small" @click="showAdminSetting">设置</el-button>
+        </div>
+      </el-row>
     </div>
     <div class="section-header">考勤设置（每日工作时长 9小时）</div>
     <div class="section-row">
       <form-row-attendance-time :start-time="company.start_time" :end-time="company.end_time" :save="saveCompanyAttendanceTime"></form-row-attendance-time>
     </div>
+    <admin-setting-modal ref="adminSettingModal"></admin-setting-modal>
   </div>
 </template>
 <script>
@@ -33,7 +39,7 @@
   import FormRowLabel from '../components/FormRowLabel';
   import FormRowTextInput from '../components/FormRowTextInput';
   import FormRowImage from '../components/FormRowImage';
-  import FormRowAdmin from '../components/FormRowAdmin';
+  import AdminSettingModal from '../components/AdminSettingModal';
   import FormRowAttendanceTime from '../components/FormRowAttendanceTime';
 
   export default {
@@ -56,7 +62,7 @@
       FormRowLabel,
       FormRowTextInput,
       FormRowImage,
-      FormRowAdmin,
+      AdminSettingModal,
       FormRowAttendanceTime,
     },
     methods: {
@@ -72,8 +78,8 @@
       saveCompanyAttendanceTime(startTime, endTime) {
         return api.updateCompany(this.company.id, { start_time: startTime, end_time: endTime });
       },
-      updateAdmin() {
-
+      showAdminSetting() {
+        this.$refs.adminSettingModal.show();
       },
     },
 };

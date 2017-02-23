@@ -50,3 +50,8 @@ export default {
     },
 };
 </script>
+<style lang="scss">
+  .el-autocomplete .el-input__small {
+    font-size: 14px;
+  }
+</style>

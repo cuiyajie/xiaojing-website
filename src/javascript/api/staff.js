@@ -18,6 +18,28 @@ export function fetchAllStaffs(companyId, departmentId, lastUserId, count) {
   });
 }
 
+export function fetchAllAdmins(companyId) {
+  return VueHttp.get(urls.URL_FETCH_ALL_ADMINS, {
+    params: {
+      company_id: companyId,
+    },
+  });
+}
+
+export function setAdmin(companyId, userId) {
+  return VueHttp.post(urls.URL_SET_ADMIN, {
+    company_id: companyId,
+    user_ids: [userId],
+  });
+}
+
+export function unsetAdmin(companyId, userId) {
+  return VueHttp.post(urls.URL_UNSET_ADMIN, {
+    company_id: companyId,
+    user_id: userId,
+  });
+}
+
 export function fetchConditionalStaffs(companyId, queryString, count) {
   const query = {};
   if (/^\d+$/.test(queryString)) {

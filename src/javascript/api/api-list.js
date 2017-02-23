@@ -3,6 +3,7 @@ export default {
   URL_FETCH_LOGIN_CODE: '/v1.0/companies/scan_code',
   URL_UPDATE_COMPANY: '/v1.0/companies/update',
   URL_FETCH_ALL_STAFFS: '/v1.0/users/company_users',
+  URL_FETCH_ALL_ADMINS: '/v1.0/companies/admin_list',
   URL_FETCH_STAFFS: '/v1.0/users/search_users',
   URL_FETCH_ALL_DEPARTMENTS: '/v1.0/departments/company_departments',
   URL_CREATE_DEPARTMENT: '/v1.0/departments/create',
@@ -15,6 +16,8 @@ export default {
   URL_STAFF_QUIT: '/v1.0/users/quit',
   URL_STAFF_IMPORT: '/v1.0/users/import_image',
   URL_STAFF_BTACH_UPDATE_DEPARTMENT: '/v1.0/users/change_department',
+  URL_SET_ADMIN: '/v1.0/users/create_admin',
+  URL_UNSET_ADMIN: '/v1.0/admin/delete',
   URL_FETCH_ATTENDANCE_ANALYSIS: '/v1.0/attendances/company_attendances_detail',
   URL_FETCH_USER_ATTENDANCE: '/v1.0/user_attendances/query',
 };

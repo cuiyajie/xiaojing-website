@@ -15,6 +15,24 @@ $border-radius: 4px;
   	width: 800px;
   }
 
+  &.no-padding {
+
+    .el-dialog__body {
+      padding: 0;
+    }
+  }
+  
+  .dialog-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .dialog-banner {
+    background-color: $lightblue;
+    height: 40px;
+    line-height: 40px;
+  }
+
   &.modal {
     top: 40% !important;
     text-align: center;
@@ -71,5 +89,11 @@ $border-radius: 4px;
 		padding-top: 0;
 		text-align: center;
 	}
+
+  .el-dialog__body {
+    overflow: hidden;
+    border-bottom-left-radius: $border-radius;
+    border-bottom-right-radius: $border-radius;
+  }
 }
 
