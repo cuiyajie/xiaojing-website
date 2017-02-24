@@ -83,7 +83,7 @@
     data() {
       return {
         emptyText: '暂时没有符合条件的员工！',
-        pageSize: 15,
+        pageSize: 10,
         total: 0,
         dataStore: [],
         historyStore: [],
