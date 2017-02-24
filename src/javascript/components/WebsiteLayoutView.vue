@@ -9,7 +9,7 @@
           <nav>
             <ul class="clearfix">
               <li><router-link exact to="/">产品介绍</router-link></li>
-              <li><router-link to="/login">登陆</router-link></li>
+              <li><router-link to="/login">登录</router-link></li>
             </ul>
           </nav>
         </div>
