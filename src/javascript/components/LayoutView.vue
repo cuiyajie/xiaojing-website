@@ -2,13 +2,14 @@
   <!-- use adminLTE layout -->
   <div class="wrapper fixed">
     <header class="main-header">
-      <router-link class="logo right-border" to="/">
+      <router-link class="logo" to="/">
         <div class="logo-lg">
           <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo || defaultCompanyLogo" alt="Company Logo"></div>
         </div>
       </router-link>
       <!-- Header navbar -->
-      <nav class="navbar navbar-static-top" role="navigation">
+      <nav class="navbar navbar-static-top bottom-border" role="navigation">
+        <div class="navbar-left">{{ currentCompany.name }}</div>
         <!-- Navbar Right Menu -->
         <div class="navbar-custom-menu">
           <ul class="nav navbar-nav clearfix">
@@ -86,15 +87,16 @@
   /* defination */
   @import "~scss_var";
   $header-height: 80px;
+  $container-border-size: 8px;
   
   /* header */
   .main-header {
-    background-color: $lightblue;
+    background-color: $darkblue;
 
     .logo {
       height: $header-height;
       line-height: $header-height;
-      background-color: #28334d;
+      background-color: $darkblue;
 
       img {
         height: 60px;
@@ -104,6 +106,17 @@
 
     .navbar {
       min-height: $header-height;
+      color: #FFF;
+
+      &.bottom-border:after {
+        left: $container-border-size;
+      }
+    }
+
+    .navbar-left {
+      float: left;
+      line-height: $header-height;
+      font-size: 20px;
     }
 
     .navbar-custom-menu {
@@ -125,7 +138,6 @@
             padding-left: 15px;
             padding-right: 20px;
             border-right: 1px solid #c9c9c9;
-            vertical-align: middle;
           }
         }
 
@@ -148,11 +160,39 @@
       border-radius: 50%;
     }
   }
+
+  .lf-page-container {
+    position: relative;
+
+    &:before,
+    &:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: $container-border-size;
+      height: $container-border-size;
+    }
+    &:before {
+      background-color: $darkblue;
+    }
+    &:after {
+      border-top-left-radius: $container-border-size;
+      background-color: #FFF;
+      border-left: 2px solid $linkface;
+      border-top: 2px solid $linkface;
+    }
+  }
+
   /* sidebar */
   .main-sidebar {
     background-color: $darkblue;
     padding-top: $header-height;
     color: #FFF;
+
+    &.right-border:after {
+      top: $header-height + $container-border-size;
+    }
 
     .sidebar {
       margin-top: 60px;
@@ -176,6 +216,7 @@
 
             &.router-link-active {
               position: relative;
+              background-color: $darkerblue;
 
               &:before {
                 content: '';

@@ -1,6 +1,6 @@
 <template>
   <div class="lf-page-container company-container">
-    <div class="section-header mt0">公司信息</div>
+    <div class="section-header">公司信息</div>
     <div class="section-row bordered">
       <form-row-label title="公司ID" :value="company.id"></form-row-label>
     </div>
@@ -16,10 +16,10 @@
         :upload-success="saveCompanyLogoSuccess">  
       </form-row-image>
     </div>
-    <div class="section-header">管理员（可以进行考勤管理，登录网站管理后台）</div>
+    <!--<div class="section-header">管理员（可以进行考勤管理，登录网站管理后台）</div>
     <div class="section-row admin-row">
       <form-row-admin :admin="admin" :save="updateAdmin" :company-id="company.id"></form-row-admin>
-    </div>
+    </div>-->
     <div class="section-header">考勤设置（每日工作时长 9小时）</div>
     <div class="section-row">
       <form-row-attendance-time :start-time="company.start_time" :end-time="company.end_time" :save="saveCompanyAttendanceTime"></form-row-attendance-time>
@@ -87,6 +87,10 @@
       margin-top: 30px;
       line-height: 200%;
       border-bottom: 1px solid $linkface;
+
+      &:first-child {
+        margin-top: 14px;
+      }
     }
 
     .section-row {

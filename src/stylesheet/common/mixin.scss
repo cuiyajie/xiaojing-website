@@ -12,3 +12,23 @@
 	display: block;
 	padding-top: $paddingTop;
 }
+
+@mixin block-border($direction, $thickness) {
+  position: relative;
+  &:after {
+    content: '';
+    position: absolute;
+    background-color: $linkface;
+    @if $direction == 'right' {
+      top: 0;
+      right: -$thickness;
+      bottom: 0;
+      width: $thickness;
+    } @else if $direction == 'bottom' {
+      right: 0;
+      left: 0;
+      height: $thickness;
+      bottom: -$thickness;
+    }
+  }
+}
