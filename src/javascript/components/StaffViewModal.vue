@@ -16,8 +16,8 @@
       <el-form-item label="职务"><span class="form-value">{{ viewed.job_position }}</span></el-form-item>
       <el-form-item class="tx_c no-bordered buttons">
        <el-button type="primary" @click="edit" size="small">编辑</el-button>
-       <el-button type="primary" @click="onQuit" size="small" 
-          v-show="viewed.status === ENUM_STAFF_STATUS.NORMAL">设为离职</el-button>
+       <!--<el-button type="primary" @click="onQuit" size="small" 
+          v-show="viewed.status === ENUM_STAFF_STATUS.NORMAL">设为离职</el-button>-->
        <el-button @click="onDelete" size="small">删除</el-button>
       </el-form-item>
     </el-form>
