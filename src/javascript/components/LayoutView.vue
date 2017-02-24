@@ -42,6 +42,10 @@
           </li>
         </ul>
       </section>
+      <div class="company-name-logo">
+        <p>今始科技有限公司</p>
+        <p>linkface.cn</p>
+      </div>
     </aside>
     <div class="content-wrapper">
       <router-view></router-view>
@@ -233,6 +237,28 @@
               }
             }
           }
+        }
+      }
+    }
+
+    .company-name-logo {
+      text-align: center;
+      position: absolute;
+      left: 0;
+      width: 100%;
+      bottom: 30px;
+      
+      p {
+        margin: 0;
+
+        &:first-child {
+          color: rgba(255, 255, 255, .2);
+          margin-bottom: 5px;
+        }
+
+        &:last-child {
+          color: rgba(255, 255, 255, .1);
+          letter-spacing: 4px;
         }
       }
     }

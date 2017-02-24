@@ -58,7 +58,7 @@
       const start = moment(end).add(-1, 'months')._d;
       return {
         emptyText: '暂时没有考勤统计',
-        pageSize: 15,
+        pageSize: 10,
         total: 0,
         dataStore: [],
         historyStore: [],
