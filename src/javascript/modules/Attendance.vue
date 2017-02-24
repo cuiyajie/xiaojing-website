@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="lf-page-header bordered">
-      <span class="lf-page-caption pin">查询日期{{ daysQueried }}天；正常{{ normal }}人，迟到{{ latecomer }}人，缺勤{{ absence }}人，请假{{ leave }}人。</span>
+      <span class="lf-page-caption pin">查询日期{{ daysQueried }}天；正常{{ normal }}人次，迟到{{ latecomer }}人次，缺勤{{ absence }}人次，请假{{ leave }}人次。</span>
     </div>
     <el-table class="custom-table mt15"
       row-key="id"
