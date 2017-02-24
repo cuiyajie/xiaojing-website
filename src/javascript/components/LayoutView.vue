@@ -17,7 +17,7 @@
             <li class="user user-menu">
                 <!-- The user image in the navbar-->
                 <img :src="currentUser.avatar || defaultAvatar" class="user-image" alt="User Image">
-                <span>{{ currentUser.name }}</span>
+                <span :class="{ 'no-border': !currentUser.name || currentUser.name === '' }">{{ currentUser.name }}</span>
             </li>
             <!-- Logout -->
             <li class="logout">
@@ -138,6 +138,10 @@
             padding-left: 15px;
             padding-right: 20px;
             border-right: 1px solid #c9c9c9;
+
+            &.no-border {
+              border-right: none;
+            }
           }
         }
 
