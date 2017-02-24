@@ -1,23 +1,44 @@
 <template>
   <span>
-    <el-dialog title="批量添加员工"
+    <el-dialog :title="title"
                v-model="dialogVisible"
                size="small"
-               custom-class="batch-upload normal small"
+               custom-class="batch-upload normal"
                :close-on-click-modal="false"
                @close="onClose">
         <div class="upload-panel">
           <span v-show="state === STATES.INIT">
-            <ul class="upload-rules">
-              <li>格式为JPG、JPEG、PNG</li>
-              <li>大小不能超过200KB</li>
-              <li>文件名称为姓名-手机号码-性别，其中各项不能为空，手机号码为11位合法号码，性别为男女</li>
-            </ul>
-            <div class="tx_c">
-              <el-button type="primary" size="small" @click="onStart" ref="StartButton">
-                点击上传图片<input type="file" class="hidden" multiple @change="onFilesAdded">
-              </el-button>
-            </div>
+            <el-row>
+              <el-col :span="12">
+                <el-form>
+                  <el-form-item label="上传照片">
+                    <el-button type="primary" class="upload-button" size="small" @click="onStart" ref="StartButton">
+                      选择文件
+                      <input type="file" class="hidden" multiple @change="onFilesAdded">
+                    </el-button>
+                  </el-form-item>
+                  <el-form-item label="注意事项"></el-form-item>
+                  <el-form-item
+                    <ul class="upload-rules">
+                      <li>只支持PNG、JPG以及JPEG文件格式</li>
+                      <li>图像要求长宽等长，并且不能小于600像素</li>
+                      <li>大小不能超过500KB</li>
+                      <li>照片命名规则为&#8220;姓名-手机号码-性别&#8221;</li>
+                    </ul>
+                  </el-form-item>
+                </el-form>
+              </el-col>
+              <el-col :span="12">
+                <el-form>
+                  <el-form-item label="图示">
+                    <div class="upload-sample">
+                      <div class="u-s-img"><img :src="UploadSampleAvatar" alt="Upload Sample Image"></div>
+                      <div class="u-s-text">周晓丽-18712345678-女</div>
+                    </div>
+                  </el-form-item>
+                </el-form>
+              </el-col>
+            </el-row>
           </span>
           <span v-show="state === STATES.UPLOADING">
             <div class="upload-progress">
@@ -44,6 +65,11 @@
   import { mapGetters } from 'vuex';
   import Rx from 'rx-lite';
   import api from '../api';
+  import UploadSampleAvatar from '../../img/upload-sample-image.jpg';
+
+  const MAX_FILESIZE = 500 * 1000;
+  const FILE_DIMENSION = 600;
+  const Image = window.Image;
 
   Vue.component('upload-success-modal', {
     data() {
@@ -78,9 +104,10 @@
   });
 
   const UPLOAD_ERRORS = {
-    NAME_NOT_INVAILD: '文件名称不符合命名规则',
-    FILE_EXTENSION: '文件格式不正确',
-    FILE_SIZE: '文件大小不能超过200KB',
+    NAME_NOT_INVAILD: '照片命名规则为“姓名-手机号码-性别”',
+    FILE_EXTENSION: '只支持PNG、JPG以及JPEG文件格式',
+    FILE_SIZE: '大小不能超过500KB',
+    FILE_DIMENSION: '图像要求长宽等长，并且不能小于600像素',
     SERVER_ERROR: '服务器错误',
     NETWORK_ERROR: '网络错误',
   };
@@ -103,12 +130,22 @@
         success: 0,
         fail: 0,
         progressStatus: '',
+        UploadSampleAvatar,
       };
     },
     computed: {
       ...mapGetters({
         company: 'currentCompany',
       }),
+      title() {
+        let title;
+        if (this.state === this.STATES.INIT) {
+          title = '选择文件';
+        } else {
+          title = '批量添加员工';
+        }
+        return title;
+      },
       progress() {
         let progress;
         if (this.total > 0) {
@@ -179,7 +216,7 @@
                   filename: file.name, 
                   description: UPLOAD_ERRORS.FILE_EXTENSION,
                 });
-              } else if (file.size > 200 * 1000) {
+              } else if (file.size > MAX_FILESIZE) {
                 return this.onFail({ 
                   filename: file.name,
                   description: UPLOAD_ERRORS.FILE_SIZE,
@@ -187,6 +224,24 @@
               }
               return file;
             })
+            .concatMap(file => Rx.Observable.create((observer) => {
+              const image = new Image();
+              const wURL = window.URL || window.webkitURL;
+              if (wURL) {
+                image.src = wURL.createObjectURL(file);
+                image.onload = () => {
+                  if (image.width === image.height && image.width >= FILE_DIMENSION) {
+                    observer.onNext(file); 
+                  } else {
+                    this.onFail({
+                      filename: file.name,
+                      description: UPLOAD_ERRORS.FILE_DIMENSION,
+                    });
+                    observer.onCompleted();
+                  }
+                };
+              }
+            }))
             .concatMap(file => Rx.Observable.fromPromise(api.importStaff(this.company.id, file)
               .catch(() => Rx.Observable.just({
                 error: {
@@ -195,6 +250,7 @@
                 },
               })
               )));
+
           // subscribe Rx
           source.subscribe((val) => {
             if (val && val._value && val._value.error) {
@@ -218,7 +274,6 @@
   
   ul.upload-rules {
     font-size: 12px;
-    color: #999;
     line-height: 150%;
     padding-left: 15px;
     margin-bottom: 15px;
@@ -230,6 +285,8 @@
   }
   
   .batch-upload.el-dialog {
+    width: 560px;
+    min-height: 240px;
 
     .el-dialog__body {
       padding-left: 0;
@@ -237,10 +294,49 @@
       max-height: 450px;
       overflow-y: auto;
     }
+
     .upload-panel {
       padding-left: 20px;
       padding-right: 20px;
+
+      .el-row .el-col:first-child {
+        padding-right: 20px;
+      }
+
+      .el-row .el-col:last-child .el-form-item__content {
+        padding-left: 60px;
+      }
+
+      .el-form-item {
+        margin-bottom: 5px;
+      }
+
+      .upload-button {
+        margin-left: 24px;
+      }
+
+      .upload-sample {
+        text-align: center;
+
+        .u-s-img {
+          width: 150px;
+          height: 150px;
+          margin: 0 auto;
+
+          img {
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
+          }
+        }
+
+        .u-s-text {
+          font-size: 12px;
+          color: #999;
+        }
+      }
     }
+
     .upload-progress {
       text-align: center;
       padding: 15px 0;
