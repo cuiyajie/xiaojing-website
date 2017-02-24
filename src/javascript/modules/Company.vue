@@ -1,6 +1,6 @@
 <template>
   <div class="lf-page-container company-container">
-    <div class="section-header mt0">公司信息</div>
+    <div class="section-header">公司信息</div>
     <div class="section-row bordered">
       <form-row-label title="公司ID" :value="company.id"></form-row-label>
     </div>
@@ -93,6 +93,10 @@
       margin-top: 30px;
       line-height: 200%;
       border-bottom: 1px solid $linkface;
+
+      &:first-child {
+        margin-top: 14px;
+      }
     }
 
     .section-row {

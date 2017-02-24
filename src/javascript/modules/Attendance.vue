@@ -1,11 +1,11 @@
 <template>
   <div class="lf-page-container attendance-container">
-    <div class="lf-page-fixed">
+    <div class="lf-page-preheader">
       <el-row>
-        <el-col :span="7">
+        <el-col :span="6">
           <el-date-picker size="small" :editable="false" v-model="dateRange" type="daterange" placeholder="选择起止日期" @change="onDateRangeChanged"></el-date-picker>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="3">
           <el-dropdown menu-align="start">
             <el-button size="small">{{ selectedDepartment.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
             <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
@@ -13,16 +13,16 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="15">
            <el-button size="small" type="primary" @click="onSearch">查询</el-button>
         </el-col>
-      </el-row>
-    </div>
-    <div class="lf-page-header bordered">
-      <span class="lf-page-caption pin">查询日期{{ daysQueried }}天；正常{{ normal }}人，迟到{{ latecomer }}人，缺勤{{ absence }}人，请假{{ leave }}人。</span>
+      </el-row>      
       <div class="lf-page-header-buttons">
         <el-button size="small" type="primary" @click="onExport">导出</el-button>
       </div>
+    </div>
+    <div class="lf-page-header bordered">
+      <span class="lf-page-caption pin">查询日期{{ daysQueried }}天；正常{{ normal }}人次，迟到{{ latecomer }}人次，缺勤{{ absence }}人次，请假{{ leave }}人次。</span>
     </div>
     <el-table class="custom-table mt15"
       row-key="id"

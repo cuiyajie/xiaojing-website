@@ -31,7 +31,11 @@
 			}
 		}
 	}
- 
+}
+
+.lf-page-header,
+.lf-page-preheader {
+
 	.lf-page-header-buttons {
 		position: absolute;
 		top: 15px;
@@ -39,12 +43,16 @@
 	}
 }
 
-.lf-page-fixed {
-	position: fixed;
-	top: ($header-height - 30px) / 2;
-	left: $sidebar-width + 20px;
-	width: 800px;
-	z-index: 1050;
+.lf-page-preheader {
+	margin-top: 18px;
+
+  .lf-page-header-buttons {
+		top: 0;
+	}
+}
+
+.lf-page-preheader {
+	position: relative;
 
   .el-col {
     padding-right: 15px;

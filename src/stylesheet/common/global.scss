@@ -50,14 +50,9 @@ a {
 }
 
 .right-border {
-  position: relative;
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 2px;
-    background-color: $linkface;
-  }
+  @include block-border('right', 2px);
+}
+
+.bottom-border {
+  @include block-border('bottom', 2px);
 }

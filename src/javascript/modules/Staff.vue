@@ -1,11 +1,11 @@
 <template>
   <div class="lf-page-container staff-container">
-    <div class="lf-page-fixed">
+    <div class="lf-page-preheader">
       <el-row>
-        <el-col :span="9">
+        <el-col :span="6">
           <staff-auto-complete @handle-request="handleRequest" @handle-select="handleSelect"></staff-auto-complete>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="3">
           <el-dropdown menu-align="start">
             <el-button size="small">{{ selectedDepartment.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
             <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
@@ -21,17 +21,17 @@
             </el-dropdown-menu>
           </el-dropdown> 
         </el-col> -->
-        <el-col :span="10">
+        <el-col :span="15">
            <el-button size="small" type="primary" @click="onSearch">查询</el-button>
         </el-col>
       </el-row>
-    </div>
-    <div class="lf-page-header bordered">
-      <span class="lf-page-caption">共{{ total }}人</span>
       <div class="lf-page-header-buttons">
         <el-button size="small" type="primary" @click="onAdd">添加员工</el-button>
         <el-button size="small" @click="onStaffBatchAdd">批量添加</el-button>
       </div>
+    </div>
+    <div class="lf-page-header bordered">
+      <span class="lf-page-caption">共{{ total }}人</span>
     </div>
     <el-table class="custom-table mt15"
       row-key="id"
@@ -83,7 +83,7 @@
     data() {
       return {
         emptyText: '暂时没有符合条件的员工！',
-        pageSize: 15,
+        pageSize: 10,
         total: 0,
         dataStore: [],
         historyStore: [],
@@ -240,7 +240,7 @@
   @import '~scss_var';
 
   .staff-header-dropdown.el-dropdown-menu {
-    width: 152px;
+    width: 190px;
     font-size: 14px;
 
     .el-dropdown-menu__item {

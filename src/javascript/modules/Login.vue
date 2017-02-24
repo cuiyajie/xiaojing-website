@@ -21,7 +21,7 @@
             <div class="feature-icon qrcode"></div>
             <div class="feature-text">
               <p>03</p>
-              <p>点击扫码登录PC网站</p>
+              <p>登录管理后台</p>
             </div>
           </li>
          </ul>
