@@ -12,7 +12,7 @@ import '../fonts/iconfont/iconfont.css';
 import filters from './utils/filters';
 import routes from './routes';
 import store from './store';
-import { syncRouter, tryAlive } from './api/global';
+import { syncRouter } from './api/global';
 import App from './App';
 
 Ellocale.use(lang);
@@ -31,9 +31,6 @@ const router = new VueRouter({
 
 sync(store, router);
 syncRouter(router);
-tryAlive().then((loginParams) => {
-  store.dispatch('autoLogin', loginParams);
-}, () => {});
 
 new Vue({
   router,
