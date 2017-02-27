@@ -32,6 +32,8 @@
 </template>
 <script>
   import logo from '../../img/login/icon_140@2x.png';
+
+  const body = window.document.body;
   
   export default {
     data() {
@@ -39,14 +41,48 @@
         logo,
       };
     },
+    methods: {
+      setTheme(to) {
+        const route = to || this.$route;
+        if (route.name === 'home') {
+          body.classList.add('dark-theme');
+        } else {
+          body.classList.remove('dark-theme');
+        }
+      },
+    },
+    watch: {
+      $route(to) {
+        this.setTheme(to);
+      },
+    },
     mounted() {
-      this.$router.replace('/login');
+      this.setTheme();
     },
   };
 </script>
 <style lang="scss">
   @import '~scss_var';
   $website-header-height: 62px;
+
+  body.dark-theme {
+    background-color: $darkblue;
+
+    .website-wrapper {
+      
+      header {
+        background-color: #FFF;
+      }
+
+      footer {
+        color: #FFF;
+        .copyright {
+          margin-top: 24px;
+          color: rgba(#FFF, .5);
+        }
+      }
+    }
+  }
 
   .website-wrapper {
     color: $darkblue;
