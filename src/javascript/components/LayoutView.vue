@@ -2,11 +2,9 @@
   <!-- use adminLTE layout -->
   <div class="wrapper fixed">
     <header class="main-header">
-      <router-link class="logo" to="/">
-        <div class="logo-lg">
-          <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo || defaultCompanyLogo" alt="Company Logo"></div>
-        </div>
-      </router-link>
+      <div class="logo logo-lg">
+        <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo || defaultCompanyLogo" alt="Company Logo"></div>
+      </div>
       <!-- Header navbar -->
       <nav class="navbar navbar-static-top bottom-border" role="navigation">
         <div class="navbar-left">{{ currentCompany.name }}</div>
