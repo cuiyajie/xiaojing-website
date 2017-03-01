@@ -77,6 +77,7 @@
   import StaffAutoComplete from './StaffAutoComplete';
   import Pagination from './Pagination';
   import api from '../api';
+  import { VueSuccesStatus } from '../api/httpstatus';
 
   export default {
     data() {
@@ -200,8 +201,12 @@
               }
             });
             this.loading = false;
-          }, () => {
-            MessageBox.tip('设置失败！');
+          }, (err) => {
+            let errAlert = '设置失败！';
+            if (err.status !== VueSuccesStatus.status && err.body.message && err.body.message !== '') {
+              errAlert = err.body.message;
+            }
+            MessageBox.tip(errAlert);
             this.loading = false;
           });
         }).catch(() => {});

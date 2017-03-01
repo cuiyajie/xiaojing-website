@@ -17,7 +17,7 @@ export default {
   URL_STAFF_IMPORT: '/v1.0/users/import_image',
   URL_STAFF_BTACH_UPDATE_DEPARTMENT: '/v1.0/users/change_department',
   URL_SET_ADMIN: '/v1.0/users/create_admin',
-  URL_UNSET_ADMIN: '/v1.0/admin/delete',
+  URL_UNSET_ADMIN: '/v1.0/users/delete_admin',
   URL_FETCH_ATTENDANCE_ANALYSIS: '/v1.0/attendances/company_attendances_detail',
   URL_FETCH_USER_ATTENDANCE: '/v1.0/user_attendances/query',
 };
