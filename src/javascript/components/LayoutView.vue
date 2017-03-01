@@ -58,7 +58,7 @@
   import logoSrc from '../../img/linkface.svg';
   import defaultAvatar from '../../img/avatar-darkbg.png';
   import defaultCompanyLogo from '../../img/company-logo.png';
-  import { logout } from '../api/global';
+  import { logout, tryAlive } from '../api/global';
 
   export default {
     data() {
@@ -83,6 +83,11 @@
           this.$store.dispatch('fetchDepartments', val.id);
         }
       },
+    },
+    created() {
+      tryAlive().then((loginParams) => {
+        this.$store.dispatch('autoLogin', loginParams);
+      }, () => {});
     },
   };
 </script>

@@ -44,7 +44,7 @@
   import QRCode from 'qrcode-generator';
   import { ActionCable } from 'actioncable-js';
   import logo from '../../img/login/icon_140@2x.png';
-  import { NetworkUtils } from '../api/global';
+  import { NetworkUtils, tryAlive } from '../api/global';
   import api from '../api';
 
   export default {
@@ -102,6 +102,11 @@
     },
     destroyed() {
       this.consumer.disconnect();
+    },
+    created() {
+      tryAlive().then((loginParams) => {
+        this.$store.dispatch('autoLogin', loginParams);
+      }, () => {});
     },
 };
 </script>
