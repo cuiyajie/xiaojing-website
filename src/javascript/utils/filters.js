@@ -23,6 +23,9 @@ export const dateFilter = {
   toStringWithWeek(mDate) {
     return mDate.format('YYYY.MM.DD dddd');
   },
+  toLongDateString(mDate) {
+    return mDate.format('YYYY.MM.DD hh:mm:ss');
+  },
   toShortString(date) {
     return moment(date).format('YYYY-MM-DD');
   },
@@ -32,6 +35,9 @@ export const dateFilter = {
   },
   toDurationString(duration) {
     return duration > 0 ? moment.duration(duration, 'seconds').format('h小时m分') : '--';
+  },
+  duration2Days(start, end) {
+    return Math.ceil(moment.duration(end - start).as('days'));
   },
 };
 

@@ -3,7 +3,7 @@
     <div class="lf-page-preheader">
       <el-row>
         <el-col :span="6">
-          <el-date-picker size="small" :editable="false" v-model="dateRange" type="daterange" placeholder="选择起止日期" @change="onDateRangeChanged"></el-date-picker>
+          <el-date-picker size="small" :editable="false" :clearable="false" v-model="dateRange" type="daterange" placeholder="选择起止日期" @change="onDateRangeChanged"></el-date-picker>
         </el-col>
         <el-col :span="3">
           <el-dropdown menu-align="start">
@@ -68,7 +68,7 @@
         absence: 0,
         leave: 0,
         loading: false,
-        daysQueried: moment.duration(end - start).as('days'),
+        daysQueried: dateFilter.duration2Days(start, end),
         dateRange: [start, end],
         selectedDepartment: { id: 0, name: '所有部门' },
       };
@@ -90,7 +90,7 @@
       onDateRangeChanged() {
         const range = this.dateRange;
         if (range && range.length === 2) {
-          this.daysQueried = moment.duration(range[1] - range[0]).as('days');
+          this.daysQueried = dateFilter.duration2Days(range[0], range[1]);
         }
       },
       selectDepartment(department) {

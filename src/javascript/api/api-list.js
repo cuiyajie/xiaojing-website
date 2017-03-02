@@ -20,4 +20,6 @@ export default {
   URL_UNSET_ADMIN: '/v1.0/users/delete_admin',
   URL_FETCH_ATTENDANCE_ANALYSIS: '/v1.0/attendances/company_attendances_detail',
   URL_FETCH_USER_ATTENDANCE: '/v1.0/user_attendances/query',
+  URL_FETCH_STAFF_CHECKIN: '/v1.0/checkins/list',
+  URL_FETCH_GUEST_CHECKIN: '/v1.0/guests/list',
 };

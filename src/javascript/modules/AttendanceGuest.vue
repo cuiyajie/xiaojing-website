@@ -5,18 +5,7 @@
         <el-col :span="6">
           <el-date-picker size="small" :editable="false" :clearable="false" v-model="dateRange" type="daterange" placeholder="选择起止日期" @change="onDateRangeChanged"></el-date-picker>
         </el-col>
-        <el-col :span="3"> 
-          <staff-auto-complete @handle-request="handleRequest" @handle-select="handleSelect"></staff-auto-complete>
-        </el-col>
-        <el-col :span="3">
-          <el-dropdown menu-align="start">
-            <el-button size="small">{{ selectedDepartment.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
-            <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
-               <el-dropdown-item v-for="department in departmentslist" :key="department.id" @click.native="selectDepartment(department);">{{ department.name }}</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </el-col>
-        <el-col :span="12">
+        <el-col :span="18">
            <el-button size="small" type="primary" @click="onSearch">查询</el-button>
         </el-col>
       </el-row>
@@ -29,9 +18,6 @@
       :empty-text="emptyText"
       :data="dataStore">
       <el-table-column label="日期" property="day"><template scope="scope">{{ dateFormatter(scope.row.day) }}</template></el-table-column>
-      <el-table-column label="员工" property="user_name"></el-table-column>
-      <el-table-column label="部门" property="department_name"></el-table-column>
-      <el-table-column label="职务" property="job_position"></el-table-column>
       <el-table-column label="人脸照片"><template scope="scope"><img class="thumb-image" :src="scope.row.face_image" alt="User FaceImage" @click="viewSourceImage(scope.row.face_image)"></template></el-table-column>
     </el-table>
     <div class="table-footer">
@@ -46,7 +32,6 @@
   import { mapGetters } from 'vuex';
   import moment from 'moment';
   import Pagination from '../components/Pagination';
-  import StaffAutoComplete from '../components/StaffAutoComplete';
   import api from '../api';
   import { dateFilter } from '../utils/filters';
   import ImageModal from '../utils/imagemodal';
@@ -54,19 +39,16 @@
   export default {
     data() {
       const end = new Date();
-      // const start = end;
-      const start = moment().add(-1, 'months')._d;
+      const start = end;
       return {
-        emptyText: '暂时没有员工的考勤记录',
+        emptyText: '暂时没有访客的考勤记录',
         pageSize: 15,
         total: 0,
         dataStore: [],
         historyStore: [],
-        lastCheckinId: 0,
+        lastGuestId: 0,
         daysQueried: dateFilter.duration2Days(start, end),
         dateRange: [start, end],
-        selectedDepartment: { id: 0, name: '所有部门' },
-        selectedStaffId: 0,
       };
     },
     computed: {
@@ -74,13 +56,9 @@
         company: 'currentCompany',
         departments: 'departments',
       }),
-      departmentslist() {
-        return [{ id: 0, name: '所有部门' }].concat(this.departments);
-      },
     },
     components: {
       Pagination,
-      StaffAutoComplete,
     },
     methods: {
       onDateRangeChanged() {
@@ -89,39 +67,25 @@
           this.daysQueried = dateFilter.duration2Days(range[0], range[1]);
         }
       },
-      handleRequest(queryString, cb) {
-        if (queryString === '') {
-          this.selectedStaffId = 0;
-          cb([]);
-        }
-      },
-      handleSelect(staff) {
-        this.selectedStaffId = staff.id;
-      },
-      selectDepartment(department) {
-        this.selectedDepartment = department;
-      },
       onSearch() {
         this.lastCheckinId = 0;
         this.historyStore = [];
-        this.fetchStaffCheckins();
+        this.fetchGuestCheckins();
       },
       dateFormatter(day) {
         return dateFilter.toLongDateString(moment(day));
       },
       // fetch data async
-      fetchStaffCheckins(fromLocale, page) {
+      fetchGuestCheckins(fromLocale, page) {
         if (fromLocale) {
           this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
         } else {
           this.loading = true;
-          api.fetchStaffCheckins(this.company.id, 
+          api.fetchGuestCheckins(this.company.id, 
               this.dateRange[0], 
               this.dateRange[1],
               this.lastCheckinId,
-              this.pageSize,
-              this.selectedDepartment.id,
-              this.selectedStaffId).then((response) => {
+              this.pageSize).then((response) => {
                 this.lastCheckinId = response.body.last_checkin_id;
                 this.dataStore = response.body.checkins;
                 this.historyStore = this.historyStore.concat(this.dataStore);
@@ -133,7 +97,7 @@
         }
       },
       onPageChanged(page) {
-        this.fetchStaffCheckins(!page.fetchData, page.newPage);
+        this.fetchGuestCheckins(!page.fetchData, page.newPage);
       },
       viewSourceImage(image) {
         ImageModal.show(image);
@@ -144,21 +108,10 @@
         immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchStaffCheckins();
+            this.fetchGuestCheckins();
           }
         },
       },
     },
   };
 </script>
-<style lang="scss">
-  .custom-table.checkin {
-    img.thumb-image {
-      cursor: pointer;
-      width: auto;
-      height: 40px;
-      vertical-align: middle;
-      margin: 5px 0;
-    }
-  }
-</style>

@@ -1,5 +1,6 @@
 <template>
   <el-autocomplete 
+       ref="autocomplete"
        size="small" 
        placeholder="请输入员工姓名或电话" 
        icon="search"
@@ -45,6 +46,7 @@ export default {
         this.$emit('handle-request', queryString, cb);
       },
       handleSelect(item) {
+        this.$refs.autocomplete.$refs.input.setCurrentValue(`${item.name}  ${item.tel}`);
         this.$emit('handle-select', item);
       },
     },

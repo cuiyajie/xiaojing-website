@@ -5,7 +5,7 @@ import LayoutView from './components/LayoutView';
 import Staff from './modules/Staff';
 import Attendance from './modules/Attendance';
 import AttendanceStaff from './modules/AttendanceStaff';
-import AttendanceVisitor from './modules/AttendanceVisitor';
+import AttendanceGuest from './modules/AttendanceGuest';
 import Department from './modules/Department';
 import Company from './modules/Company';
 import NotFound from './NotFound';
@@ -40,9 +40,9 @@ const DashboardRouter = {
     name: 'attendace-staff',
     component: AttendanceStaff,
   }, {
-    path: 'attendance/visitor',
-    name: 'attendace-visitor',
-    component: AttendanceVisitor,
+    path: 'attendance/guest',
+    name: 'attendace-guest',
+    component: AttendanceGuest,
   }, {
     path: 'department',
     name: 'department',

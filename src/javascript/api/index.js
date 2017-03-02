@@ -3,6 +3,7 @@ import * as CompanyApi from './company';
 import * as StaffApi from './staff';
 import * as DepartmentApi from './department';
 import * as AttendanceApi from './attendance';
+import * as CheckinApi from './checkin';
 
 export default {
   ...LoginApi,
@@ -10,4 +11,5 @@ export default {
   ...StaffApi,
   ...DepartmentApi,
   ...AttendanceApi,
+  ...CheckinApi,
 };

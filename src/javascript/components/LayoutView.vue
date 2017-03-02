@@ -36,7 +36,7 @@
               <li><router-link to="/page/department">部门管理</router-link></li>
               <li><router-link exact to="/page">考勤统计</router-link></li>
               <li><router-link to="/page/attendance/staff">员工签到记录</router-link></li>
-              <li><router-link to="/page/attendance/visitor">访客签到记录</router-link></li>
+              <li><router-link to="/page/attendance/guest">访客签到记录</router-link></li>
               <li><router-link to="/page/company">公司信息管理</router-link></li>
             </ul>
           </li>
@@ -174,15 +174,14 @@
     }
   }
 
-  .lf-page-container {
-    position: relative;
+  .content-wrapper {
 
     &:before,
     &:after {
       content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
+      position: fixed;
+      top: $header-height;
+      left: $sidebar-width;
       width: $container-border-size;
       height: $container-border-size;
     }
