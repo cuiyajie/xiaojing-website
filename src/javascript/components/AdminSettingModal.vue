@@ -100,6 +100,7 @@
     computed: {
       ...mapGetters({
         company: 'currentCompany',
+        admin: 'currentUser',
       }),
       upgCurrentPage() {
         return this.$refs.upg.currentPage;
@@ -117,7 +118,8 @@
         this.dialogVisible = true;
       },
       isAdmin(id) {
-        return _array.findIndex(this.adminHistoryStore, admin => admin.id === id) >= 0;
+        const adminIndex = _array.findIndex(this.adminHistoryStore, admin => admin.id === id);
+        return id === this.admin.id || adminIndex !== -1;
       },
       handleAdminUsers(usrs) {
         return _.map(usrs, u => Object.assign({}, u, {
@@ -220,7 +222,11 @@
             api.fetchAllAdmins(this.company.id)
               .then((response) => {
                 this.adminHistoryStore = response.body.admins;
-                this.adminTotal = this.adminHistoryStore.length || 0; 
+                const index = _array.findIndex(this.adminHistoryStore, a => a.id === this.admin.id);
+                if (index !== -1) {
+                  this.adminHistoryStore.splice(index, 1);
+                }
+                this.adminTotal = this.adminHistoryStore.length || 0;
                 this.fetchAdmins(this.initialAdminPage);
                 this.fetchStaffs();
               }, () => {});
