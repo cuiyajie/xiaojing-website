@@ -17,8 +17,8 @@
       row-key="id"
       :empty-text="emptyText"
       :data="dataStore">
-      <el-table-column label="日期" property="day"><template scope="scope">{{ dateFormatter(scope.row.day) }}</template></el-table-column>
-      <el-table-column label="人脸照片"><template scope="scope"><img class="thumb-image" :src="scope.row.face_image" alt="User FaceImage" @click="viewSourceImage(scope.row.face_image)"></template></el-table-column>
+      <el-table-column label="日期" property="dacheck_timey"><template scope="scope">{{ dateFormatter(scope.row.check_time) }}</template></el-table-column>
+      <el-table-column label="访客照片"><template scope="scope"><img class="thumb-image" :src="scope.row.face_image" alt="User FaceImage" @click="viewSourceImage(scope.row.face_image)"></template></el-table-column>
     </el-table>
     <div class="table-footer">
       <pagination class="table-pagination" 
@@ -68,7 +68,8 @@
         }
       },
       onSearch() {
-        this.lastCheckinId = 0;
+        this.lastGuestId = 0;
+        this.total = 0;
         this.historyStore = [];
         this.fetchGuestCheckins();
       },
@@ -84,10 +85,10 @@
           api.fetchGuestCheckins(this.company.id, 
               this.dateRange[0], 
               this.dateRange[1],
-              this.lastCheckinId,
+              this.lastGuestId,
               this.pageSize).then((response) => {
-                this.lastCheckinId = response.body.last_checkin_id;
-                this.dataStore = response.body.checkins;
+                this.lastGuestId = response.body.last_guest_id;
+                this.dataStore = response.body.guests;
                 this.historyStore = this.historyStore.concat(this.dataStore);
                 this.total = response.body.total;
                 this.loading = false;

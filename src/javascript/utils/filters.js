@@ -37,7 +37,8 @@ export const dateFilter = {
     return duration > 0 ? moment.duration(duration, 'seconds').format('h小时m分') : '--';
   },
   duration2Days(start, end) {
-    return Math.ceil(moment.duration(end - start).as('days'));
+    const days = moment.duration(end - start).as('days');
+    return days > 0 ? Math.ceil(days) : (days + 1);
   },
 };
 

@@ -28,7 +28,7 @@
       row-key="id"
       :empty-text="emptyText"
       :data="dataStore">
-      <el-table-column label="日期" property="day"><template scope="scope">{{ dateFormatter(scope.row.day) }}</template></el-table-column>
+      <el-table-column label="日期"><template scope="scope">{{ dateFormatter(scope.row.check_time) }}</template></el-table-column>
       <el-table-column label="员工" property="user_name"></el-table-column>
       <el-table-column label="部门" property="department_name"></el-table-column>
       <el-table-column label="职务" property="job_position"></el-table-column>
@@ -54,8 +54,7 @@
   export default {
     data() {
       const end = new Date();
-      // const start = end;
-      const start = moment().add(-1, 'months')._d;
+      const start = end;
       return {
         emptyText: '暂时没有员工的考勤记录',
         pageSize: 15,
