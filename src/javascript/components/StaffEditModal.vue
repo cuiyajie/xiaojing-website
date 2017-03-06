@@ -12,7 +12,7 @@
                    :before-upload="onBeforeUpload"
                    :on-success="onUploadSuccess"
                    :on-error="onUploadError"
-                   :show-upload-list="false">
+                   :show-upload-list="false"></el-upload>
       </div>
     </div>
     <el-form v-model="changed">
