@@ -51,6 +51,8 @@
   import Pagination from '../components/Pagination';
   import StaffAutoComplete from '../components/StaffAutoComplete';
   import api from '../api';
+  import { ServerSuccessStatus } from '../api/httpstatus';
+  import utils from '../utils';
   import { dateFilter } from '../utils/filters';
   import ImageModal from '../utils/imagemodal';
   import MessageBox from '../utils/messagebox';
@@ -117,11 +119,26 @@
           return;
         }
 
-        MessageBox.lConfirm(`确定导出本公司从
-          ${dateFilter.toShortString(this.dateRange[0])}到
-          ${dateFilter.toShortString(this.dateRange[1])}之间的员工考勤记录？`)
+        const startDateSStr = dateFilter.toShortString(this.dateRange[0]);
+        const endDateSStr = dateFilter.toShortString(this.dateRange[1]);
+        const departmentText = this.selectDepartment && this.selectedDepartment.id ? this.selectedDepartment.name : '';
+
+        MessageBox.lConfirm(`导出本公司从
+          ${startDateSStr}到
+          ${endDateSStr}${departmentText}的员工考勤记录？`)
         .then(() => {
-          api.downloadStaffCheckins(this.company.id, this.dateRange[0], this.dateRange[1]);
+          api.downloadStaffCheckins(
+            this.company.id, 
+            this.dateRange[0], 
+            this.dateRange[1],
+            this.selectedDepartment.id).then((data) => {
+              if (data.statusText === ServerSuccessStatus.status) {
+                utils.readBlobAsFile(
+                  data.bodyBlob, 
+                  window, 
+                  `${startDateSStr}至${endDateSStr}${departmentText}员工考勤记录.xls`);
+              }
+            });
         }, () => {});
       },
       dateFormatter(day) {
@@ -159,7 +176,6 @@
     },
     watch: {
       company: {
-        immediate: true,
         handler() {
           if (this.company && this.company.id) {
             this.fetchStaffCheckins();

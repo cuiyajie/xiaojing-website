@@ -195,7 +195,7 @@ export const logoutAsync = () => {
   const token = Vue.cookie.get('xtAccessToken');
   if (companyId && token) {
     const options = {
-      expires: '3s',
+      expires: '5s',
       path: '/',
     };
     Vue.cookie.set('xtCompanyId', companyId, options);

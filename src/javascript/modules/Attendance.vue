@@ -50,6 +50,8 @@
   import Pagination from '../components/Pagination';
   import DayAttendanceModal from '../components/DayAttendanceModal';
   import api from '../api';
+  import { ServerSuccessStatus } from '../api/httpstatus';
+  import utils from '../utils';
   import { dateFilter } from '../utils/filters';
   import MessageBox from '../utils/messagebox';
 
@@ -110,11 +112,21 @@
           return;
         }
 
-        MessageBox.lConfirm(`确定导出本公司从
+        const startDateSStr = dateFilter.toShortString(this.dateRange[0]);
+        const endDateSStr = dateFilter.toShortString(this.dateRange[1]);
+
+        MessageBox.lConfirm(`导出本公司从
           ${dateFilter.toShortString(this.dateRange[0])}到
           ${dateFilter.toShortString(this.dateRange[1])}之间的考勤统计？`)
         .then(() => {
-          api.downloadAttendanceAnalysis(this.company.id, this.dateRange[0], this.dateRange[1]);
+          api.downloadAttendanceAnalysis(
+            this.company.id, 
+            this.dateRange[0], 
+            this.dateRange[1]).then((data) => {
+              if (data.statusText === ServerSuccessStatus.status) {
+                utils.readBlobAsFile(data.bodyBlob, window, `${startDateSStr}至${endDateSStr}考勤统计.xls`);
+              }
+            });
         }, () => {});
       },
       dateFormatter(day) {

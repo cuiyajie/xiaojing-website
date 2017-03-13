@@ -85,9 +85,11 @@
       },
     },
     created() {
-      tryAlive().then((loginParams) => {
-        this.$store.dispatch('autoLogin', loginParams);
-      }, () => {});
+      if (!this.currentCompany || !this.currentCompany.id) {
+        tryAlive().then((loginParams) => {
+          this.$store.dispatch('autoLogin', loginParams);
+        }, () => {});
+      }
     },
   };
 </script>

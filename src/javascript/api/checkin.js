@@ -31,11 +31,15 @@ export function fetchStaffCheckins(
 export function downloadStaffCheckins(
   companyId,
   startTime,
-  endTime) {
+  endTime,
+  departmentId) {
   const params = {};
   params.company_id = companyId;
   params.start_time = dateFilter.toShortString(startTime);
   params.end_time = dateFilter.toShortString(endTime);
+  if (departmentId) {
+    params.department_id = departmentId;
+  }
   return VueHttp.get(urls.URL_EXPORT_STAFF_CHECKINS, {
     params,
   });
