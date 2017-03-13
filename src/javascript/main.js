@@ -12,7 +12,7 @@ import '../fonts/iconfont/iconfont.css';
 import filters from './utils/filters';
 import routes from './routes';
 import store from './store';
-import { syncRouter } from './api/global';
+import { syncRouter, logoutAsync } from './api/global';
 import App from './App';
 
 Ellocale.use(lang);
@@ -36,4 +36,12 @@ new Vue({
   router,
   store,
   render: h => h(App),
+  created() {
+    window.addEventListener('beforeunload', this.onLeave);
+  },
+  methods: {
+    onLeave() {
+      logoutAsync();
+    },
+  },
 }).$mount('#app');

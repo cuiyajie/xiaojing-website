@@ -3,7 +3,7 @@ import Vue from 'vue';
 import VueResource from 'vue-resource';
 import VueCookie from 'vue-cookie';
 import _ from 'lodash/core';
-import Cache from './cache';
+// import Cache from './cache';
 import { VueSuccesStatus, ServerSuccessStatus, ServerInvalidToken } from './httpstatus';
 
 Vue.use(VueResource);
@@ -99,29 +99,33 @@ const getUrl = (url) => {
   return `${apiServer}${url}`;
 };
 
-function getCacheKey(request) {
-  const paramsString = _.map(request.params, (v, k) => `${k}=${v}`);
-  return `Cache_${request.url}?${paramsString.join('&')}`;
-}
+// function getCacheKey(request) {
+//   const paramsString = _.map(request.params, (v, k) => `${k}=${v}`);
+//   return `Cache_${request.url}?${paramsString.join('&')}`;
+// }
 
 // add interceptor used to cache put request result
 Vue.http.interceptors.push((request, next) => {
   request.url = getUrl(request.url);
 
-  if (request.method.toLowerCase() === 'get') {
-    const cache = Cache.get(getCacheKey(request));
-    if (cache) {
-      next(request.respondWith(Object.assign({}, cache), VueSuccesStatus));
-      return;			
-    }
-  }
+  // (disable cache on 2017/03/13 base on latest requirement)
+  // if (request.method.toLowerCase() === 'get') {
+  //   const cache = Cache.get(getCacheKey(request));
+  //   if (cache) {
+  //     next(request.respondWith(Object.assign({}, cache), VueSuccesStatus));
+  //     return;			
+  //   }
+  // }
 
-  next((response) => {
-    const { status, body } = response;
-    if (status === VueSuccesStatus.status && request.method.toLowerCase() === 'get' && body.status === ServerSuccessStatus.status) {
-      Cache.set(getCacheKey(request), body.result);
-    }
-  });
+  // next((response) => {
+  //   const { status, body } = response;
+  //   if (status === VueSuccesStatus.status && request.method.toLowerCase() === 'get' 
+  //       && body.status === ServerSuccessStatus.status) {
+  //     Cache.set(getCacheKey(request), body.result);
+  //   }
+  // });
+
+  next();
 });
 
 // unwrap body data
@@ -184,6 +188,19 @@ export const tryAlive = () => {
   } 
   handleUnAuthorized();
   return Promise.reject();
+};
+
+export const logoutAsync = () => {
+  const companyId = Vue.cookie.get('xtCompanyId');
+  const token = Vue.cookie.get('xtAccessToken');
+  if (companyId && token) {
+    const options = {
+      expires: '3s',
+      path: '/',
+    };
+    Vue.cookie.set('xtCompanyId', companyId, options);
+    Vue.cookie.set('xtAccessToken', token, options);
+  }
 };
  
 export const logout = () => {

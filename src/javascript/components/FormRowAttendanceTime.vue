@@ -83,6 +83,11 @@ export default {
             const startTime = `${this.form.sMinute}:${this.form.sSecond}`;
             const endTime = `${this.form.eMinute}:${this.form.eSecond}`;
 
+            if (startTime > endTime) {
+              MessageBox.tip('考勤开始时间不应超过考勤结束时间');
+              return;
+            }
+
             if (this.save) {
               this.loading = true;
               this.save(startTime, endTime)

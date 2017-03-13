@@ -8,9 +8,10 @@
       <form-row-text-input title="公司名称" :value="company.name" description="50字以内" placeholder="请输入公司名称" :save="saveCompanyName"></form-row-text-input>
     </div>
     <div class="section-row image-row">
-      <form-row-image title="公司标志" :origin-image="company.logo" description="只支持PNG，JPG格式文件；图片尺寸100*100像素；文件小于100KB。"
+      <form-row-image title="公司标志" :origin-image="company.logo" description="只支持PNG，JPG，JPEG格式文件；文件小于400KB。"
          upload-name="logo" 
-        :upload-url="uploadCompanyLogoUrl" 
+        :upload-url="uploadCompanyLogoUrl"
+        :upload-extensions="uploadExtensions" 
         :upload-params="uploadCompanyLogoParams"
         :upload-limitsize="uploadCompanyLogoLimit"
         :upload-success="saveCompanyLogoSuccess">  
@@ -36,6 +37,7 @@
   import { mapGetters } from 'vuex';
   import api from '../api';
   import urls from '../api/api-list';
+  import utils from '../utils/filters';
   import FormRowLabel from '../components/FormRowLabel';
   import FormRowTextInput from '../components/FormRowTextInput';
   import FormRowImage from '../components/FormRowImage';
@@ -46,7 +48,8 @@
     data() {
       return {
         uploadCompanyLogoUrl: urls.URL_UPDATE_COMPANY,
-        uploadCompanyLogoLimit: 100000,
+        uploadCompanyLogoLimit: 400 * 1024,
+        uploadExtensions: ['jpg', 'jpeg', 'png'],
       };
     },
     computed: {
@@ -69,14 +72,19 @@
       saveCompanyName(name) {
         return api.updateCompany(this.company.id, { name });
       },
-      saveCompanyLogoSuccess(logo) {
-        if (logo && logo !== '') {
-          const logoUnique = `${logo}?t=${new Date().getTime()}`;
-          this.$store.dispatch('updateCompany', { logoUnique });
+      saveCompanyLogoSuccess(data) {
+        if (data && data.logo) {
+          this.$store.dispatch('updateCompany', { logo: utils.noCacheUrl(data.logo) });
         }
       },
       saveCompanyAttendanceTime(startTime, endTime) {
-        return api.updateCompany(this.company.id, { start_time: startTime, end_time: endTime });
+        const updatedFields = { 
+          start_time: startTime, 
+          end_time: endTime, 
+        };
+        return api.updateCompany(this.company.id, updatedFields).then(() => {
+          this.$store.dispatch('updateCompany', updatedFields);
+        });
       },
       showAdminSetting() {
         this.$refs.adminSettingModal.show();

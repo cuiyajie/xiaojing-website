@@ -28,6 +28,19 @@ export function fetchStaffCheckins(
   });
 }
 
+export function downloadStaffCheckins(
+  companyId,
+  startTime,
+  endTime) {
+  const params = {};
+  params.company_id = companyId;
+  params.start_time = dateFilter.toShortString(startTime);
+  params.end_time = dateFilter.toShortString(endTime);
+  return VueHttp.get(urls.URL_EXPORT_STAFF_CHECKINS, {
+    params,
+  });
+}
+
 export function fetchGuestCheckins(
   companyId, 
   startTime, 

@@ -7,9 +7,9 @@
         </el-col>
         <el-col :span="3">
           <el-dropdown menu-align="start">
-            <el-button size="small">{{ selectedDepartment.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
-            <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
-               <el-dropdown-item v-for="department in departmentslist" :key="department.id" @click.native="selectDepartment(department);">{{ department.name }}</el-dropdown-item>
+            <el-button size="small"><span class="text-wrap">{{ selectedDepartment.name }}</span><i class="el-icon-caret-bottom el-icon--right"></i></el-button>
+            <el-dropdown-menu slot="dropdown" class="lf-header-dropdown">
+               <el-dropdown-item class="text-wrap" v-for="department in departmentslist" :key="department.id" @click.native="selectDepartment(department);">{{ department.name }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
@@ -51,6 +51,9 @@
   import DayAttendanceModal from '../components/DayAttendanceModal';
   import api from '../api';
   import { dateFilter } from '../utils/filters';
+  import MessageBox from '../utils/messagebox';
+
+  const MAX_EXPORT_DURATION = 31;
 
   export default {
     data() {
@@ -102,7 +105,17 @@
         this.fetchAttendanceAnalysis();
       },
       onExport() {
+        if (this.daysQueried > MAX_EXPORT_DURATION) {
+          MessageBox.tip('最多只能导出一个月（31天）的考勤统计');
+          return;
+        }
 
+        MessageBox.lConfirm(`确定导出本公司从
+          ${dateFilter.toShortString(this.dateRange[0])}到
+          ${dateFilter.toShortString(this.dateRange[1])}之间的考勤统计？`)
+        .then(() => {
+          api.downloadAttendanceAnalysis(this.company.id, this.dateRange[0], this.dateRange[1]);
+        }, () => {});
       },
       dateFormatter(day) {
         return dateFilter.toStringWithWeek(moment(day));

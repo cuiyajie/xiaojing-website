@@ -11,7 +11,7 @@
         <el-col :span="3">
           <el-dropdown menu-align="start">
             <el-button size="small">{{ selectedDepartment.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
-            <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
+            <el-dropdown-menu slot="dropdown" class="lf-header-dropdown">
                <el-dropdown-item v-for="department in departmentslist" :key="department.id" @click.native="selectDepartment(department);">{{ department.name }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -19,7 +19,10 @@
         <el-col :span="12">
            <el-button size="small" type="primary" @click="onSearch">查询</el-button>
         </el-col>
-      </el-row>
+      </el-row>    
+      <div class="lf-page-header-buttons">
+        <el-button size="small" type="primary" @click="onExport">导出</el-button>
+      </div>
     </div>
     <div class="lf-page-header bordered">
       <span class="lf-page-caption pin">查询日期{{ daysQueried }}天；共{{ total }}条查询记录。</span>
@@ -50,6 +53,9 @@
   import api from '../api';
   import { dateFilter } from '../utils/filters';
   import ImageModal from '../utils/imagemodal';
+  import MessageBox from '../utils/messagebox';
+
+  const MAX_EXPORT_DURATION = 31;
 
   export default {
     data() {
@@ -104,6 +110,19 @@
         this.lastCheckinId = 0;
         this.historyStore = [];
         this.fetchStaffCheckins();
+      },
+      onExport() {
+        if (this.daysQueried > MAX_EXPORT_DURATION) {
+          MessageBox.tip('最多只能导出一个月（31天）的员工考勤记录');
+          return;
+        }
+
+        MessageBox.lConfirm(`确定导出本公司从
+          ${dateFilter.toShortString(this.dateRange[0])}到
+          ${dateFilter.toShortString(this.dateRange[1])}之间的员工考勤记录？`)
+        .then(() => {
+          api.downloadStaffCheckins(this.company.id, this.dateRange[0], this.dateRange[1]);
+        }, () => {});
       },
       dateFormatter(day) {
         return dateFilter.toLongDateString(moment(day));

@@ -8,7 +8,7 @@
         <el-col :span="3">
           <el-dropdown menu-align="start">
             <el-button size="small">{{ selectedDepartment.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
-            <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
+            <el-dropdown-menu slot="dropdown" class="lf-header-dropdown">
                <el-dropdown-item v-for="department in departmentslist" :key="department.id" @click.native="selectDepartment(department);">{{ department.name }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -16,7 +16,7 @@
         <!-- <el-col :span="5">
           <el-dropdown menu-align="start">
             <el-button size="small">{{ selectedStatus.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
-            <el-dropdown-menu slot="dropdown" class="staff-header-dropdown">
+            <el-dropdown-menu slot="dropdown" class="lf-header-dropdown">
               <el-dropdown-item v-for="stat in statuslist" :key="stat.id" @click.native="selectStat(stat);">{{ stat.name }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown> 
@@ -137,6 +137,9 @@
       },
       // fetch data async
       fetchAllStaffs(fromLocale, page) {
+        if (page) {
+          this.$refs.pagination.currentPage = page;
+        }
         if (fromLocale) {
           this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
         } else {
@@ -202,10 +205,6 @@
         this.selected = selection;
       },
       onModalMultiSelectDepartment(selectedDepartment) {
-        if (!this.selected || this.selected.length === 0) {
-          MessageBox.tip('请选择至少一位员工');
-          return;
-        }
         const userIds = _.map(this.selected, s => s.id);
         api.batchUpdateDepartment(this.company.id, selectedDepartment.id, userIds).then(() => {
           _.each(this.selected, (s) => {
@@ -221,6 +220,11 @@
         });
       },
       changeDepartment() {
+        if (!this.selected || this.selected.length === 0) {
+          MessageBox.tip('请选择至少一位员工');
+          return;
+        }
+        
         this.$refs.multiDepartmentlistModal.show();
       },
     },
@@ -239,7 +243,7 @@
 <style lang="scss">
   @import '~scss_var';
 
-  .staff-header-dropdown.el-dropdown-menu {
+  .lf-header-dropdown.el-dropdown-menu {
     width: 190px;
     font-size: 14px;
 

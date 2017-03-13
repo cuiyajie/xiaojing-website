@@ -42,4 +42,12 @@ export const dateFilter = {
   },
 };
 
-export default tableValFilter;
+export default {
+  noCacheUrl(url) {
+    let startChar = '?';
+    if (url && url.split('?').length > 1) {
+      startChar = '&';
+    }
+    return `${url}${startChar}t=${+new Date()}`;
+  },
+};

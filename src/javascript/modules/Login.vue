@@ -52,7 +52,7 @@
     data() {
       return {
         logo,
-        loading: true,
+        loading: false,
         consumer: null,
         subscription: null,
       };
@@ -88,6 +88,7 @@
       },
     },
     mounted() {
+      this.loading = true;
       api.fetchLoginCode().then((response) => {
         const code = response.body.code;
         const typeNumber = 4;
@@ -101,7 +102,9 @@
       }, () => {}); 
     },
     destroyed() {
-      this.consumer.disconnect();
+      if (this.consumer) {
+        this.consumer.disconnect();
+      }
     },
     created() {
       tryAlive().then((loginParams) => {

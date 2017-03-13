@@ -72,4 +72,28 @@
   .el-dropdown > .el-button {
     width: 100%;
   }
+
+  .el-dropdown .el-button span.text-wrap {
+    max-width: 90%;
+    display: inline-block;
+    vertical-align: bottom;
+  }
 }
+
+.lf-header-dropdown.el-dropdown-menu {
+  width: 190px;
+  font-size: 14px;
+	max-height: 400px;
+	overflow-y: auto;
+
+  .el-dropdown-menu__item {
+    line-height: 30px;
+    
+    &:not(.is-disabled):hover {
+      background-color: $linkface;
+      color: #FFF;
+    }
+  }
+}
+
+

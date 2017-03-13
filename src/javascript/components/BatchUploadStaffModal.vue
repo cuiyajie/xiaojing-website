@@ -57,7 +57,7 @@
           </span>
         </div>
     </el-dialog>
-    <upload-success-modal ref="resultModal" :total="total" :fail="fail" @view-details="onViewDetails"></upload-success-modal>
+    <upload-success-modal ref="resultModal" :total="total" :fail="fail" @view-details="onViewDetails" @close="onClose"></upload-success-modal>
   </span>
 </template>
 <script>
@@ -67,7 +67,7 @@
   import api from '../api';
   import UploadSampleAvatar from '../../img/upload-sample-image.jpg';
 
-  const MAX_FILESIZE = 500 * 1000;
+  const MAX_FILESIZE = 500 * 1024;
   const FILE_DIMENSION = 600;
   const Image = window.Image;
 
@@ -86,7 +86,8 @@
                  :show-close="false">
                  <div class="upload-sucss">
                     本次添加{{ total }}人，{{ fail }}个人添加失败<br/>
-                    查看添加失败的<a href="javascript:void(0);" @click="viewDetails">明细</a>
+                    <span v-show="fail > 0">查看添加失败的<a href="javascript:void(0);" @click="viewDetails">明细</a></span>
+                    <span v-show="fail == 0"><a href="javascript:void(0);" @click="close">关闭</a></span>
                  </div>
                </el-dialog>`,
     methods: {
@@ -95,6 +96,7 @@
       },
       close() {
         this.dialogVisible = false;
+        this.$emit('close');
       },
       viewDetails() {
         this.$emit('view-details');
@@ -192,7 +194,7 @@
         this.progressStatus = '';
       },
       onClose() {
-        if (this.users.length > 0 && this.state >= this.STATES.SUCCESS) {
+        if (this.users.length > 0) {
           this.$emit('staff-batch-added', this.users.slice());
         }
         this.reset();
@@ -224,14 +226,14 @@
               }
               return file;
             })
-            .concatMap(file => Rx.Observable.create((observer) => {
+            .flatMap(file => Rx.Observable.create((observer) => {
               const image = new Image();
               const wURL = window.URL || window.webkitURL;
               if (wURL) {
                 image.src = wURL.createObjectURL(file);
                 image.onload = () => {
                   if (image.width === image.height && image.width >= FILE_DIMENSION) {
-                    observer.onNext(file); 
+                    observer.onNext(file);
                   } else {
                     this.onFail({
                       filename: file.name,
@@ -242,14 +244,18 @@
                 };
               }
             }))
-            .concatMap(file => Rx.Observable.fromPromise(api.importStaff(this.company.id, file)
-              .catch(() => Rx.Observable.just({
-                error: {
-                  filename: file.name, 
-                  description: UPLOAD_ERRORS.SERVER_ERROR,
-                },
-              })
-              )));
+            .flatMap(file => Rx.Observable.fromPromise(
+              api.importStaff(this.company.id, file)
+                .catch(err => Rx.Observable.just({
+                  error: {
+                    filename: file.name, 
+                    description: err && err.body && err.body.message ? 
+                                  err.body.message :
+                                  UPLOAD_ERRORS.SERVER_ERROR,
+                  },
+                }))
+              )
+            );
 
           // subscribe Rx
           source.subscribe((val) => {

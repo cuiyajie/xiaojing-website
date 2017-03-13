@@ -13,15 +13,18 @@
                  :name="uploadName"
                  :headers="ajaxHeaders"
                  :on-success="handleSuccess"
-                 :show-upload-list="false">
+                 :show-upload-list="false"
+                 :before-upload="onBeforeUpload">
       	<el-button type="primary" size="small" :disabled="loading" :loading="loading">上传</el-button>
       </el-upload>
     </div>
   </el-row>
 </template>
 <script>
+    import prettySize from 'prettysize';
     import defaultLogo from '../../img/company-logo.png';
     import { NetworkUtils } from '../api/global';
+    import MessageBox from '../utils/messagebox';
 
     export default {
       data() {
@@ -45,12 +48,30 @@
           return null;
         },
       },
-      props: ['title', 'description', 'originImage', 'uploadUrl', 'uploadName', 'uploadParams', 'uploadLimitsize', 'uploadSuccess'],
+      props: ['title', 'description', 'originImage', 'uploadUrl', 'uploadName', 'uploadParams', 'uploadLimitsize', 'uploadExtensions', 'uploadSuccess'],
       methods: {
-        handleSuccess() {
-          if (this.uploadSuccess) {
-            this.uploadSuccess();
+        handleSuccess(data) {
+          if (this.uploadSuccess && data.result) {
+            this.uploadSuccess(data.result);
           }
+        },
+        onBeforeUpload(file) {
+          if (!file) {
+            return false;
+          }
+          
+          if (file.size > this.uploadLimitsize) {
+            MessageBox.tip(`文件大小不能超过${prettySize(this.uploadLimitsize)}`);
+            return false;
+          }
+
+          const regex = new RegExp(`image/(${this.uploadExtensions.join('|')})`);
+          if (this.uploadExtensions && !regex.test(file.type)) {
+            MessageBox.tip('文件格式不符合要求');
+            return false;
+          }
+
+          return file;
         },
       },
     };

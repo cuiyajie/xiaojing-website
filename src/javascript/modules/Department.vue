@@ -43,7 +43,7 @@ export default {
       return {
         emptyText: '暂时没有添加部门',
         currentPage: 1,
-        pageSize: 15,
+        pageSize: 10,
         dataStore: [],
         loading: false,
       };
@@ -73,7 +73,7 @@ export default {
         },
         props: ['company'],
         template: `<el-dialog v-loading.body="loading" :title="title" v-model="dialogVisible" size="small" custom-class="department-editing normal tiny" :close-on-click-modal="false" :show-close="false">
-                      <el-input placeholder="请输入部门" size="small" :disabled="loading" min="10" v-model="changed.name"></el-input>
+                      <el-input placeholder="请输入部门" size="small" :disabled="loading" :maxlength="10" v-model="changed.name"></el-input>
                       <div class="description">不超过10个字，名称不能重复</div>
                       <span slot="footer" class="dialog-footer">
                         <el-button type="primary" size="small" @click="onSave" :loading="loading">确定</el-button>
@@ -84,6 +84,8 @@ export default {
           show(department) {
             if (department) {
               this.changed = Object.assign({}, department);
+            } else {
+              this.changed = {};
             }
             this.dialogVisible = true;
           },
@@ -93,7 +95,11 @@ export default {
           },
           onSave() {
             if (this.changed.name === '') {
-              MessageBox.tip('部门名称不能为空!');
+              MessageBox.tip('部门名称不能为空！');
+              return;
+            }
+            if (this.changed.name.length > 10) {
+              MessageBox.tip('部门名称过长！');
               return;
             }
             this.loading = true;
@@ -106,7 +112,10 @@ export default {
               this.loading = false;
               this.$store.dispatch(requestAction, response.body);
               this.dialogVisible = false;
-            }, () => {
+            }, (err) => {
+              if (err && err.body && err.body.message) {
+                MessageBox.tip(err.body.message);
+              }
               this.loading = false;
             });
           },
