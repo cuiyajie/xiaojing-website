@@ -4,6 +4,7 @@ import * as StaffApi from './staff';
 import * as DepartmentApi from './department';
 import * as AttendanceApi from './attendance';
 import * as CheckinApi from './checkin';
+import * as AddressApi from './address';
 
 export default {
   ...LoginApi,
@@ -12,4 +13,5 @@ export default {
   ...DepartmentApi,
   ...AttendanceApi,
   ...CheckinApi,
+  ...AddressApi,
 };

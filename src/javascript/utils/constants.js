@@ -26,4 +26,6 @@ export const ATTENDANCE_STATUS = {
   leave: 3,
 };
 
+export const ADDRESS_SEPERATOR = '|';
+
 export default STAFF_STATUS;

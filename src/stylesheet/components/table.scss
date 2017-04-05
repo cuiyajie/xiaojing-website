@@ -9,6 +9,13 @@ $pagination-next-bgcolor: $linkface;
 	border: 0;
   padding-bottom: 20px;
 
+	&.first-column-left {
+		tr td:first-child,
+		tr th:first-child {
+			text-align: left;
+		}
+	}
+
 	&:before,
 	&:after {
 		content: none;

@@ -35,4 +35,13 @@ export const deleteDepartment = ({ commit }, departmentId) => {
   commit(types.DELETE_DEPARTMENT, departmentId);
 };
 
+export const fetchAreas = ({ commit }, cb) => {
+  api.fetchAreas().then(({ body }) => {
+    commit(types.FETCH_AREAS, body);
+    if (cb) {
+      cb();
+    }
+  }); 
+};
+
 export default autoLogin;

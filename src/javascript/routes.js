@@ -8,6 +8,7 @@ import AttendanceStaff from './modules/AttendanceStaff';
 import AttendanceGuest from './modules/AttendanceGuest';
 import Department from './modules/Department';
 import Company from './modules/Company';
+import Address from './modules/Address';
 import NotFound from './NotFound';
 
 const WebsiteRouter = {
@@ -28,6 +29,10 @@ const DashboardRouter = {
   path: '/page',
   component: LayoutView,
   children: [{
+    path: 'address',
+    name: 'address',
+    component: Address,
+  }, {
     path: 'staff',
     name: 'staff',
     component: Staff,

@@ -8,7 +8,7 @@ import { VueSuccesStatus, ServerSuccessStatus, ServerInvalidToken } from './http
 
 Vue.use(VueResource);
 Vue.use(VueCookie);
-Vue.config.debug = false;
+Vue.config.debug = true;
 Vue.http.options.xhr = { withCredentials: true, crossDomain: true };
 
 let router;

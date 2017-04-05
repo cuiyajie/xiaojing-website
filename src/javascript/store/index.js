@@ -11,6 +11,7 @@ const state = {
     currentUser: {},
     currentCompany: {},
     departments: [],
+    areas: [],
   },
 };
 

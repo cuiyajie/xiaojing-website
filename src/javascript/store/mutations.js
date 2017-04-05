@@ -26,4 +26,7 @@ export default {
     const departments = state.global.departments;
     set(state.global, 'departments', departments.slice(0, index).concat(departments.slice(index + 1)));
   },
+  [types.FETCH_AREAS](state, areas) {
+    set(state.global, 'areas', areas);
+  },
 };
