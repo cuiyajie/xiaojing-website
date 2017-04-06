@@ -23,7 +23,7 @@
                       row-key="id"
                       :empty-text="userlistEmptyText"
                       :data="users">
-               <el-table-column width="40">
+               <el-table-column width="60">
                 <template scope="scope">
                   <span class="action-icon" 
                     :class="{ disabled: scope.row.isAdmin }"
@@ -39,6 +39,7 @@
                  ref="upg"
                  :page-size="pageSize" 
                  :total="userTotal"
+                 :history-store="userHistoryStore"
                  @pagination-pagechange="onUserPageChanged">
               </pagination>
             </div>
@@ -48,7 +49,7 @@
                       row-key="id"
                       :empty-text="adminlistEmptyText"
                       :data="admins">
-               <el-table-column width="40">
+               <el-table-column width="60">
                 <template scope="scope"><span class="action-icon" @click="removeAdmin(scope.row, scope.$index)"><el-icon name="close"></el-icon></span></template>
                </el-table-column>
                <el-table-column label="姓名" property="name"></el-table-column>
@@ -60,6 +61,7 @@
                 ref="apg"
                  :page-size="pageSize" 
                  :total="adminTotal"
+                 :history-store="adminHistoryStore"
                  @pagination-pagechange="onAdminPageChanged">
               </pagination>
             </div>
@@ -126,12 +128,15 @@
           isAdmin: this.isAdmin(u.id),  
         }));
       },
+      getDataStore(historyStore, page) {
+        return historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+      },
       fetchAdmins(page) {
-        this.admins = this.adminHistoryStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+        this.admins = this.getDataStore(this.adminHistoryStore, page);
       },
       fetchStaffs(fromLocale, page) {
         if (fromLocale) {
-          this.users = this.userHistoryStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+          this.users = this.getDataStore(this.userHistoryStore, page);
         } else {
           api.fetchAllStaffs(
             this.company.id,
@@ -140,8 +145,9 @@
             this.pageSize)
             .then((response) => {
               this.lastUserId = response.body.max_user_id;
-              this.users = this.handleAdminUsers(response.body.users);
-              this.userHistoryStore = this.userHistoryStore.concat(this.users);
+              const users = this.handleAdminUsers(response.body.users);
+              this.userHistoryStore = this.userHistoryStore.concat(users);
+              this.users = this.getDataStore(this.userHistoryStore, page);
               this.userTotal = response.body.total || 0;
             }, () => {});
         }
@@ -157,12 +163,15 @@
           this.lastUserId = 0;
           this.userHistoryStore = [];
           this.userTotal = 0;
-          this.fetchStaffs();
+          this.fetchStaffs(false, 1);
           cb([]);
         }
       },
       handleACSelect(user) {
-        this.users = this.handleAdminUsers([user]);
+        const handledUser = this.handleAdminUsers([user]);
+        this.userHistoryStore = handledUser;
+        this.userTotal = 1;
+        this.users = handledUser;
       },
       addAdmin(u) {
         const user = u;
@@ -228,7 +237,7 @@
                 }
                 this.adminTotal = this.adminHistoryStore.length || 0;
                 this.fetchAdmins(this.initialAdminPage);
-                this.fetchStaffs();
+                this.fetchStaffs(false, 1);
               }, () => {});
           }
         },

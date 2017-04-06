@@ -15,8 +15,10 @@
     </el-table>
     <div class="table-footer">
       <pagination class="table-pagination" 
+        ref="pagination"
         :page-size="pageSize"
         :total="total"
+        :history-store="historyStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
   </span>
@@ -50,9 +52,12 @@
       Pagination,
     },
     methods: {
+      getDataTable(page) {
+        return this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+      },
       fetchAttendanceRecords(formLocale, page) {
         if (formLocale) {
-          this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+          this.dataStore = this.getDataTable(page);
         } else {
           this.loading = true;
           api.fetchUserAttendanceRecords(this.company.id, 
@@ -63,8 +68,8 @@
             this.pageSize, 
             this.lastUserAttendanceId).then((response) => {
               this.lastUserAttendanceId = response.body.last_user_attendance_id;
-              this.dataStore = response.body.user_attendances;
-              this.historyStore = this.historyStore.concat(this.dataStore);
+              this.historyStore = this.historyStore.concat(response.body.user_attendances);
+              this.dataStore = this.getDataTable(page);
               this.total = response.body.total || 0;
               this.loading = false;
             }, () => {
@@ -77,7 +82,7 @@
       },
       show() {
         if (this.initial) {
-          this.fetchAttendanceRecords();
+          this.fetchAttendanceRecords(false, 1);
           this.initial = false;
         }
       },
@@ -86,6 +91,7 @@
         this.dataStore = [];
         this.lastUserAttendanceId = 0;
         this.total = 0;
+        this.$refs.pagination.reset();
         this.initial = true;
       },
       ...dateFilter,

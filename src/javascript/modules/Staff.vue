@@ -55,6 +55,7 @@
       <pagination class="table-pagination" ref="pagination"
         :page-size="pageSize"
         :total="total"
+        :history-store="historyStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
     <department-list-modal ref="multiDepartmentlistModal" @select-department="onModalMultiSelectDepartment"></department-list-modal>
@@ -62,6 +63,7 @@
     <staff-edit-modal ref="staffModal" @staff-added="onStaffAdded"></staff-edit-modal>
     <staff-view-modal ref="staffViewModal" @staff-edit="onStaffEdit" @staff-delete="onStaffDelete"></staff-view-modal>
     <batch-upload-staff-modal ref="batchUploadModal" @staff-batch-added="onStaffBatchAdded"></batch-upload-staff-modal>
+    <address-list-modal ref="addresslistModal" @select-address="onAddressSelected"></address-list-modal>
   </div>
 </template>
 <script>
@@ -74,6 +76,7 @@
   import StaffViewModal from '../components/StaffViewModal';
   import BatchUploadStaffModal from '../components/BatchUploadStaffModal';
   import DepartmentListModal from '../components/DepartmentListModal';
+  import AddressListModal from '../components/AddressListModal';
   import { tableValFilter } from '../utils/filters';
   import { STAFF_STATUS } from '../utils/constants';
   import MessageBox from '../utils/messagebox';
@@ -112,16 +115,19 @@
       StaffViewModal,
       BatchUploadStaffModal,
       DepartmentListModal,
+      AddressListModal,
     },
     methods: {
       handleRequest(queryString, cb) {
         if (queryString === '') {
           this.clearStore();
-          this.fetchAllStaffs();
+          this.fetchAllStaffs(false, 1);
           cb([]);
         }
       },
       handleSelect(staff) {
+        this.historyStore = [staff];
+        this.total = 1;
         this.dataStore = [staff];
       },
       selectDepartment(department) {
@@ -133,25 +139,27 @@
       clearStore() {
         this.lastUserID = 0;
         this.historyStore = [];
+        this.dataStore = [];
         this.total = 0;
+        this.$refs.pagination.reset();
+      },
+      getDataTable(page) {
+        this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
       },
       // fetch data async
       fetchAllStaffs(fromLocale, page) {
-        if (page) {
-          this.$refs.pagination.currentPage = page;
-        }
         if (fromLocale) {
-          this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+          this.dataStore = this.getDataTable(page);
         } else {
           this.loading = true;
           api.fetchAllStaffs(
             this.company.id, 
             this.selectedDepartment.id, 
-            this.lastUserID, 
+            this.lastUserID,
             this.pageSize).then((response) => {
               this.lastUserID = response.body.max_user_id;
-              this.dataStore = response.body.users;
-              this.historyStore = this.historyStore.concat(this.dataStore);
+              this.historyStore = this.historyStore.concat(response.body.users);
+              this.dataStore = this.getDataTable(page);
               this.total = response.body.total || 0;
               this.loading = false;
             }, () => {
@@ -178,7 +186,7 @@
       onStaffAdded(staff) {
         this.historyStore.splice(0, 0, staff);
         this.total = this.total + 1;
-        this.fetchAllStaffs(true, 1);
+        this.$refs.pagination.onCurrentChange(1);
       },
       onStaffEdit(staff) {
         this.$refs.staffModal.show(staff);
@@ -187,7 +195,7 @@
         const index = _array.findIndex(this.historyStore, u => u.id === staffId);
         this.historyStore.splice(index, 1);
         this.total = this.total - 1;
-        this.fetchAllStaffs(true, this.$refs.pagination.currentPage);
+        this.$refs.pagination.onCurrentChange(this.$refs.pagination.currentPage);
       },
       onStaffBatchAdd() {
         this.$refs.batchUploadModal.dialogVisible = true;
@@ -195,11 +203,14 @@
       onStaffBatchAdded(staffs) {
         this.historyStore = staffs.concat(this.historyStore);
         this.total = this.total + staffs.length;
-        this.fetchAllStaffs(true, 1);
+        this.$refs.pagination.onCurrentChange(1);
       },
       onModalSelectDepartment(selected) {
         this.$refs.staffModal.changed.department_id = selected.id;
         this.$refs.staffModal.changed.department_name = selected.name;
+      },
+      onAddressSelected() {
+        
       },
       onSelectionChange(selection) {
         this.selected = selection;
@@ -233,7 +244,7 @@
         immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchAllStaffs();
+            this.fetchAllStaffs(false, 1);
           }
         },
       },

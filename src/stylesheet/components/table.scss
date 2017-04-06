@@ -63,4 +63,10 @@ $pagination-next-bgcolor: $linkface;
 	}
 } 
 
+.el-table.header-hidden {
+	.el-table__header-wrapper {
+		display: none;
+	}
+}
+
 

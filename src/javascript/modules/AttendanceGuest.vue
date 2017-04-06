@@ -24,6 +24,7 @@
       <pagination class="table-pagination" 
         :page-size="pageSize"
         :total="total"
+        :history-store="historyStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
   </div>
@@ -61,6 +62,9 @@
       Pagination,
     },
     methods: {
+      getDataTable(page) {
+        this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+      },
       onDateRangeChanged() {
         const range = this.dateRange;
         if (range && range.length === 2) {
@@ -71,7 +75,7 @@
         this.lastGuestId = 0;
         this.total = 0;
         this.historyStore = [];
-        this.fetchGuestCheckins();
+        this.fetchGuestCheckins(false, 1);
       },
       dateFormatter(day) {
         return dateFilter.toLongDateString(moment(day));
@@ -79,7 +83,7 @@
       // fetch data async
       fetchGuestCheckins(fromLocale, page) {
         if (fromLocale) {
-          this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+          this.dataStore = this.getDataTable(page);
         } else {
           this.loading = true;
           api.fetchGuestCheckins(this.company.id, 
@@ -88,8 +92,8 @@
               this.lastGuestId,
               this.pageSize).then((response) => {
                 this.lastGuestId = response.body.last_guest_id;
-                this.dataStore = response.body.guests;
-                this.historyStore = this.historyStore.concat(this.dataStore);
+                this.historyStore = this.historyStore.concat(response.body.guests);
+                this.dataStore = this.getDataTable(page);
                 this.total = response.body.total;
                 this.loading = false;
               }, () => {
@@ -109,7 +113,7 @@
         immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchGuestCheckins();
+            this.fetchGuestCheckins(false, 1);
           }
         },
       },

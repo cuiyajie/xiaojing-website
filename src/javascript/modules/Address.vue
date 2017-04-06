@@ -14,6 +14,7 @@
           <span>{{ trimLocation(scope.row.location) }}<span v-if="scope.row.is_default" class="default-label">默认</span></span>
         </template>
       </el-table-column>
+      <el-table-column label="使用人数" property="user_count"></el-table-column>
       <el-table-column label="操作">
         <template scope="scope">
           <span>
@@ -28,6 +29,7 @@
         ref="pagination"
         :page-size="pageSize"
         :total="total"
+        :history-store="historyStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
     <address-edit-modal ref="AddressModal" @address-added="onAddressAdded" @address-edited="onAddressEdited"></address-edit-modal>
@@ -51,7 +53,6 @@ export default {
       return {
         addrRegExp,
         emptyText: '暂时没有办公地点',
-        currentPage: 1,
         pageSize: 10,
         dataStore: [],
         historyStore: [],
@@ -69,12 +70,12 @@ export default {
       AddressEditModal,
     },
     methods: {
+      getDataTable(page) {
+        this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+      },
       fetchAddresses(fromLocale, page) {
-        if (page) {
-          this.$refs.pagination.currentPage = page;
-        }
         if (fromLocale) {
-          this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+          this.dataStore = this.getDataTable(page);
         } else {
           this.loading = true;
           api.fetchAddresses(
@@ -82,8 +83,8 @@ export default {
             this.lastAddressID, 
             this.pageSize).then((response) => {
               this.lastAddressID = response.body.last_address_id;
-              this.dataStore = response.body.addresses;
-              this.historyStore = this.historyStore.concat(this.dataStore);
+              this.historyStore = this.historyStore.concat(response.body.addresses);
+              this.dataStore = this.getDataTable(page);
               this.total = response.body.total || 0;
               this.loading = false;
             }, () => {
@@ -100,7 +101,7 @@ export default {
       onAddressAdded(addr) {
         this.historyStore.splice(0, 0, addr);
         this.total = this.total + 1;
-        this.fetchAddresses(true, 1);
+        this.$refs.pagination.onCurrentChange(1);
         if (addr.is_default) {
           this.remarkDefault(addr.id);
         }
@@ -120,7 +121,7 @@ export default {
             const curr = this.$refs.pagination.currentPage;
             this.historyStore.splice(((curr - 1) * this.pageSize) + index, 1);
             this.total--;
-            this.fetchAddresses(true, curr);
+            this.$refs.pagination.onCurrentChange(curr);
           }, () => {
             MessageBox.tip('删除失败！');
           });
@@ -138,9 +139,10 @@ export default {
     },
     watch: {
       company: {
+        immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchAddresses();
+            this.fetchAddresses(false, 1);
           }
         },
       },

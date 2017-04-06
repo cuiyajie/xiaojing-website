@@ -59,6 +59,17 @@ $border-radius: 4px;
     }
   }
 
+  &.light-header {
+
+    .el-dialog__header {
+      background-color: $lightblue;
+
+      .el-dialog__title {
+        color: #4A4A4A;
+      }
+    }
+  }
+
 	.el-dialog__header {
 		background-color: $darkblue;
 		text-align: center;

@@ -26,6 +26,7 @@
       <pagination class="table-pagination" 
         :page-size="pageSize"
         :total="departments.length"
+        :history-store="departments"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
     <department-setting-modal ref="SettingModal" :company="company"></department-setting-modal>

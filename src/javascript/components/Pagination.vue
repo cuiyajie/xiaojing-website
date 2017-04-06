@@ -10,7 +10,6 @@
 	export default {
   data() {
     return {
-      maxPage: 0,
       currentPage: 1,
     };
   },
@@ -22,6 +21,10 @@
     total: {
       type: Number,
     },
+    historyStore: {
+      type: Array,
+      default: [],
+    },
   },
   computed: {
     pageCount() {
@@ -29,12 +32,16 @@
     },
   },
   methods: {
+    reset() {
+      this.currentPage = 1;
+    },
     onCurrentChange(newPage) {
-      let fetchData = false;
-      if (newPage > this.maxPage) {
-        this.maxPage = newPage;
-        fetchData = true;
+      if (newPage > this.pageCount) {
+        return;
       }
+
+      const fetchData = this.historyStore.length < this.total && 
+          this.historyStore.length < newPage * this.pageSize;
       this.$emit('pagination-pagechange', {
         newPage,
         oldPage: this.currentPage,

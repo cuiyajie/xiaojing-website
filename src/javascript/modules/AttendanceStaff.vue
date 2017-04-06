@@ -41,6 +41,7 @@
       <pagination class="table-pagination" 
         :page-size="pageSize"
         :total="total"
+        :history-store="historyStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
   </div>
@@ -90,6 +91,9 @@
       StaffAutoComplete,
     },
     methods: {
+      getDataTable(page) {
+        this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+      },
       onDateRangeChanged() {
         const range = this.dateRange;
         if (range && range.length === 2) {
@@ -111,7 +115,7 @@
       onSearch() {
         this.lastCheckinId = 0;
         this.historyStore = [];
-        this.fetchStaffCheckins();
+        this.fetchStaffCheckins(false, 1);
       },
       onExport() {
         if (this.daysQueried > MAX_EXPORT_DURATION) {
@@ -147,7 +151,7 @@
       // fetch data async
       fetchStaffCheckins(fromLocale, page) {
         if (fromLocale) {
-          this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+          this.dataStore = this.getDataTable(page);
         } else {
           this.loading = true;
           api.fetchStaffCheckins(this.company.id, 
@@ -158,8 +162,8 @@
               this.selectedDepartment.id,
               this.selectedStaffId).then((response) => {
                 this.lastCheckinId = response.body.last_checkin_id;
-                this.dataStore = response.body.checkins;
-                this.historyStore = this.historyStore.concat(this.dataStore);
+                this.historyStore = this.historyStore.concat(response.body.checkins);
+                this.dataStore = this.getDataTable(page);
                 this.total = response.body.total;
                 this.loading = false;
               }, () => {
@@ -176,9 +180,10 @@
     },
     watch: {
       company: {
+        immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchStaffCheckins();
+            this.fetchStaffCheckins(false, 1);
           }
         },
       },
