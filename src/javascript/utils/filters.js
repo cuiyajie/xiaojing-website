@@ -1,9 +1,13 @@
 import moment from 'moment';
 import 'moment-duration-format';
 import 'moment/locale/zh-cn';
-import { STAFF_STATUS, GENDER } from './constants';
+import { STAFF_STATUS, GENDER, ADDRESS_SEPERATOR } from './constants';
 
 moment.locale('zh-cn');
+
+const RegExp = window.RegExp;
+const escapeReg = regexp => regexp.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+const addrRegExp = new RegExp(escapeReg(ADDRESS_SEPERATOR), 'g');
 
 export const tableValFilter = {
   gender: (val) => {
@@ -49,5 +53,9 @@ export default {
       startChar = '&';
     }
     return `${url}${startChar}t=${+new Date()}`;
+  },
+  trimAddress(addr) {
+    const address = addr || '';
+    return address.replace(addrRegExp, '');
   },
 };

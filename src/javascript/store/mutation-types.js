@@ -8,4 +8,9 @@ export const DELETE_DEPARTMENT = 'DELETE_DEPARTMENT';
 
 export const FETCH_AREAS = 'FETCH_AREAS';
 
+export const FETCH_ADDRESS = 'FETCH_ADDRESS';
+export const DELETE_ADDRESS = 'DELETE_ADDRESS';
+export const UPDATE_ADDRESS = 'UPDATE_ADDRESS';
+export const CREATE_ADDRESS = 'CREATE_ADDRESS';
+
 export default AUTO_LOGIN;

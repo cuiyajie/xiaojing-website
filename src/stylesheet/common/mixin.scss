@@ -32,3 +32,14 @@
     }
   }
 }
+
+@mixin table-column-align($columnIndex: 1, $direction: 'left', $containHeader: true) {
+  tr td:nth-child(#{$columnIndex}) {
+    text-align: #{$direction};
+  }
+  @if $containHeader {
+    tr th:nth-child(#{$columnIndex}) {
+      text-align: #{$direction};
+    }
+  }
+}

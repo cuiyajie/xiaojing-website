@@ -26,7 +26,7 @@
       <el-form-item label="联系电话"><el-input v-model="changed.tel" placeholder="请输入电话号码"></el-input></el-form-item>
       <el-form-item label="部门"><span class="form-department" @click="handleSelectDepartment">{{ changed.department_name }}<i class="el-icon-caret-right el-icon--right"></i></span></el-form-item>
       <el-form-item label="职务"><el-input v-model="changed.job_position" placeholder="选填"></el-input></el-form-item>
-      <el-form-item label="办公地点"><span class="form-department" @click="handleSelectAddress">{{ changed.location }}<i class="el-icon-caret-right el-icon--right"></i></span></el-form-item>
+      <el-form-item label="办公地点"><span class="form-department" @click="handleSelectAddress"><span class="text-wrap">{{ trimAddress(changed.location) }}</span><i class="el-icon-caret-right el-icon--right"></i></span></el-form-item>
       <el-form-item class="tx_c no-bordered buttons">
        <el-button type="primary" @click="onSubmit" size="small" :disabled="saving">保存</el-button>
        <el-button @click="close" size="small" :disabled="saving">取消</el-button>
@@ -41,6 +41,7 @@
   import MessageBox from '../utils/messagebox';
   import urls from '../api/api-list';
   import api from '../api';
+  import filters from '../utils/filters';
   import { NetworkUtils } from '../api/global';
   import defaultAvatar from '../../img/avatar-darkbg.png';
 
@@ -86,6 +87,7 @@
       },
     },
     methods: {
+      trimAddress: filters.trimAddress,
       show(staff) {
         if (staff && staff.id) {
           this.origin = staff;
@@ -191,10 +193,10 @@
         });
       },
       handleSelectAddress() {
-        // this.$parent.$refs.addresslistModal.show({
-          // id: this.changed.address_id,
-          // name: this.changed.location,
-        // });
+        this.$parent.$refs.addresslistModal.show({
+          id: this.changed.address_id,
+          location: this.changed.location,
+        });
       },
     },
   };
@@ -271,6 +273,13 @@
 
         i {
           color: $linkface;
+        }
+
+        .text-wrap {
+          text-align: right;
+          width: 160px;
+          display: inline-block;
+          vertical-align: middle;
         }
       }
 

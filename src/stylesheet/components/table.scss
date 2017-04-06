@@ -10,10 +10,11 @@ $pagination-next-bgcolor: $linkface;
   padding-bottom: 20px;
 
 	&.first-column-left {
-		tr td:first-child,
-		tr th:first-child {
-			text-align: left;
-		}
+		@include table-column-align(1);
+	}
+
+	&.second-column-left {
+		@include table-column-align(2, 'left', false);
 	}
 
 	&:before,

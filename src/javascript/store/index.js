@@ -12,6 +12,10 @@ const state = {
     currentCompany: {},
     departments: [],
     areas: [],
+    
+    addressStore: [],
+    lastAddressId: 0,
+    addressTotal: -1,
   },
 };
 

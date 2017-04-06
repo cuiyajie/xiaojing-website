@@ -29,7 +29,7 @@
         ref="pagination"
         :page-size="pageSize"
         :total="total"
-        :history-store="historyStore"
+        :history-store="addressStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
     <address-edit-modal ref="AddressModal" @address-added="onAddressAdded" @address-edited="onAddressEdited"></address-edit-modal>
@@ -37,32 +37,28 @@
 </template>
 <script>
   import { mapGetters } from 'vuex';
-  import _ from 'lodash/core';
   import Pagination from '../components/Pagination';
   import AddressEditModal from '../components/AddressEditModal';
   import api from '../api';
   import MessageBox from '../utils/messagebox';
-  import { ADDRESS_SEPERATOR } from '../utils/constants'; 
-
-  const RegExp = window.RegExp;
-  const escapeReg = regexp => regexp.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+  import filters from '../utils/filters';
 
 export default {
     data() {
-      const addrRegExp = new RegExp(escapeReg(ADDRESS_SEPERATOR), 'g');
       return {
-        addrRegExp,
         emptyText: '暂时没有办公地点',
         pageSize: 10,
         dataStore: [],
-        historyStore: [],
+        currentPage: 1,
         loading: false,
-        total: 0,
       };
     },
     computed: {
       ...mapGetters({
         company: 'currentCompany',
+        addressStore: 'addressStore',
+        total: 'addressTotal',
+        lastAddressId: 'lastAddressId',
       }),
     },
     components: {
@@ -70,80 +66,66 @@ export default {
       AddressEditModal,
     },
     methods: {
-      getDataTable(page) {
-        return this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
-      },
-      fetchAddresses(fromLocale, page) {
-        if (fromLocale) {
-          this.dataStore = this.getDataTable(page);
-        } else {
-          this.loading = true;
-          api.fetchAddresses(
-            this.company.id,
-            this.lastAddressID, 
-            this.pageSize).then((response) => {
-              this.lastAddressID = response.body.last_address_id;
-              this.historyStore = this.historyStore.concat(response.body.addresses);
-              this.dataStore = this.getDataTable(page);
-              this.total = response.body.total || 0;
-              this.loading = false;
-            }, () => {
-              this.loading = false;
-            });
-        }
+      getDataTable() {
+        this.dataStore = this.addressStore.slice(
+          this.pageSize * (this.currentPage - 1), 
+          this.pageSize * this.currentPage);
       },
       onPageChanged(page) {
-        this.fetchAddresses(!page.fetchData, page.newPage);
+        this.currentPage = page.newPage;
+        this.$store.dispatch('fetchAddress', {
+          perpage: this.pageSize, 
+          current: this.currentPage,
+        });
       },
       onAdd() {
         return this.$refs.AddressModal.show();
       },
       onAddressAdded(addr) {
-        this.historyStore.splice(0, 0, addr);
-        this.total = this.total + 1;
-        this.$refs.pagination.onCurrentChange(1);
-        if (addr.is_default) {
-          this.remarkDefault(addr.id);
-        }
+        this.$store.dispatch('createAddress', addr);
       },
       onEdit(row) {
         return this.$refs.AddressModal.show(row);
       },
       onAddressEdited(addr) {
-        if (addr.is_default) {
-          this.remarkDefault(addr.id);
-        }
+        this.$store.dispatch('updateAddress', addr);
       },
-      onDelete(row, index) {
+      onDelete(row) {
         MessageBox.lConfirm('删除后，使用此地址员工的办公地点将被清除？').then(() => {
           api.deleteAddress(this.company.id, row.id).then(() => {
             MessageBox.tip('删除成功！');
-            const curr = this.$refs.pagination.currentPage;
-            this.historyStore.splice(((curr - 1) * this.pageSize) + index, 1);
-            this.total--;
-            this.$refs.pagination.onCurrentChange(curr);
+            this.$store.dispatch('deleteAddress', row.id);
           }, () => {
             MessageBox.tip('删除失败！');
           });
         }).catch(() => {});
       },
-      trimLocation(location) {
-        return location.replace(this.addrRegExp, '');
-      },
-      remarkDefault(addrId) {
-        _.each(this.historyStore, (addr) => {
-          /* eslint no-param-reassign: ["off"]*/
-          addr.is_default = (addr.id === addrId);
-        });
-      },
+      trimLocation: filters.trimAddress,
     },
     watch: {
       company: {
         immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchAddresses(false, 1);
+            this.$store.dispatch('fetchAddress', {
+              perpage: this.pageSize, 
+              current: this.currentPage,
+            });
           }
+        },
+      },
+      addressStore: {
+        immediate: true,
+        handler() {
+          if (this.addressStore) {
+            this.getDataTable();
+          }
+        },
+      },
+      currentPage: {
+        immediate: true,
+        handler() {
+          this.getDataTable();
         },
       },
     },

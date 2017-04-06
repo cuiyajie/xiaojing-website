@@ -44,8 +44,23 @@ export const fetchAreas = ({ commit }, cb) => {
   }); 
 };
 
-// export const fillAddressStore = ({ commit }, addresses) => {
-  
-// };
+export const fetchAddress = ({ commit, state }, { perpage = 10, current = 1 }) => {
+  commit(types.FETCH_ADDRESS, {
+    perpage, 
+    current,
+  });
+};
+
+export const createAddress = ({ commit }, newAddress) => {
+  commit(types.CREATE_ADDRESS, newAddress);
+};
+
+export const updateAddress = ({ commit }, newAddress) => {
+  commit(types.UPDATE_ADDRESS, newAddress);
+};
+
+export const deleteAddress = ({ commit }, addressId) => {
+  commit(types.DELETE_ADDRESS, addressId);
+};
 
 export default autoLogin;

@@ -196,6 +196,7 @@
           }
           this.saving = true;
           if (this.address.id) {
+            delete this.address.user_count;
             Api.updateAddress(this.company.id, this.address).then((response) => {
               this.saving = false;
               this.origin = Object.assign(this.origin, response.body.address);

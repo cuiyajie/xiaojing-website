@@ -209,8 +209,9 @@
         this.$refs.staffModal.changed.department_id = selected.id;
         this.$refs.staffModal.changed.department_name = selected.name;
       },
-      onAddressSelected() {
-        
+      onAddressSelected(selected) {
+        this.$refs.staffModal.changed.address_id = selected.id;
+        this.$refs.staffModal.changed.location = selected.location;
       },
       onSelectionChange(selection) {
         this.selected = selection;

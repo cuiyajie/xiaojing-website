@@ -14,6 +14,7 @@
       <el-form-item label="联系电话"><span class="form-value">{{ viewed.tel }}</span></el-form-item>
       <el-form-item label="部门"><span class="form-value">{{ viewed.department_name }}</span></el-form-item>
       <el-form-item label="职务"><span class="form-value">{{ viewed.job_position }}</span></el-form-item>
+      <el-form-item label="办公地点"><span class="form-value text-wrap">{{ trimAddress(viewed.location) }}</span></el-form-item>
       <el-form-item class="tx_c no-bordered buttons">
        <el-button type="primary" @click="edit" size="small">编辑</el-button>
        <el-button type="primary" @click="onQuit" size="small" 
@@ -26,7 +27,7 @@
 <script>
   import { mapGetters } from 'vuex';
   import { ENUM_STAFF_STATUS } from '../utils/constants';
-  import { tableValFilter } from '../utils/filters';
+  import { tableValFilter, default as filters } from '../utils/filters';
   import MessageBox from '../utils/messagebox';
   import api from '../api';
 
@@ -78,6 +79,7 @@
           });
         }).catch(() => {});
       },
+      trimAddress: filters.trimAddress,
       ...tableValFilter,
     },
   };
@@ -89,6 +91,10 @@
     span.form-value {
       display: block;
       text-align: right;
+    }
+
+    span.form-value.text-wrap {
+      width: 180px;
     }
 
     &.staff-setting .avatar-header span {

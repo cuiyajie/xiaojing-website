@@ -82,7 +82,7 @@ export function createStaff({ company_id, user, face_image }) {
 }
 
 export function updateStaff({ company_id, user }) {
-  const fields = ['id', 'name', 'gender', 'tel', 'department_id', 'job_position', 'birthday', 'email', 'id_number'];
+  const fields = ['id', 'name', 'gender', 'tel', 'department_id', 'job_position', 'birthday', 'email', 'id_number', 'address_id'];
   const checkedUser = {};
   _.each(user, (v, k) => {
     if (v && fields.indexOf(k) !== -1) {
