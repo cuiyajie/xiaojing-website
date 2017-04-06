@@ -39,6 +39,7 @@
       <pagination class="table-pagination" 
         :page-size="pageSize"
         :total="total"
+        :history-store="historyStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
     <day-attendance-modal ref="DayAttendanceModal"></day-attendance-modal>
@@ -92,6 +93,9 @@
       DayAttendanceModal,
     },
     methods: {
+      getDataTable(page) {
+        return this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+      },
       onDateRangeChanged() {
         const range = this.dateRange;
         if (range && range.length === 2) {
@@ -104,7 +108,7 @@
       onSearch() {
         this.lastAttendanceId = 0;
         this.historyStore = [];
-        this.fetchAttendanceAnalysis();
+        this.fetchAttendanceAnalysis(false, 1);
       },
       onExport() {
         if (this.daysQueried > MAX_EXPORT_DURATION) {
@@ -135,7 +139,7 @@
       // fetch data async
       fetchAttendanceAnalysis(fromLocale, page) {
         if (fromLocale) {
-          this.dataStore = this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
+          this.dataStore = this.getDataTable(page);
         } else {
           this.loading = true;
           api.fetchAttendanceAnalysis(this.company.id, 
@@ -145,8 +149,8 @@
               this.pageSize,
               this.lastAttendanceId).then((response) => {
                 this.lastAttendanceId = response.body.last_attendance_id;
-                this.dataStore = response.body.attendances;
-                this.historyStore = this.historyStore.concat(this.dataStore);
+                this.historyStore = this.historyStore.concat(response.body.attendances);
+                this.dataStore = this.getDataTable(page);
                 this.total = response.body.total || 0;
                 this.normal = response.body.normal;
                 this.absence = response.body.absence;
@@ -170,7 +174,7 @@
         immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchAttendanceAnalysis();
+            this.fetchAttendanceAnalysis(false, 1);
           }
         },
       },

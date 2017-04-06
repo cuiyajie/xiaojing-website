@@ -44,4 +44,8 @@ export const fetchAreas = ({ commit }, cb) => {
   }); 
 };
 
+// export const fillAddressStore = ({ commit }, addresses) => {
+  
+// };
+
 export default autoLogin;
