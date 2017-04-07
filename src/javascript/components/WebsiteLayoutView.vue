@@ -17,13 +17,6 @@
       <span><router-view></router-view></span>
       <footer>
         <div class="layout-container">
-          <nav>
-            <ul class="clearfix">
-              <li><a href="https://www.linkface.cn/">LINKFACE</a></li>
-              <li><a href="https://www.jdcapital.com/">九鼎投资</a></li>
-              <li><a href="https://www.sensetime.com/">商汤集团</a></li>
-            </ul>
-          </nav>
           <div class="copyright">©2017 Linkface Corporation 京ICP备 15020634</div>
         </div>
       </footer>
@@ -63,7 +56,7 @@
 </script>
 <style lang="scss">
   @import '~scss_var';
-  $website-header-height: 62px;
+  $website-header-height: 80px;
 
   body.dark-theme {
     background-color: $darkblue;
@@ -89,7 +82,7 @@
 
     header {
       height: $website-header-height;
-      font-size: 14px;
+      font-size: 16px;
 
       nav {
         float: right;
@@ -107,8 +100,8 @@
             position: absolute;
             left: 15px;
             right: 15px;
-            bottom: 0;
-            height: 4px;
+            bottom: 18px;
+            height: 3px;
           }
 
           > a.router-link-active:after {
@@ -120,7 +113,7 @@
 
     footer {
       font-size: 14px;
-      height: 260px;
+      height: 150px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -129,15 +122,6 @@
       .copyright {
         margin-top: 24px;
         color: rgba($darkblue, .5);
-      }
-
-      nav {
-        display: inline-block;
-        li {
-          float: left;
-          padding-left: 15px;
-          padding-right: 15px;
-        }
       }
     }
 
@@ -148,8 +132,8 @@
 
       img {
         margin-right: 10px;
-        width: 40px;
-        height: 40px;
+        width: 58px;
+        height: 58px;
         vertical-align: middle;
       }
     }

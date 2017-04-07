@@ -4,7 +4,7 @@
       <div class="layout-container arena-container">
         <div class="description">
           <h2>小瞳助手，企业考勤好帮手</h2>
-          <p>将全球领先的人脸识别和深度学习技术用于企业办公服务。</p>
+          <p>将全球领先的<span class="clr-lf fw-normal">人脸识别</span>和深度学习技术用于企业办公服务。</p>
           <p class="seperator"><span>下载应用</span></p>
           <div class="clearfix">
             <div class="app-column">
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <section class="feature">
+    <section class="intro-block feature">
       <div class="layout-container"><h2 class="guide">小瞳能做什么</h2></div>
       <div class="layout-container feature-section feature-record">
         <h2>人脸极速打卡</h2>
@@ -29,11 +29,39 @@
         <p>智能生成考勤统计，减轻考勤统计工作</p>
       </div>
     </section>
+    <section class="intro-block case">
+      <div class="layout-container">
+        <h2 class="guide">我们的案例</h2>
+        <div class="case-row">
+          <div class="case-img" :style="{ backgroundImage: 'url(' + logo1 + ')' }"></div>
+          <div class="case-des">
+            2016年6月份投入使用<br/>
+            通过部署考勤机+闸机，实现员工考勤与企业的智能门禁。
+          </div>
+        </div>
+        <div class="case-row reverse">
+          <div class="case-img" :style="{ backgroundImage: 'url(' + logo2 + ')' }"></div>
+          <div class="case-des">
+            2016年12月份投入使用<br/>
+            通过iPad安装“小瞳助手”进行多地部署，实现公司总部对全国分公司员工出勤的智能管理。
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 <script>
+  import logo1 from '../../img/home/logo_jz@2x.png';
+  import logo2 from '../../img/home/logo_jh@2x.png';
+
   export default {
     name: 'homepage',
+    data() {
+      return {
+        logo1,
+        logo2,
+      };
+    },
   };
 </script>
 <style lang="scss">
@@ -81,9 +109,9 @@
       flex-direction: row;
       flex-wrap: wrap;
       align-items: center;
-      background: url(../../img/home/shot-app@2x.png) no-repeat;
-      background-size: 355px auto;
-      background-position: 88% center;
+      background: url(../../img/home/shot-model@2x.png) no-repeat;
+      background-size: 300px auto;
+      background-position: 80% bottom;
     }
 
     .app-column {
@@ -125,14 +153,26 @@
       }
     }
 
-    .feature {
-      background-color: #FFF;
+    .intro-block {
       color: $darkblue;
       text-align: center;
       padding-top: 80px;
 
       h2 {
         margin-bottom: 15px;
+      }
+
+      &.feature {
+        background-color: #FFF;
+      }
+
+      &.case {
+        background-color: #F7F7F7;
+        padding-bottom: 150px;
+
+        h2 {
+          margin-bottom: 100px;
+        }
       }
     }
 
@@ -194,6 +234,40 @@
           background-position-x: right;
           background-image: url('../../img/home/shot-analysis@2x.png');
         }
+      }
+    }
+
+    .case-row {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      &.reverse {
+        flex-direction: row-reverse;
+      }
+
+      .case-img {
+        width: 270px;
+        height: 157px;
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: #FFF;
+      }
+
+      .case-des {
+        text-align: left;
+        font-size: 18px;
+        line-height: 30px;
+        background-color: #FFF;
+        padding: 0 30px;
+        width: calc(100% - 280px);
+        display: flex;
+        align-items: center;
+      }
+
+      & + .case-row {
+        margin-top: 20px;
       }
     }
   }
