@@ -24,6 +24,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item label="联系电话"><el-input v-model="changed.tel" placeholder="请输入电话号码"></el-input></el-form-item>
+      <el-form-item label="邮箱"><el-input v-model="changed.email" placeholder="请输入邮箱"></el-input></el-form-item>
       <el-form-item label="部门"><span class="form-department" @click="handleSelectDepartment">{{ changed.department_name }}<i class="el-icon-caret-right el-icon--right"></i></span></el-form-item>
       <el-form-item label="职务"><el-input v-model="changed.job_position" placeholder="选填"></el-input></el-form-item>
       <el-form-item label="办公地点"><span class="form-department" @click="handleSelectAddress"><span class="text-wrap">{{ trimAddress(changed.location) }}</span><i class="el-icon-caret-right el-icon--right"></i></span></el-form-item>

@@ -12,6 +12,7 @@
       <el-form-item label="姓名"><span class="form-value">{{ viewed.name }}</span></el-form-item>
       <el-form-item label="性别"><span class="form-value">{{ gender(viewed.gender) }}</span></el-form-item>
       <el-form-item label="联系电话"><span class="form-value">{{ viewed.tel }}</span></el-form-item>
+      <el-form-item label="邮箱"><span class="form-value">{{ viewed.email }}</span></el-form-item>
       <el-form-item label="部门"><span class="form-value">{{ viewed.department_name }}</span></el-form-item>
       <el-form-item label="职务"><span class="form-value">{{ viewed.job_position }}</span></el-form-item>
       <el-form-item label="办公地点"><span class="form-value text-wrap">{{ trimAddress(viewed.location) }}</span></el-form-item>
