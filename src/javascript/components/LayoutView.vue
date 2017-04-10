@@ -3,7 +3,7 @@
   <div class="wrapper fixed">
     <header class="main-header">
       <div class="logo logo-lg">
-        <div class="container overflow-hidden tx_c"><img :src="currentCompany.logo || defaultCompanyLogo" alt="Company Logo"></div>
+        <div class="container overflow-hidden tx_c"><img v-show="companyLogo" :src="companyLogo" alt="Company Logo"></div>
       </div>
       <!-- Header navbar -->
       <nav class="navbar navbar-static-top bottom-border" role="navigation">
@@ -74,6 +74,14 @@
         currentUser: 'currentUser',
         currentCompany: 'currentCompany',
       }),
+      companyLogo() {
+        if (!this.currentCompany.id) {
+          return false;
+        } else if (this.currentCompany.logo && this.currentCompany.logo !== '') {
+          return this.currentCompany.logo;
+        } 
+        return defaultCompanyLogo;
+      },
     },
     methods: {
       logout,
