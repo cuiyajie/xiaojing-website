@@ -34,14 +34,14 @@ export const dateFilter = {
     return mDate.format('YYYY.MM.DD dddd');
   },
   toLongDateString(mDate) {
-    return mDate.format('YYYY.MM.DD hh:mm:ss');
+    return mDate.format('YYYY.MM.DD HH:mm:ss');
   },
   toShortString(date) {
     return moment(date).format('YYYY-MM-DD');
   },
   toShortTimeString(date) {
     const mDate = moment(date);
-    return mDate.isValid() ? mDate.format('hh:mm:ss') : '--';
+    return mDate.isValid() ? mDate.format('HH:mm:ss') : '--';
   },
   toDurationString(duration) {
     return duration > 0 ? moment.duration(duration, 'seconds').format('h小时m分') : '--';
