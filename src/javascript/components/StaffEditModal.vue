@@ -99,6 +99,7 @@
         this.dialogVisible = true;
       },
       close() {
+        this.$refs.userAvatar.setAttribute('src', defaultAvatar);
         this.origin = null;
         this.dialogVisible = false;
       },
@@ -176,11 +177,11 @@
         api[action](params).then((response) => {
           this.saving = false;
           if (this.isCreate) {
-            this.dialogVisible = false;
+            this.close();
             this.$emit('staff-added', response.body);
           } else {
             this.origin = Object.assign(this.origin, response.body);
-            this.dialogVisible = false;
+            this.close();
           }
         }, () => {
           this.saving = false;
