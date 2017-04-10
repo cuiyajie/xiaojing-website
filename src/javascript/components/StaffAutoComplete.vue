@@ -49,6 +49,9 @@ export default {
         this.$refs.autocomplete.$refs.input.setCurrentValue(`${item.name}  ${item.tel}`);
         this.$emit('handle-select', item);
       },
+      clear() {
+        this.$refs.autocomplete.$refs.input.setCurrentValue('');
+      },
     },
 };
 </script>

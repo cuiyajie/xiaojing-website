@@ -3,7 +3,7 @@
     <div class="lf-page-preheader">
       <el-row>
         <el-col :span="6">
-          <staff-auto-complete @handle-request="handleRequest" @handle-select="handleSelect"></staff-auto-complete>
+          <staff-auto-complete ref="autoComplete" @handle-request="handleRequest" @handle-select="handleSelect"></staff-auto-complete>
         </el-col>
         <el-col :span="3">
           <el-dropdown menu-align="start">
@@ -82,6 +82,9 @@
   import MessageBox from '../utils/messagebox';
   import api from '../api';
 
+  const defaultDepartment = { id: 0, name: '所有部门' };
+  const defaultStatus = { id: 0, name: '所有状态' };
+
   export default {
     data() {
       return {
@@ -92,8 +95,8 @@
         historyStore: [],
         selected: [],
         loading: false,
-        selectedDepartment: { id: 0, name: '所有部门' },
-        selectedStatus: { id: 0, name: '所有状态' },
+        selectedDepartment: defaultDepartment,
+        selectedStatus: defaultStatus,
       };
     },
     computed: {
@@ -102,10 +105,10 @@
         departments: 'departments',
       }),
       departmentslist() {
-        return [{ id: 0, name: '所有部门' }].concat(this.departments);
+        return [defaultDepartment].concat(this.departments);
       },
       statuslist() {
-        return [{ id: 0, name: '所有状态' }].concat(_.map(STAFF_STATUS, (v, k) => ({ id: k, name: v })));
+        return [defaultStatus].concat(_.map(STAFF_STATUS, (v, k) => ({ id: k, name: v })));
       },
     },
     components: {
@@ -123,6 +126,8 @@
           this.clearStore();
           this.fetchAllStaffs(false, 1);
           cb([]);
+        } else {
+          this.resetQuery();
         }
       },
       handleSelect(staff) {
@@ -142,6 +147,10 @@
         this.dataStore = [];
         this.total = 0;
         this.$refs.pagination.reset();
+      },
+      resetQuery() {
+        this.selectedDepartment = defaultDepartment;
+        this.selectedStatus = defaultStatus;
       },
       getDataTable(page) {
         return this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
@@ -177,8 +186,9 @@
       },
       ...tableValFilter,
       onSearch() {
+        this.$refs.autoComplete.clear();
         this.clearStore();
-        this.fetchAllStaffs();
+        this.fetchAllStaffs(false, 1);
       },
       onAdd() {
         this.$refs.staffModal.show();
