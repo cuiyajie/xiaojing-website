@@ -12,9 +12,9 @@
               <el-col :span="12">
                 <el-form>
                   <el-form-item label="上传照片">
-                    <el-button type="primary" class="upload-button" size="small" @click="onStart" ref="StartButton">
+                    <el-button type="primary" class="upload-button" size="small" @click="onStart">
                       选择文件
-                      <input type="file" class="hidden" multiple @change="onFilesAdded">
+                      <input ref="fileInput" type="file" class="hidden" multiple @change="onFilesAdded">
                     </el-button>
                   </el-form-item>
                   <el-form-item label="注意事项"></el-form-item>
@@ -177,7 +177,7 @@
       },
       onStart() {
         if (this.state === this.STATES.INIT) {
-          const file = this.$refs.StartButton.$el.querySelector('input[type=file]');
+          const file = this.$refs.fileInput;
           if (file) {
             file.click();
           }
@@ -192,6 +192,7 @@
         this.users = [];
         this.total = 0;
         this.progressStatus = '';
+        this.$refs.fileInput.value = null;
       },
       onClose() {
         if (this.users.length > 0) {

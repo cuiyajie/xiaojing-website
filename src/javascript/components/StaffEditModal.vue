@@ -183,9 +183,15 @@
             this.origin = Object.assign(this.origin, response.body);
             this.close();
           }
-        }, () => {
+        }, (err) => {
           this.saving = false;
-          MessageBox.tip(`${this.isCreate ? '添加' : '更新'}用户信息失败`);
+          let msg;
+          if (err && err.body && err.body.message) {
+            msg = err.body.message;
+          } else {
+            msg = `${this.isCreate ? '添加' : '更新'}用户信息失败`;
+          }
+          MessageBox.tip(msg);
         });
       },
       handleSelectDepartment() {
