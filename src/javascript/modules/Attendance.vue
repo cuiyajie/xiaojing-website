@@ -56,7 +56,7 @@
   import { dateFilter } from '../utils/filters';
   import MessageBox from '../utils/messagebox';
 
-  const MAX_EXPORT_DURATION = 31;
+  const MAX_EXPORT_DURATION = 32;
 
   export default {
     data() {

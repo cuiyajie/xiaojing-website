@@ -7,9 +7,13 @@
       <el-table-column label="员工" property="user_name" width="80"></el-table-column>
       <el-table-column label="部门" property="department_name" width="150"></el-table-column>
       <el-table-column label="上班签到" property="first_checkin_date" width="100"><template scope="scope">{{ toShortTimeString(scope.row.first_checkin_date) }}</template></el-table-column>
-      <el-table-column label="签到地址" property="first_place"></el-table-column>
+      <el-table-column label="签到地址">
+        <template scope="scope"><span>{{ showAddress(scope.row.first_place) }}</span></template>
+      </el-table-column>
       <el-table-column label="下班签退" property="last_checkin_date" width="100"><template scope="scope">{{ toShortTimeString(scope.row.last_checkin_date) }}</template></el-table-column>
-      <el-table-column label="签退地址" property="last_place"></el-table-column>
+      <el-table-column label="签退地址">
+        <template scope="scope"><span>{{ showAddress(scope.row.last_place) }}</span></template>
+      </el-table-column>
       <el-table-column label="工作时长" property="worktime" width="120"><template scope="scope">{{ toDurationString(scope.row.worktime) }}</template></el-table-column>
       <el-table-column label="加班时长" property="overtime" width="120"><template scope="scope">{{ toDurationString(scope.row.overtime) }}</template></el-table-column>
     </el-table>
@@ -27,7 +31,7 @@
   import { mapGetters } from 'vuex';
   import Pagination from './Pagination';
   import api from '../api';
-  import { dateFilter } from '../utils/filters';
+  import { dateFilter, default as filters } from '../utils/filters';
 
   export default {
     data() {
@@ -93,6 +97,12 @@
         this.total = 0;
         this.$refs.pagination.reset();
         this.initial = true;
+      },
+      showAddress(addr) {
+        if (addr && addr.location) {
+          return filters.trimAddress(addr.location);
+        } 
+        return '';
       },
       ...dateFilter,
     },

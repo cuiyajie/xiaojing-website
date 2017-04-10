@@ -9,6 +9,12 @@ const RegExp = window.RegExp;
 const escapeReg = regexp => regexp.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 const addrRegExp = new RegExp(escapeReg(ADDRESS_SEPERATOR), 'g');
 
+const getStartOfDay = date => new Date(date.getFullYear(), 
+    date.getMonth(), date.getDate(), 0, 0, 0);
+
+const getEndOfDay = date => new Date(date.getFullYear(),
+    date.getMonth(), date.getDate(), 23, 59, 59);
+
 export const tableValFilter = {
   gender: (val) => {
     if (val === GENDER.MALE) {
@@ -41,8 +47,9 @@ export const dateFilter = {
     return duration > 0 ? moment.duration(duration, 'seconds').format('h小时m分') : '--';
   },
   duration2Days(start, end) {
-    const days = moment.duration(end - start).as('days');
-    return days > 0 ? Math.ceil(days) : (days + 1);
+    const dStart = getStartOfDay(start);
+    const dEnd = getEndOfDay(end);
+    return Math.ceil(moment.duration(dEnd - dStart).as('days'));
   },
 };
 
