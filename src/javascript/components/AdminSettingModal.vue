@@ -50,7 +50,7 @@
                       :empty-text="adminlistEmptyText"
                       :data="admins">
                <el-table-column width="60">
-                <template scope="scope"><span class="action-icon" @click="removeAdmin(scope.row, scope.$index)"><el-icon name="close"></el-icon></span></template>
+                <template scope="scope"><span v-if="scope.row.id !== admin.id" class="action-icon" @click="removeAdmin(scope.row, scope.$index)"><el-icon name="close"></el-icon></span></template>
                </el-table-column>
                <el-table-column label="姓名" property="name"></el-table-column>
                <el-table-column label="部门" property="department_name"></el-table-column>
@@ -231,10 +231,6 @@
             api.fetchAllAdmins(this.company.id)
               .then((response) => {
                 this.adminHistoryStore = response.body.admins;
-                const index = _array.findIndex(this.adminHistoryStore, a => a.id === this.admin.id);
-                if (index !== -1) {
-                  this.adminHistoryStore.splice(index, 1);
-                }
                 this.adminTotal = this.adminHistoryStore.length || 0;
                 this.fetchAdmins(this.initialAdminPage);
                 this.fetchStaffs(false, 1);
