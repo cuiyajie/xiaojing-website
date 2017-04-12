@@ -1,5 +1,12 @@
 $border-radius: 4px;
 
+//fix content is empty
+.el-dialog__header:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
 .el-dialog.normal {
   border-radius: $border-radius;
 

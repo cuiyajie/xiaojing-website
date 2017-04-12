@@ -200,7 +200,7 @@
             Api.updateAddress(this.company.id, this.address).then((response) => {
               this.saving = false;
               this.origin = Object.assign(this.origin, response.body.address);
-              this.$emit('address-edited', response.body.address);
+              this.$emit('address-edited', this.origin);
               this.close();
             }, () => {
               this.saving = false;

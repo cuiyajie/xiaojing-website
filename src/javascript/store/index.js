@@ -6,7 +6,7 @@ import mutations from './mutations';
 
 Vue.use(Vuex);
 
-const state = {
+const initialState = {
   global: {
     currentUser: {},
     currentCompany: {},
@@ -18,6 +18,12 @@ const state = {
     addressTotal: -1,
   },
 };
+
+const state = {
+  global: Object.assign({}, initialState.global),
+};
+
+export { initialState };
 
 export default new Vuex.Store({
   state,

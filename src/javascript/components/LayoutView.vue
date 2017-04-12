@@ -84,7 +84,10 @@
       },
     },
     methods: {
-      logout,
+      logout() {
+        this.$store.dispatch('resetStore');
+        logout();
+      },
     },
     watch: {
       currentCompany(val) {

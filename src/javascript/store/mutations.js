@@ -9,7 +9,7 @@ function remarkDefault(store, addr) {
   if (addr.is_default) {
     _.each(store, (a) => {
       /* eslint no-param-reassign: ["off"]*/
-      addr.is_default = (a.id === addr.Id);
+      a.is_default = (a.id === addr.id);
     });
   }
 }

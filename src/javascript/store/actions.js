@@ -1,5 +1,9 @@
+import { set } from 'vue';
+import _ from 'lodash/core';
+
 import * as types from './mutation-types';
 import api from '../api';
+import { initialState } from '../store';
 
 export const autoLogin = ({ commit }, { companyId, token, cb }) => {
   api.login(companyId, token).then(({ body }) => {
@@ -61,6 +65,12 @@ export const updateAddress = ({ commit }, newAddress) => {
 
 export const deleteAddress = ({ commit }, addressId) => {
   commit(types.DELETE_ADDRESS, addressId);
+};
+
+export const resetStore = ({ commit, state }) => { // eslint-disable-line
+  _.each(initialState.global, (val, prop) => {
+    set(state.global, prop, val);
+  });
 };
 
 export default autoLogin;
