@@ -4,9 +4,12 @@ import urls from './api-list';
 
 const FormData = window.FormData;
 
-export function fetchAllStaffs(companyId, departmentId, lastUserId, count) {
+export function fetchAllStaffs(companyId, departmentId, status, lastUserId, count) {
   const params = {};
   params.company_id = companyId;
+  if (status) {
+    params.status = status;
+  }
   if (departmentId) {
     params.department_id = departmentId;
   }

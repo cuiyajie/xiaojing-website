@@ -13,15 +13,15 @@
             </el-dropdown-menu>
           </el-dropdown>
         </el-col>
-        <!-- <el-col :span="5">
+        <el-col :span="3">
           <el-dropdown menu-align="start">
             <el-button size="small">{{ selectedStatus.name }}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
             <el-dropdown-menu slot="dropdown" class="lf-header-dropdown">
               <el-dropdown-item v-for="stat in statuslist" :key="stat.id" @click.native="selectStat(stat);">{{ stat.name }}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown> 
-        </el-col> -->
-        <el-col :span="15">
+        </el-col>
+        <el-col :span="12">
            <el-button size="small" type="primary" @click="onSearch">查询</el-button>
         </el-col>
       </el-row>
@@ -83,7 +83,8 @@
   import api from '../api';
 
   const defaultDepartment = { id: 0, name: '所有部门' };
-  const defaultStatus = { id: 0, name: '所有状态' };
+  const statuslist = _.map(STAFF_STATUS, (v, k) => ({ id: k, name: v }));
+  const defaultStatus = { id: 1, name: STAFF_STATUS[1] };
 
   export default {
     data() {
@@ -96,6 +97,7 @@
         selected: [],
         loading: false,
         selectedDepartment: defaultDepartment,
+        statuslist,
         selectedStatus: defaultStatus,
       };
     },
@@ -106,9 +108,6 @@
       }),
       departmentslist() {
         return [defaultDepartment].concat(this.departments);
-      },
-      statuslist() {
-        return [defaultStatus].concat(_.map(STAFF_STATUS, (v, k) => ({ id: k, name: v })));
       },
     },
     components: {
@@ -164,6 +163,7 @@
           api.fetchAllStaffs(
             this.company.id, 
             this.selectedDepartment.id, 
+            this.selectedStatus.id,
             this.lastUserID,
             this.pageSize).then((response) => {
               this.lastUserID = response.body.max_user_id;

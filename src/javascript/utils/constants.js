@@ -1,7 +1,7 @@
 export const STAFF_STATUS = {
   1: '在职',
   2: '离职',
-  3: '删除',
+  // 3: '删除',
 };
 
 export const ENUM_STAFF_STATUS = {
