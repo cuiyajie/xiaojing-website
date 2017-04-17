@@ -8,7 +8,12 @@
     <div class="dialog-body">
       <el-tabs v-model="current" @tab-click="onTabClick" ref="Hello">
         <el-tab-pane v-for="tab in tabs" :name="tab" :label="tabTitle[tab]">
-         <attendance-record-table :tab="tab" :name="statusMap[tab]" :day="day" :ref="tabRefs[tab]"></attendance-record-table>
+         <attendance-record-table 
+           :tab="tab" 
+           :name="statusMap[tab]" 
+           :day="day" 
+           :department="department"
+           :ref="tabRefs[tab]"></attendance-record-table>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -37,6 +42,7 @@
         dialogVisible: false,
         data: null,
         day: null,
+        department: null,
         tabs,
         statusMap,
         tabRefs,
@@ -61,10 +67,11 @@
       AttendanceRecordTable,
     },
     methods: {
-      show(row) {
+      show(row, department) {
         if (row && row.day) {
           this.data = row;
           this.day = row.day;
+          this.department = department;
           this.dialogVisible = true;
           this.current = this.tabs[0];
           this.$nextTick(() => {

@@ -42,7 +42,8 @@ export function fetchUserAttendanceRecords(
   companyId, 
   startTime, 
   endTime, 
-  status, 
+  status,
+  departmentId, 
   userId, 
   count, 
   lastUserAttendanceId) {
@@ -52,6 +53,9 @@ export function fetchUserAttendanceRecords(
   params.end_time = dateFilter.toShortString(endTime);
   if (status) {
     params.status = ATTENDANCE_STATUS[status];
+  }
+  if (departmentId) {
+    params.department_id = departmentId; 
   }
   if (userId) {
     params.user_id = userId;

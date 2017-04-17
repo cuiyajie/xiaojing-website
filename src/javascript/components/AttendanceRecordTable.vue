@@ -46,7 +46,7 @@
         initial: true,
       };
     }, 
-    props: ['tab', 'name', 'day'],
+    props: ['tab', 'name', 'day', 'department'],
     computed: {
       ...mapGetters({
         company: 'currentCompany',
@@ -67,7 +67,8 @@
           api.fetchUserAttendanceRecords(this.company.id, 
             this.day, 
             this.day, 
-            this.tab, 
+            this.tab,
+            this.department && this.department.id, 
             null, 
             this.pageSize, 
             this.lastUserAttendanceId).then((response) => {

@@ -166,7 +166,7 @@
         this.fetchAttendanceAnalysis(!page.fetchData, page.newPage);
       },
       onRowClick(row) {
-        this.$refs.DayAttendanceModal.show(row);
+        this.$refs.DayAttendanceModal.show(row, this.selectedDepartment);
       },
     },
     watch: {
