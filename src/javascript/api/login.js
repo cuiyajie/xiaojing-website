@@ -7,8 +7,8 @@ export function login(cid, tkn) {
   if (ENV.isDebug()) {
     if (ENV.isDevelopment()) {
       // companyId = 4;
-      // companyId = 28;
       // token = 'b3A4mdXeWP7yyT8Ss4N42tSA';
+      // companyId = 28;
       // token = 'L1yBSAYkCQWfh2XdcMrUP76N';
       companyId = 77;
       token = 'wgNr3jAvnmcwDC7UU2SbQSA1';

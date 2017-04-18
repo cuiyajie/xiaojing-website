@@ -46,6 +46,7 @@
   import logo from '../../img/login/icon_140@2x.png';
   import { NetworkUtils, tryAlive } from '../api/global';
   import api from '../api';
+  import MessageBox from '../utils/messagebox';
 
   export default {
     name: 'Login',
@@ -78,8 +79,13 @@
               vm.$store.dispatch('autoLogin', {
                 companyId: data.company_id,
                 token: data.token,
-                cb() {
-                  vm.$router.push('/page');
+                cb(err) {
+                  if (err) {
+                    const errMsg = err.message || '登录失败';
+                    MessageBox.tip(errMsg);
+                  } else {
+                    vm.$router.push('/page');
+                  }
                 },
               });
             }

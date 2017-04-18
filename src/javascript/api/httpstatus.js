@@ -18,5 +18,5 @@ export const ServerSuccessStatus = {
 };
 
 export const ServerInvalidToken = {
-  status: 'INVALID_TOKEN',
+  status: 'TOKEN_INVALID',
 };

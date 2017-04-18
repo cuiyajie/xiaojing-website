@@ -14,7 +14,11 @@ export const autoLogin = ({ commit }, { companyId, token, cb }) => {
     if (cb) {
       cb();
     }
-  }, () => {});
+  }, (err) => {
+    if (cb) {
+      cb(err);
+    }
+  });
 };
 
 export const fetchDepartments = ({ commit }, companyId) => {
