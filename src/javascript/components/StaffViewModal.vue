@@ -18,9 +18,9 @@
       <el-form-item label="办公地点"><span class="form-value text-wrap">{{ trimAddress(viewed.location) }}</span></el-form-item>
       <el-form-item class="tx_c no-bordered buttons">
        <el-button type="primary" @click="edit" size="small">编辑</el-button>
-       <el-button type="primary" @click="onQuit" size="small" 
+       <el-button type="primary" v-if="!isAdmin()" @click="onQuit" size="small" 
           v-show="viewed.status === ENUM_STAFF_STATUS.NORMAL">设为离职</el-button>
-       <el-button @click="onDelete" size="small">删除</el-button>
+       <el-button v-if="!isAdmin()" @click="onDelete" size="small">删除</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>
@@ -43,6 +43,7 @@
     computed: {
       ...mapGetters({
         company: 'currentCompany',
+        admin: 'currentUser',
       }),
     },
     methods: {
@@ -59,6 +60,9 @@
       edit() {
         this.$emit('staff-edit', this.viewed);
         this.close();
+      },
+      isAdmin() {
+        return this.admin.id === this.viewed.id;
       },
       onQuit() {
         MessageBox.lConfirm('确定将该员工设置为离职？').then(() => {
