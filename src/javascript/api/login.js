@@ -7,9 +7,11 @@ export function login(cid, tkn) {
   if (ENV.isDebug()) {
     if (ENV.isDevelopment()) {
       // companyId = 4;
-      companyId = 28;
+      // companyId = 28;
       // token = 'b3A4mdXeWP7yyT8Ss4N42tSA';
-      token = 'L1yBSAYkCQWfh2XdcMrUP76N';
+      // token = 'L1yBSAYkCQWfh2XdcMrUP76N';
+      companyId = 77;
+      token = 'wgNr3jAvnmcwDC7UU2SbQSA1';
     } else {
       companyId = 14;
       token = 'rbxQgSpszpQHZ635NSkJDpB9';
