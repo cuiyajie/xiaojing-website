@@ -60,6 +60,7 @@ export function fetchGuestCheckins(
 
   return VueHttp.get(urls.URL_FETCH_GUEST_CHECKIN, {
     params,
+    responseType: 'blob',
   });
 }
 

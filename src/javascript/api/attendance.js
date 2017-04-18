@@ -35,6 +35,7 @@ export function downloadAttendanceAnalysis(
   params.end_time = dateFilter.toShortString(endTime);
   return VueHttp.get(urls.URL_EXPORT_ATTENDANCE_ANALYSIS, {
     params,
+    responseType: 'blob',
   });
 }
 
