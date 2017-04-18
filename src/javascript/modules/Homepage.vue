@@ -8,7 +8,7 @@
           <p class="seperator"><span>下载应用</span></p>
           <div class="clearfix">
             <div class="app-column">
-              <a href="javascript:void(0)" class="app-link ios">iPhone下载</a>
+              <a href="https://itunes.apple.com/cn/app/%E5%B0%8F%E7%9E%B3%E5%8A%A9%E6%89%8B/id1194978803?mt=8" target="_blank" class="app-link ios">iPhone下载</a>
               <span class="note">Phone5s、iPad Air2、<br />iPad Mini2及以上，iOS7.0以上系统</span>
             </div>
             <div class="app-column">
