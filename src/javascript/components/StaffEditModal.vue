@@ -142,7 +142,7 @@
         this.uploading = false;
       },
       onSubmit() {
-        if (_.isEmpty(this.changed.name)) {
+        if (_.isEmpty(this.changed.name.trim())) {
           MessageBox.tip('请输入员工姓名');
           return;
         }

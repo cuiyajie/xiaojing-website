@@ -15,7 +15,7 @@
             <li class="user user-menu">
                 <!-- The user image in the navbar-->
                 <img :src="currentUser.avatar || defaultAvatar" class="user-image" alt="User Image">
-                <span :class="{ 'no-border': !currentUser.name || currentUser.name === '' }">{{ currentUser.name }}</span>
+                <span v-show="validateUserName()">{{ currentUser.name }}</span>
             </li>
             <!-- Logout -->
             <li class="logout">
@@ -87,6 +87,9 @@
       logout() {
         this.$store.dispatch('resetStore');
         logout();
+      },
+      validateUserName() {
+        return this.currentUser.name && this.currentUser.name.trim() !== '';
       },
     },
     watch: {
