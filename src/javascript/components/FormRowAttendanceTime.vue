@@ -12,6 +12,9 @@
 <script>
   import _ from 'lodash/core';
   import MessageBox from '../utils/messagebox';
+  import utils from '../utils/filters';
+
+  const pad = utils.pad;
 
 export default {
     props: ['startTime', 'endTime', 'save'],
@@ -79,9 +82,9 @@ export default {
               MessageBox.tip('请输入合法的时间');
               return;
             }
-
-            const startTime = `${this.form.sMinute}:${this.form.sSecond}`;
-            const endTime = `${this.form.eMinute}:${this.form.eSecond}`;
+           
+            const startTime = `${pad(this.form.sMinute)}:${pad(this.form.sSecond)}`;
+            const endTime = `${pad(this.form.eMinute)}:${pad(this.form.eSecond)}`;
 
             if (startTime > endTime) {
               MessageBox.tip('考勤开始时间不应超过考勤结束时间');

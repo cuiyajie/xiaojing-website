@@ -65,4 +65,12 @@ export default {
     const address = addr || '';
     return address.replace(addrRegExp, '');
   },
+  pad(str, num = 2) {
+    let source = str.toString();
+    const len = num - source.length;
+    for (let i = 0; i < len; i++) {
+      source = `0${source}`;
+    }
+    return source.slice(-num);
+  },
 };

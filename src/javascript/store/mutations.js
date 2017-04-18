@@ -3,6 +3,7 @@ import _ from 'lodash/core';
 import _array from 'lodash/array';
 import * as types from './mutation-types';
 import api from '../api';
+import utils from '../utils/filters';
 
 
 function remarkDefault(store, addr) {
@@ -16,6 +17,9 @@ function remarkDefault(store, addr) {
 
 export default {
   [types.AUTO_LOGIN](state, { user, company }) {
+    if (company.logo && company.logo !== '') {
+      company.logo = utils.noCacheUrl(company.logo);
+    }
     set(state.global, 'currentUser', user);
     set(state.global, 'currentCompany', company);
   },

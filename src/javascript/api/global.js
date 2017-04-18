@@ -40,7 +40,9 @@ const clearCookie = () => {
 const handleUnAuthorized = () => {
   if (router) {
     clearCookie();
-    router.replace('/login');
+    if (!router.currentRoute || router.currentRoute.name !== 'login') {
+      router.replace('/login');
+    }
   }
 };
 
@@ -75,7 +77,7 @@ Vue.http.interceptors.push((request, next) => {
 	// check if token is invalid
   next((response) => {
     const { status, body } = response;
-    if (status === VueSuccesStatus.status && body.status === ServerInvalidToken.status) {
+    if (status !== VueSuccesStatus.status && body.status === ServerInvalidToken.status) {
       handleUnAuthorized.call(this, request);
       return;
     }
@@ -165,7 +167,11 @@ export const keepAlive = (companyId, token) => {
 export const isAlive = () => !!Vue.cookie.get('xtAccessToken', { path: '/' });
 
 export const tryAlive = () => {
-  const cb = () => {
+  const cb = (err) => {
+    if (err) {
+      return;  
+    } 
+
     if (/^\/page.*$/.test(window.location.pathname)) {
       router.push(window.location.pathname);
     } else {

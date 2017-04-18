@@ -60,7 +60,6 @@
   import defaultAvatar from '../../img/avatar-darkbg.png';
   import defaultCompanyLogo from '../../img/company-logo.png';
   import { logout, tryAlive } from '../api/global';
-  import utils from '../utils/filters';
 
   export default {
     data() {
@@ -79,7 +78,7 @@
         if (!this.currentCompany.id) {
           return false;
         } else if (this.currentCompany.logo && this.currentCompany.logo !== '') {
-          return utils.noCacheUrl(this.currentCompany.logo);
+          return this.currentCompany.logo;
         } 
         return defaultCompanyLogo;
       },
