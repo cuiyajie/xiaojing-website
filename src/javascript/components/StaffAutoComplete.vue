@@ -46,11 +46,14 @@ export default {
         this.$emit('handle-request', queryString, cb);
       },
       handleSelect(item) {
-        this.$refs.autocomplete.$refs.input.setCurrentValue(`${item.name}  ${item.tel}`);
+        this.setInputValueManually(`${item.name}  ${item.tel}`);
         this.$emit('handle-select', item);
       },
       clear() {
-        this.$refs.autocomplete.$refs.input.setCurrentValue('');
+        this.setInputValueManually('');
+      },
+      setInputValueManually(val) {
+        this.$refs.autocomplete.$refs.input.currentValue = val;
       },
     },
 };
