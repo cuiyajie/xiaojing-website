@@ -48,7 +48,7 @@ const handleUnAuthorized = () => {
 
 const environment = {
   isDevelopment: () => {
-    const devIP = '192.168.2.181';
+    const devIP = '192.168.2.79';
     // return false;
     return window.location.href.indexOf('localhost') >= 0 || window.location.href.indexOf(devIP) >= 0;
   },
@@ -88,7 +88,7 @@ function getApiServer() {
   let _apiServer = QueryString.api_server;
   if (_.isEmpty(_apiServer)) {
     if (environment.isDevelopment()) {
-      _apiServer = 'http://192.168.2.181';
+      _apiServer = 'http://192.168.2.79';
     } else {
       _apiServer = 'https://xiaojing.linkface.cn';
     }
@@ -150,7 +150,7 @@ export const ENV = environment;
 
 export const SocketUrl = () => {
   if (environment.isDevelopment()) {
-    return 'ws://192.168.2.181:7000/websocket';
+    return 'ws://192.168.2.79:7000/websocket';
   } 
   return 'wss://xiaojing.linkface.cn/websocket';
 };
