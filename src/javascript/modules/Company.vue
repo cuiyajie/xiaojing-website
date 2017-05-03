@@ -30,6 +30,9 @@
     <div class="section-row">
       <form-row-attendance-time :start-time="company.start_time" :end-time="company.end_time" :save="saveCompanyAttendanceTime"></form-row-attendance-time>
     </div>
+    <div class="section-row bordered">
+      <form-row-text-input title="Web Hook" :value="company.callback_url" placeholder="请输入Web Hook地址" :save="saveWebHook"></form-row-text-input>
+    </div>
     <admin-setting-modal ref="adminSettingModal"></admin-setting-modal>
   </div>
 </template>
@@ -71,6 +74,9 @@
     methods: {
       saveCompanyName(name) {
         return api.updateCompany(this.company.id, { name });
+      },
+      saveWebHook(url) {
+        return api.updateCompany(this.company.id, { callback_url: url });
       },
       saveCompanyLogoSuccess(data) {
         if (data && data.logo) {
