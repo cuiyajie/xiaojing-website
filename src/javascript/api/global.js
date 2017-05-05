@@ -90,7 +90,7 @@ function getApiServer() {
     if (environment.isDevelopment()) {
       _apiServer = 'http://192.168.2.79';
     } else {
-      _apiServer = 'https://xiaojing.linkface.cn';
+      _apiServer = 'http://100.66.212.115';
     }
   }
   return _apiServer;
@@ -152,7 +152,7 @@ export const SocketUrl = () => {
   if (environment.isDevelopment()) {
     return 'ws://192.168.2.79:7000/websocket';
   } 
-  return 'wss://xiaojing.linkface.cn/websocket';
+  return 'ws://100.66.212.115:7000/websocket';
 };
 
 export const keepAlive = (companyId, token) => {
