@@ -31,11 +31,14 @@
       row-key="id"
       :empty-text="emptyText"
       :data="dataStore">
+      <el-table-column label="Checkin ID" property="id"></el-table-column>
       <el-table-column label="日期"><template scope="scope">{{ dateFormatter(scope.row.check_time) }}</template></el-table-column>
       <el-table-column label="员工" property="user_name"></el-table-column>
       <el-table-column label="部门" property="department_name"></el-table-column>
       <el-table-column label="职务" property="job_position"></el-table-column>
+      <el-table-column label="底图照片"><template scope="scope"><img class="thumb-image" :src="scope.row.avatar" alt="User FaceImage" @click="viewSourceImage(scope.row.avatar)"></template></el-table-column>
       <el-table-column label="人脸照片"><template scope="scope"><img class="thumb-image" :src="scope.row.face_image" alt="User FaceImage" @click="viewSourceImage(scope.row.face_image)"></template></el-table-column>
+      <el-table-column label="分数"><template scope="scope"><span>{{ scope.row.score && (Math.floor(scope.row.score * 10000) / 10000)  }}</span></template></el-table-column>
     </el-table>
     <div class="table-footer">
       <pagination class="table-pagination" 
