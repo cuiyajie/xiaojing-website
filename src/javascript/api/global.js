@@ -88,7 +88,7 @@ function getApiServer() {
   let _apiServer = QueryString.api_server;
   if (_.isEmpty(_apiServer)) {
     if (environment.isDevelopment()) {
-      _apiServer = 'http://192.168.2.79';
+      _apiServer = 'http://192.168.2.79:8000';
     } else {
       _apiServer = 'http://100.66.212.115';
     }
@@ -150,7 +150,7 @@ export const ENV = environment;
 
 export const SocketUrl = () => {
   if (environment.isDevelopment()) {
-    return 'ws://192.168.2.79:7000/websocket';
+    return 'ws://192.168.2.79:8000/websocket';
   } 
   return 'ws://100.66.212.115:7000/websocket';
 };
