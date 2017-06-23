@@ -8,7 +8,7 @@ import { VueSuccesStatus, ServerSuccessStatus, ServerInvalidToken } from './http
 
 Vue.use(VueResource);
 Vue.use(VueCookie);
-Vue.config.debug = false;
+Vue.config.debug = true;
 Vue.http.options.xhr = { withCredentials: true, crossDomain: true };
 
 let router;
@@ -47,11 +47,12 @@ const handleUnAuthorized = () => {
 };
 
 const environment = {
-  isDevelopment: () => {
-    const devIP = '192.168.2.181';
-    // return false;
-    return window.location.href.indexOf('localhost') >= 0 || window.location.href.indexOf(devIP) >= 0;
-  },
+  isDevelopment: () => 
+    // const devIP = '192.168.2.181';
+    // return window.location.href.indexOf('localhost') >= 0 
+    //       || window.location.href.indexOf(devIP) >= 0;
+     false,    
+  
   isDebug: () => Vue.config.debug,
 };
 
@@ -90,7 +91,8 @@ function getApiServer() {
     if (environment.isDevelopment()) {
       _apiServer = 'http://192.168.2.181';
     } else {
-      _apiServer = 'https://xiaojing.linkface.cn';
+      _apiServer = 'http://localhost:7000';
+      // _apiServer = 'https://xiaojing.linkface.cn';
     }
   }
   return _apiServer;
@@ -152,7 +154,7 @@ export const SocketUrl = () => {
   if (environment.isDevelopment()) {
     return 'ws://192.168.2.181:7000/websocket';
   } 
-  return 'wss://xiaojing.linkface.cn/websocket';
+  return 'wss://localhost:7000/websocket';
 };
 
 export const keepAlive = (companyId, token) => {

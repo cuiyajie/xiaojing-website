@@ -5,16 +5,11 @@ export function login(cid, tkn) {
   let companyId = cid;
   let token = tkn;
   if (ENV.isDebug()) {
-    if (ENV.isDevelopment()) {
-      // companyId = 4;
-      // token = 'b3A4mdXeWP7yyT8Ss4N42tSA';
-      // companyId = 28;
-      // token = 'L1yBSAYkCQWfh2XdcMrUP76N';
-      companyId = 77;
-      token = 'wgNr3jAvnmcwDC7UU2SbQSA1';
+    if (ENV.isDevelopment()) {// eslint-disable-line
+      
     } else {
-      companyId = 14;
-      token = 'rbxQgSpszpQHZ635NSkJDpB9';
+      companyId = 1;
+      token = 'P6skSFEHgVpzne5dMHrdgk4d';
     }
   }
   keepAlive(companyId, token);
