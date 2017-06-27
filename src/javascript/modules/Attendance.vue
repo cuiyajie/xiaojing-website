@@ -37,6 +37,7 @@
     </el-table>
     <div class="table-footer">
       <pagination class="table-pagination" 
+        ref="Pagination"
         :page-size="pageSize"
         :total="total"
         :history-store="historyStore"
@@ -108,6 +109,8 @@
       onSearch() {
         this.lastAttendanceId = 0;
         this.historyStore = [];
+        this.total = 0;
+        this.$refs.Pagination.reset();
         this.fetchAttendanceAnalysis(false, 1);
       },
       onExport() {

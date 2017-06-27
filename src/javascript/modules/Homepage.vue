@@ -12,7 +12,7 @@
               <span class="note">Phone5s、iPad Air2、<br />iPad Mini2及以上，iOS7.0以上系统</span>
             </div>
             <div class="app-column">
-              <a href="javascript:void(0)" class="app-link android">Android稍后上线</a>
+              <a href="https://cloudadminstatic.oss-cn-beijing.aliyuncs.com/app-web-release-v1.0.0-1-20170627-142618.apk" download class="app-link android">Android稍后上线</a>
             </div>
           </div>
         </div>
@@ -146,7 +146,6 @@
       }
 
       &.android {
-        border-style: dashed;
         padding-left: 20px;
         background-image: url(../../img/home/ico_android.png);
         background-position-x: 10px;

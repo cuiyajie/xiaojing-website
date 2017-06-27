@@ -69,6 +69,15 @@
         company: 'currentCompany',
         departments: 'departments',
       }),
+      uploadText() {
+        return this.uploading ? '上传中' : '点击上传';
+      },
+      isCreate() {
+        return !(this.changed && this.changed.id);
+      },
+    },
+    methods: {
+      trimAddress: filters.trimAddress,
       empty() {
         return {
           avatar: defaultAvatar,
@@ -80,21 +89,12 @@
           job_position: '',
         };
       },
-      uploadText() {
-        return this.uploading ? '上传中' : '点击上传';
-      },
-      isCreate() {
-        return !(this.changed && this.changed.id);
-      },
-    },
-    methods: {
-      trimAddress: filters.trimAddress,
       show(staff) {
         if (staff && staff.id) {
           this.origin = staff;
           this.changed = Object.assign({}, staff);
         } else {
-          this.changed = Object.assign({}, this.empty);
+          this.changed = Object.assign({}, this.empty());
         }
         this.dialogVisible = true;
       },
