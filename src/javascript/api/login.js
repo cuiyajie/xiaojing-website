@@ -9,7 +9,7 @@ export function login(cid, tkn) {
       
     } else {
       companyId = 1;
-      token = 'P6skSFEHgVpzne5dMHrdgk4d';
+      token = 'HpVNfrGtwaAbvvR5axR9n6Sj';
     }
   }
   keepAlive(companyId, token);

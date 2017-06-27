@@ -6,7 +6,7 @@ module.exports = {
   },
   prod: {
     user: 'linkface',
-    host: 'xiaojing.linkface.cn',
-    destination: '/data/www/server/public'
+    host: '192.168.2.228',
+    destination: '/opt/linkface/xiaotong-website'
   }
 };
