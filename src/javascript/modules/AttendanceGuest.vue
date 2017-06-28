@@ -22,6 +22,7 @@
     </el-table>
     <div class="table-footer">
       <pagination class="table-pagination" 
+        ref="Pagination"
         :page-size="pageSize"
         :total="total"
         :history-store="historyStore"
@@ -75,6 +76,7 @@
         this.lastGuestId = 0;
         this.total = 0;
         this.historyStore = [];
+        this.$refs.Pagination.reset();
         this.fetchGuestCheckins(false, 1);
       },
       dateFormatter(day) {

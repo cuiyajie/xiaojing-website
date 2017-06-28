@@ -104,6 +104,8 @@
         tryAlive().then((loginParams) => {
           this.$store.dispatch('autoLogin', loginParams);
         }, () => {});
+      } else {
+        this.$store.dispatch('fetchDepartments', this.currentCompany.id);
       }
     },
   };

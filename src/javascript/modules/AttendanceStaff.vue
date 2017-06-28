@@ -42,6 +42,7 @@
     </el-table>
     <div class="table-footer">
       <pagination class="table-pagination" 
+        ref="Pagination"
         :page-size="pageSize"
         :total="total"
         :history-store="historyStore"
@@ -118,6 +119,8 @@
       onSearch() {
         this.lastCheckinId = 0;
         this.historyStore = [];
+        this.total = 0;
+        this.$refs.Pagination.reset();
         this.fetchStaffCheckins(false, 1);
       },
       onExport() {
