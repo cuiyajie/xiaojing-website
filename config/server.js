@@ -2,7 +2,7 @@ module.exports = {
   stage: {
     user: 'chenhc',
     host: '192.168.2.79',
-    destination: '/var/www/xiaotong'
+    destination: '/var/www/jdb-xiaotong'
   },
   prod: {
     user: 'linkface',
