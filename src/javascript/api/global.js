@@ -47,11 +47,11 @@ const handleUnAuthorized = () => {
 };
 
 const environment = {
-  isDevelopment: () => {
-    const devIP = '192.168.2.80';
-    // return false;
-    return window.location.href.indexOf('localhost') >= 0 || window.location.href.indexOf(devIP) >= 0;
-  },
+  isDevelopment: () => 
+    // const devIP = '192.168.2.80';
+     false,    // return window.location.href.indexOf('localhost') >= 0 
+    //   || window.location.href.indexOf(devIP) >= 0;
+  
   isDebug: () => Vue.config.debug,
 };
 
@@ -90,7 +90,7 @@ function getApiServer() {
     if (environment.isDevelopment()) {
       _apiServer = 'http://192.168.2.80:7000';
     } else {
-      _apiServer = 'https://xiaojing.linkface.cn';
+      _apiServer = 'http://192.168.2.80:7000';
     }
   }
   return _apiServer;
@@ -152,7 +152,7 @@ export const SocketUrl = () => {
   if (environment.isDevelopment()) {
     return 'ws://192.168.2.80/websocket';
   } 
-  return 'wss://xiaojing.linkface.cn/websocket';
+  return 'ws://192.168.2.80/websocket';
 };
 
 export const keepAlive = (companyId, token) => {

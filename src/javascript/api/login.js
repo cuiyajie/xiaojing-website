@@ -9,8 +9,8 @@ export function login(cid, tkn) {
       companyId = 3;
       token = 'CxbqBN8iEQXhQ5mJsME6U7m7';
     } else {
-      companyId = 14;
-      token = 'rbxQgSpszpQHZ635NSkJDpB9';
+      companyId = 4;
+      token = 'sSFizNEEtNxDGwSd6sQN8WcA';
     }
   }
   keepAlive(companyId, token);
