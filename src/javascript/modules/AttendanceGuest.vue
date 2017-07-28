@@ -17,7 +17,9 @@
       row-key="id"
       :empty-text="emptyText"
       :data="dataStore">
-      <el-table-column label="日期" property="dacheck_timey"><template scope="scope">{{ dateFormatter(scope.row.check_time) }}</template></el-table-column>
+      <el-table-column label="ID" property="id"></el-table-column>
+      <el-table-column label="日期" property="check_time"><template scope="scope">{{ dateFormatter(scope.row.check_time) }}</template></el-table-column>
+      <el-table-column label="抓拍次数" property="total"></el-table-column>
       <el-table-column label="访客照片"><template scope="scope"><img class="thumb-image" :src="scope.row.face_image" alt="User FaceImage" @click="viewSourceImage(scope.row.face_image)"></template></el-table-column>
     </el-table>
     <div class="table-footer">

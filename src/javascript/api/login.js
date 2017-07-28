@@ -6,12 +6,8 @@ export function login(cid, tkn) {
   let token = tkn;
   if (ENV.isDebug()) {
     if (ENV.isDevelopment()) {
-      // companyId = 4;
-      // token = 'b3A4mdXeWP7yyT8Ss4N42tSA';
-      // companyId = 28;
-      // token = 'L1yBSAYkCQWfh2XdcMrUP76N';
-      companyId = 77;
-      token = 'wgNr3jAvnmcwDC7UU2SbQSA1';
+      companyId = 3;
+      token = 'CxbqBN8iEQXhQ5mJsME6U7m7';
     } else {
       companyId = 14;
       token = 'rbxQgSpszpQHZ635NSkJDpB9';
