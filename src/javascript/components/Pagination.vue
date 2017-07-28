@@ -23,7 +23,9 @@
     },
     historyStore: {
       type: Array,
-      default: [],
+      default() {
+        return [];
+      },
     },
   },
   computed: {
@@ -39,7 +41,7 @@
       if (newPage > this.pageCount) {
         return;
       }
-
+      
       const fetchData = this.historyStore.length < this.total && 
           this.historyStore.length < newPage * this.pageSize;
       this.$emit('pagination-pagechange', {

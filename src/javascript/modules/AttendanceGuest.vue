@@ -27,7 +27,6 @@
         ref="Pagination"
         :page-size="pageSize"
         :total="total"
-        :history-store="historyStore"
         @pagination-pagechange="onPageChanged"></pagination>
     </div>
   </div>
@@ -49,8 +48,6 @@
         pageSize: 15,
         total: 0,
         dataStore: [],
-        historyStore: [],
-        lastGuestId: 0,
         daysQueried: dateFilter.duration2Days(start, end),
         dateRange: [start, end],
       };
@@ -65,9 +62,6 @@
       Pagination,
     },
     methods: {
-      getDataTable(page) {
-        return this.historyStore.slice(this.pageSize * (page - 1), this.pageSize * page);
-      },
       onDateRangeChanged() {
         const range = this.dateRange;
         if (range && range.length === 2) {
@@ -75,9 +69,7 @@
         }
       },
       onSearch() {
-        this.lastGuestId = 0;
         this.total = 0;
-        this.historyStore = [];
         this.$refs.Pagination.reset();
         this.fetchGuestCheckins(false, 1);
       },
@@ -85,28 +77,22 @@
         return dateFilter.toLongDateString(moment(day));
       },
       // fetch data async
-      fetchGuestCheckins(fromLocale, page) {
-        if (fromLocale) {
-          this.dataStore = this.getDataTable(page);
-        } else {
-          this.loading = true;
-          api.fetchGuestCheckins(this.company.id, 
-              this.dateRange[0], 
-              this.dateRange[1],
-              this.lastGuestId,
-              this.pageSize).then((response) => {
-                this.lastGuestId = response.body.last_guest_id;
-                this.historyStore = this.historyStore.concat(response.body.guests);
-                this.dataStore = this.getDataTable(page);
-                this.total = response.body.total;
-                this.loading = false;
-              }, () => {
-                this.loading = false;
-              });
-        }
+      fetchGuestCheckins(page) {
+        this.loading = true;
+        api.fetchGuestCheckins(this.company.id, 
+            this.dateRange[0], 
+            this.dateRange[1],
+            page,
+            this.pageSize).then((response) => {
+              this.dataStore = response.body.guests;
+              this.total = response.body.total;
+              this.loading = false;
+            }, () => {
+              this.loading = false;
+            });
       },
       onPageChanged(page) {
-        this.fetchGuestCheckins(!page.fetchData, page.newPage);
+        this.fetchGuestCheckins(page.newPage);
       },
       viewSourceImage(image) {
         ImageModal.show(image);
@@ -117,7 +103,7 @@
         immediate: true,
         handler() {
           if (this.company && this.company.id) {
-            this.fetchGuestCheckins(false, 1);
+            this.fetchGuestCheckins(1);
           }
         },
       },

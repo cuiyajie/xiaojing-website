@@ -1,7 +1,7 @@
 module.exports = {
   stage: {
-    user: 'chenhc',
-    host: '192.168.2.79',
+    user: 'face',
+    host: '192.168.2.80',
     destination: '/var/www/xiaotong'
   },
   prod: {

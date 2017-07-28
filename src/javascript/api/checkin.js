@@ -49,14 +49,14 @@ export function fetchGuestCheckins(
   companyId, 
   startTime, 
   endTime, 
-  lastGuestId, 
-  count) {
+  pageNumber, 
+  pageSize) {
   const params = {};
   params.company_id = companyId;
   params.start_time = dateFilter.toShortString(startTime);
   params.end_time = dateFilter.toShortString(endTime);
-  params.last_guest_id = lastGuestId || 0;
-  params.count = count || 15;
+  params.page_number = pageNumber || 0;
+  params.page_size = pageSize || 15;
 
   return VueHttp.get(urls.URL_FETCH_GUEST_CHECKIN, {
     params,
