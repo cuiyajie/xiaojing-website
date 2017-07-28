@@ -37,7 +37,7 @@ const DashboardRouter = {
     name: 'staff',
     component: Staff,
   }, {
-    path: '',
+    path: 'attendance',
     name: 'attendance',
     component: Attendance,
   }, {
@@ -45,7 +45,7 @@ const DashboardRouter = {
     name: 'attendace-staff',
     component: AttendanceStaff,
   }, {
-    path: 'attendance/guest',
+    path: '',
     name: 'attendace-guest',
     component: AttendanceGuest,
   }, {
