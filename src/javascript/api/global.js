@@ -1,4 +1,6 @@
 /* eslint no-param-reassign: ["error", { "props": false }]*/
+/* global COMPILE_ARGUMENTS:true*/
+/* eslint no-undef: "error"*/
 import Vue from 'vue';
 import VueResource from 'vue-resource';
 import VueCookie from 'vue-cookie';
@@ -8,7 +10,7 @@ import { VueSuccesStatus, ServerSuccessStatus, ServerInvalidToken } from './http
 
 Vue.use(VueResource);
 Vue.use(VueCookie);
-Vue.config.debug = false;
+Vue.config.debug = COMPILE_ARGUMENTS.login;
 Vue.http.options.xhr = { withCredentials: true, crossDomain: true };
 
 let router;
@@ -47,11 +49,12 @@ const handleUnAuthorized = () => {
 };
 
 const environment = {
-  isDevelopment: () => {
-    const devIP = '192.168.2.79';
-    // return false;
-    return window.location.href.indexOf('localhost') >= 0 || window.location.href.indexOf(devIP) >= 0;
-  },
+  isDevelopment: () => 
+    // const devIP = '192.168.2.79';
+    // return window.location.href.indexOf('localhost') >= 0 || 
+    //        window.location.href.indexOf(devIP) >= 0;
+     false,    
+  
   isDebug: () => Vue.config.debug,
 };
 
@@ -91,6 +94,7 @@ function getApiServer() {
       _apiServer = 'http://192.168.2.79';
     } else {
       _apiServer = 'https://xiaojing.linkface.cn';
+      // _apiServer = COMPILE_ARGUMENTS.host;
     }
   }
   return _apiServer;
@@ -152,7 +156,7 @@ export const SocketUrl = () => {
   if (environment.isDevelopment()) {
     return 'ws://192.168.2.79:7000/websocket';
   } 
-  return 'wss://xiaojing.linkface.cn/websocket';
+  return COMPILE_ARGUMENTS.websocket;
 };
 
 export const keepAlive = (companyId, token) => {

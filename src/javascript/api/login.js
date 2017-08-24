@@ -1,3 +1,5 @@
+/* global COMPILE_ARGUMENTS:true*/
+/* eslint no-undef: "error"*/
 import { VueHttp, ENV, keepAlive } from './global';
 import urls from './api-list';
 
@@ -13,8 +15,10 @@ export function login(cid, tkn) {
       companyId = 77;
       token = 'wgNr3jAvnmcwDC7UU2SbQSA1';
     } else {
-      companyId = 14;
-      token = 'rbxQgSpszpQHZ635NSkJDpB9';
+      // companyId = 14;
+      // token = 'rbxQgSpszpQHZ635NSkJDpB9';
+      companyId = COMPILE_ARGUMENTS.companyId;
+      token = COMPILE_ARGUMENTS.token;
     }
   }
   keepAlive(companyId, token);
