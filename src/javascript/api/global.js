@@ -93,8 +93,8 @@ function getApiServer() {
     if (environment.isDevelopment()) {
       _apiServer = 'http://192.168.2.79';
     } else {
-      _apiServer = 'https://xiaojing.linkface.cn';
-      // _apiServer = COMPILE_ARGUMENTS.host;
+      // _apiServer = 'https://xiaojing.linkface.cn';
+      _apiServer = COMPILE_ARGUMENTS.host;
     }
   }
   return _apiServer;
@@ -156,7 +156,8 @@ export const SocketUrl = () => {
   if (environment.isDevelopment()) {
     return 'ws://192.168.2.79:7000/websocket';
   } 
-  return COMPILE_ARGUMENTS.websocket;
+  return 'ws://192.168.2.79:7000/websocket';
+  // return COMPILE_ARGUMENTS.websocket;
 };
 
 export const keepAlive = (companyId, token) => {
